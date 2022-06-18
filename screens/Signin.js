@@ -14,6 +14,8 @@ const Signin = ({ navigation }) => {
         <SafeAreaView style={tw.style('h-full justify-center')}>
             <View style={tw.style('p-8')}>
                 <Text style={tw.style('self-center text-4xl')}>Login</Text>
+
+                {/* {state.firstName == '' ? <Text style={tw.style('self-center text-2xl')}></Text> : <Text style={tw.style('self-center text-2xl')}>Login inválido</Text>} */}
                 <Input
                     style={tw.style('text-blue-800 font-semibold')}
                     placeholder="Email"

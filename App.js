@@ -10,9 +10,6 @@ import Profile from './screens/Profile';
 import { Provider as AuthProvider } from './context/AuthContext.js';
 import { Context as AuthContext } from './context/AuthContext';
 import {
-    useQuery,
-    useMutation,
-    useQueryClient,
     QueryClient,
     QueryClientProvider,
 } from 'react-query'

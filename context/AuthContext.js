@@ -21,17 +21,72 @@ const signup = dispatch => {
     };
 };
 
+const encodeFormData = (data) => {
+    return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+}
+
+const logInRequest = async (formData) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeFormData(formData)
+    };
+    const response = await fetch('http://192.168.1.199:3000/api/auth/login', requestOptions);
+    const json = await response.json();
+    if (json?.status == 0) {
+        return false
+    } else {
+        return json.data
+    }
+    // console.log(json?.status)
+}
+
 const signin = dispatch => {
     return ({ email, password }) => {
         // Do some API Request here
-        console.log('Signin');
-        dispatch({
-            type: 'signin',
-            payload: {
-                token: 'some access token here',
-                email,
-            },
+        logInRequest({ email: email, password: password }).then(data => {
+            if (data) {
+                dispatch({
+                    type: 'signin',
+                    payload: {
+                        token: data.token,
+                        userData: {
+                            id: data._id,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            email: data.email,
+                        },
+                        email: data.email,
+                    },
+
+                })
+            } else {
+                firstName = false
+            }
         });
+        // if (login) {
+        //     dispatch({
+        //         type: 'signin',
+        //         payload: {
+        //             token: login.token,
+        //             email: login.email,
+        //         },
+
+        //     })
+        // }
+        // .then(response => response.json())
+        // .then(data => dispatch({
+        //     type: 'signin',
+        //     payload: {
+        //         token: data,
+        //         email: data,
+        //     },
+
+        // })).catch(console.error);
+
+        console.log('Signin');
     };
 };
 
@@ -44,5 +99,5 @@ const signout = dispatch => {
 export const { Provider, Context } = createDataContext(
     authReducer,
     { signin, signout, signup },
-    { token: 'hi', email: 'aaron@intowin.es' },
+    { token: null, email: '', firstName: '' },
 );

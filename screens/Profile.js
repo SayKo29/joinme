@@ -1,29 +1,41 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, Input } from 'react-native-elements';
 import { Context as AuthContext } from '../context/AuthContext';
+import tw from 'twrnc';
 
 const Profile = ({ navigation }) => {
     const { state, signout } = useContext(AuthContext);
 
     return (
-        <View style={styles.master}>
-            <Text style={styles.header}>Profile</Text>
-            <Button onPress={signout} title="Ready to Sign out?" type="clear" />
-        </View>
+        <SafeAreaView style={tw.style('h-full')}>
+            <View style={tw.style('w-full')}>
+                <Button style={tw.style('self-end text-5xl text-slate-200')} onPress={signout} title="Cerrar sesión" type="clear" />
+                {/* <Text style={tw.style('self-center text-4xl')}>Login</Text> */}
+                {/* <Input
+                    style={tw.style('text-blue-800 font-semibold')}
+                    placeholder="Email"
+                    onChangeText={setEmail}
+                    value={email}
+                    leftIcon={<Icon name="envelope" type="font-awesome" size={24} />}
+                />
+                <Input
+                    placeholder="Password"
+                    onChangeText={setPassword}
+                    value={password}
+                    leftIcon={<Icon name="key" type="font-awesome" size={24} />}
+                    secureTextEntry
+                /> */}
+                {/* <Button
+                    title="Login"
+                    type="clear"
+                    onPress={() => {
+                        signin({ email, password });
+                    }}
+                /> */}
+            </View>
+        </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    master: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    header: {
-        fontSize: 32,
-        marginBottom: 8,
-    },
-});
 
 export default Profile;
