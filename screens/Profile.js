@@ -11,7 +11,7 @@ const Profile = ({ navigation }) => {
         <SafeAreaView style={tw.style('h-full')}>
             <View style={tw.style('w-full')}>
                 <Button style={tw.style('self-end text-5xl text-slate-200')} onPress={signout} title="Cerrar sesión" type="clear" />
-                {/* <Text style={tw.style('self-center text-4xl')}>Login</Text> */}
+                <Text style={tw.style('self-center text-4xl')}>{state.userData.firstName}</Text>
                 {/* <Input
                     style={tw.style('text-blue-800 font-semibold')}
                     placeholder="Email"
