@@ -42,7 +42,7 @@ function HomeFlow() {
                         <Text
                             style={[
                                 focused
-                                    ? tw.style("text-main text-xs")
+                                    ? tw.style("text-pink-900 text-xs")
                                     : tw.style("text-gray-500"),
                             ]}>
                             {route.name}

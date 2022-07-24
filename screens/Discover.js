@@ -1,34 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { useQuery } from 'react-query'
-import getMarkersData from '../api/MarkersData'
-import * as Location from 'expo-location';
-import tw from 'twrnc';
+import { useQuery } from "react-query";
+import getMarkersData from "../api/MarkersData";
+import * as Location from "expo-location";
+import tw from "twrnc";
+import GallerySwiper from "react-native-gallery-swiper";
+import SlidePanelDetail from "../components/SlidePanelDetail";
+import LottieAnimation from "../components/LottieAnimation";
 
-
-export default function Discover () {
-
+export default function Discover() {
     const [location, setLocation] = useState(null);
 
     const [markerPressed, setMarkerPressed] = useState(false);
 
-    const query = useQuery('MARKERS', getMarkersData);
+    const query = useQuery("MARKERS", getMarkersData);
 
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
+            if (status !== "granted") {
+                setErrorMsg("Permission to access location was denied");
                 return;
             }
 
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
-
         })();
     }, []);
-
 
     if (query.isLoading) {
         return <Text>Loading markers...</Text>;
@@ -37,69 +36,129 @@ export default function Discover () {
         return <Text>Error markers...</Text>;
     }
 
-    if (location != null) {
+    const handleMarkerPressed = (marker) => {
+        setMarkerPressed(marker);
+    };
 
+    if (location) {
         return (
             <View style={styles.container}>
                 {/*Render our MapView*/}
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={styles.map}
-                    //specify our coordinates.
-                    initialRegion={{
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                    mapType="standard"
-                >
-                    {query.data.data.map((marker, index) => (
+                <View style={styles.mapContainer}>
+                    <MapView
+                        onPress={() =>
+                            markerPressed ? setMarkerPressed(false) : null
+                        }
+                        provider={PROVIDER_GOOGLE}
+                        // conditional rendering for the map
+                        style={styles.map}
+                        //specify our coordinates.
+                        initialRegion={{
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude,
+                            latitudeDelta: 0.0043,
+                            longitudeDelta: 0.0043,
+                        }}
+                        mapType="standard">
+                        {query.data.data.map((marker, index) => (
+                            <Marker
+                                key={index}
+                                title={marker.title}
+                                description={marker.description}
+                                coordinate={{
+                                    latitude: parseFloat(marker.latitude),
+                                    longitude: parseFloat(marker.longitude),
+                                }}
+                                onPress={(e) =>
+                                    handleMarkerPressed(marker)
+                                }></Marker>
+                        ))}
+
+                        {/* Mi ubicación */}
                         <Marker
-                            key={index}
-                            title={marker.title}
-                            description={marker.description}
                             coordinate={{
-                                latitude: parseFloat(marker.latitude),
-                                longitude: parseFloat(marker.longitude),
-                            }}
-                        // onPress={(e) => handleMarkerPressed(marker)}
-                        ></Marker>
+                                latitude: location.coords.latitude,
+                                longitude: location.coords.longitude,
+                            }}>
+                            <Callout style>
+                                <Image
+                                    source={require("../assets/userLocation.png")}
+                                />
+                                <Text>Mi ubicación</Text>
+                            </Callout>
+                            <Image
+                                source={require("../assets/userLocation.png")}
+                                style={{ width: 40, height: 40 }}
+                            />
+                        </Marker>
+                    </MapView>
+                </View>
 
+                {/* Show sliding panel if marker pressed */}
 
-                    ))}
-                    {/* Mi ubicación */}
-                    <Marker
-                        coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
+                {markerPressed && (
+                    <View style={styles.slider}>
+                        {/* Imagenes preview */}
 
-                    >
-                        <Callout style>
-                            <Image source={require('../assets/userLocation.png')} />
-                            <Text>Mi ubicación</Text>
-                        </Callout>
-                        <Image source={require('../assets/userLocation.png')} style={{ width: 40, height: 40 }} />
-                    </Marker>
-                </MapView>
+                        <GallerySwiper
+                            style={styles.gallery}
+                            images={markerPressed.images.map((image) => ({
+                                source: {
+                                    uri: image,
+                                },
+                            }))}
+                        />
+                        <SlidePanelDetail
+                            markerData={markerPressed}></SlidePanelDetail>
+                    </View>
+                )}
             </View>
         );
     }
     return (
-        <View style={tw.style('h-full justify-center')}>
-            <Text style={tw.style('self-center text-xl text-blue-600')}>Obteniendo ubicación y cargando mapa...</Text>
+        <View style={tw.style("h-full justify-center")}>
+            <LottieAnimation url={"loader.json"}></LottieAnimation>
         </View>
-    )
-
-
+    );
 }
 //create our styling code:
 const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
-        flex: 1, //the container will fill the whole screen.
-        justifyContent: "flex-end",
-        alignItems: "center",
+    },
+    mapContainer: {
+        flex: 1,
+        width: "100%",
+        height: "50%",
     },
     map: {
-        ...StyleSheet.absoluteFillObject,
+        flex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    slideContainer: {
+        flex: 1,
+        backgroundColor: "#FFF",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    slider: {
+        width: "100%",
+        height: "30%",
+    },
+    gallery: {
+        width: "100%",
+        height: "100%",
+    },
+    panel: {
+        flex: 1,
+        backgroundColor: "white",
+        position: "relative",
+    },
+    panelHeader: {
+        height: "10%",
+        backgroundColor: "#561F37",
+        alignItems: "center",
+        justifyContent: "start",
     },
 });
