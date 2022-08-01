@@ -3,12 +3,13 @@ import createDataContext from "./createDataContext";
 const authReducer = (state, action) => {
     switch (action.type) {
         case "signout":
-            return { token: null, email: "" };
+            return { token: null, email: "", userData: {} };
         case "signin":
         case "signup":
             return {
                 token: action.payload.token,
                 email: action.payload.email,
+                userData: action.payload.userData,
             };
         default:
             return state;
@@ -107,6 +108,6 @@ export const { Provider, Context } = createDataContext(
     {
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjM4YzliMmU1MzA5ZjY1MzRjOGVmMDkiLCJmaXJzdE5hbWUiOiJBYXJvbiIsImxhc3ROYW1lIjoiU2FybWllbnRvIiwiZW1haWwiOiJmaWVybzQ4MjZAZ21haWwuY29tIiwiaWF0IjoxNjU4NjE2MTMzLCJleHAiOjE2NTg2MjMzMzN9.5TAjeUsxn70pFAk1qb9SRRtlOsQe-Dq5MDfa1Es_dM8",
         email: "fiero4826@gmail.com",
-        firstName: "Aarón",
+        userData: {},
     }
 );

@@ -9,9 +9,9 @@ import Discover from "./screens/Discover";
 import Tab2 from "./screens/Tab2";
 import Profile from "./screens/Profile";
 import { Provider as AuthProvider } from "./context/AuthContext.js";
+import { TailwindProvider } from "tailwindcss-react-native";
 import { Context as AuthContext } from "./context/AuthContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-import tw from "twrnc";
 
 const AuthStack = createStackNavigator();
 function AuthFlow() {
@@ -40,10 +40,8 @@ function HomeFlow() {
                 tabBarLabel: ({ focused }) => {
                     return (
                         <Text
-                            style={[
-                                focused
-                                    ? tw.style("text-pink-900 text-xs")
-                                    : tw.style("text-gray-500"),
+                            className={[
+                                focused ? "text-pink-900" : "text-gray-500",
                             ]}>
                             {route.name}
                         </Text>
@@ -133,23 +131,25 @@ function App() {
     console.log(state);
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                {state.token === null ? (
-                    <>
+            <TailwindProvider>
+                <Stack.Navigator>
+                    {state.token === null ? (
+                        <>
+                            <Stack.Screen
+                                options={{ headerShown: false }}
+                                name="Auth"
+                                component={AuthFlow}
+                            />
+                        </>
+                    ) : (
                         <Stack.Screen
                             options={{ headerShown: false }}
-                            name="Auth"
-                            component={AuthFlow}
+                            name="Home"
+                            component={HomeFlow}
                         />
-                    </>
-                ) : (
-                    <Stack.Screen
-                        options={{ headerShown: false }}
-                        name="Home"
-                        component={HomeFlow}
-                    />
-                )}
-            </Stack.Navigator>
+                    )}
+                </Stack.Navigator>
+            </TailwindProvider>
         </NavigationContainer>
     );
 }

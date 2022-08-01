@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useQuery } from "react-query";
 import getMarkersData from "../api/MarkersData";
 import * as Location from "expo-location";
-import tw from "twrnc";
 import GallerySwiper from "react-native-gallery-swiper";
 import SlidePanelDetail from "../components/SlidePanelDetail";
+import { useNavigation } from "@react-navigation/native";
 import LottieAnimation from "../components/LottieAnimation";
 
 export default function Discover() {
@@ -15,6 +15,14 @@ export default function Discover() {
     const [markerPressed, setMarkerPressed] = useState(false);
 
     const query = useQuery("MARKERS", getMarkersData);
+
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerShown: false,
+        });
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -115,11 +123,7 @@ export default function Discover() {
             </View>
         );
     }
-    return (
-        <View style={tw.style("h-full justify-center")}>
-            <LottieAnimation url={"loader.json"}></LottieAnimation>
-        </View>
-    );
+    return <LottieAnimation />;
 }
 //create our styling code:
 const styles = StyleSheet.create({
@@ -161,4 +165,5 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "start",
     },
+    lottie: { width: "100%", height: "100%" },
 });

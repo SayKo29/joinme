@@ -1,30 +1,24 @@
 import React, { useContext } from "react";
-import {
-    SafeAreaView,
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-} from "react-native";
-import { Button, Input } from "react-native-elements";
+import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { Context as AuthContext } from "../context/AuthContext";
-import tw from "twrnc";
 
 const Profile = ({ navigation }) => {
     const { state, signout } = useContext(AuthContext);
+    console.log(state);
 
     return (
-        <SafeAreaView style={tw.style("h-full")}>
-            <View style={tw.style("w-full")}>
-                <Button
-                    style={tw.style("self-end text-5xl text-slate-200")}
-                    onPress={signout}
-                    title="Cerrar sesión"
-                    type="clear"
-                />
-                <Text style={tw.style("self-center text-4xl")}>
-                    {state.firstName}
+        <SafeAreaView className="h-full w-full">
+            <View className="w-full">
+                <Text className="self-center text-4xl text-main">
+                    {state.userData.firstName} {state.userData.lastName}
                 </Text>
+                <TouchableOpacity
+                    className="self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2"
+                    onPress={signout}>
+                    <Text className=" text-xl w-auto text-white ">
+                        Cerrar Sesión
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
