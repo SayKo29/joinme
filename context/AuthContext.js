@@ -34,22 +34,22 @@
 // };
 
 // const logInRequest = async (formData) => {
-//     const requestOptions = {
-//         method: "POST",
-//         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//         body: encodeFormData(formData),
-//     };
-//     const response = await fetch(
-//         "http://192.168.1.199:3000/api/auth/login",
-//         requestOptions
-//     );
-//     const json = await response.json();
-//     if (json?.status == 0) {
-//         return false;
-//     } else {
-//         return json.data;
-//     }
-//     // console.log(json?.status)
+// const requestOptions = {
+//     method: "POST",
+//     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+//     body: encodeFormData(formData),
+// };
+// const response = await fetch(
+//     "http://192.168.1.199:3000/api/auth/login",
+//     requestOptions
+// );
+// const json = await response.json();
+// if (json?.status == 0) {
+//     return false;
+// } else {
+//     return json.data;
+// }
+// console.log(json?.status)
 // };
 
 // async function save(key, value) {

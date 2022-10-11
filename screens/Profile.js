@@ -1,22 +1,25 @@
 import React, { useContext } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
-import { Context as AuthContext } from "../context/AuthContext";
+import { useAuth } from "../contexts/Auth";
 
 const Profile = ({ navigation }) => {
-    const { state, signout } = useContext(AuthContext);
-    console.log(state);
-    if (state) {
+    const auth = useAuth();
+    const signOut = () => {
+        auth.signOut();
+    };
+    console.log(auth);
+    if (auth.authData) {
         return (
             // if has state, show profile
 
             <SafeAreaView className="h-full w-full">
                 <View className="w-full">
                     <Text className="self-center text-4xl text-main">
-                        {state.userData.firstName} {state.userData.lastName}
+                        {auth.authData.firstName} {auth.authData.lastName}
                     </Text>
                     <TouchableOpacity
                         className="self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2"
-                        onPress={signout}>
+                        onPress={signOut}>
                         <Text className=" text-xl w-auto text-white ">
                             Cerrar Sesión
                         </Text>
@@ -29,12 +32,9 @@ const Profile = ({ navigation }) => {
         // if no state, show signin
         <SafeAreaView className="h-full w-full">
             <View className="w-full">
-                <Text className="self-center text-4xl text-main">
-                    Iniciar Sesión
-                </Text>
                 <TouchableOpacity
                     className="self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2"
-                    onPress={() => navigation.navigate("Signin")}>
+                    onPress={signOut}>
                     <Text className=" text-xl w-auto text-white ">
                         Iniciar Sesión
                     </Text>

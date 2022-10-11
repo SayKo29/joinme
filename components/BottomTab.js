@@ -1,8 +1,7 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import { Text } from "react-native";
-import { Icon } from "react-native-elements";
 import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Icon } from "react-native-elements";
+import { Text } from "react-native";
 import Discover from "../screens/Discover";
 import Profile from "../screens/Profile";
 import Tab2 from "../screens/Tab2";

@@ -16,7 +16,8 @@ export const SignInScreen = () => {
     const auth = useAuth();
     const signIn = async () => {
         isLoading(true);
-        await auth.signIn();
+        await auth.signIn({ email: email, password: password });
+        isLoading(false);
     };
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
