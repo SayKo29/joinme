@@ -5,7 +5,6 @@ import { useQuery } from "react-query";
 import getMarkersData from "../api/MarkersData";
 import * as Location from "expo-location";
 import GallerySwiper from "react-native-gallery-swiper";
-import SlidePanelDetail from "../components/SlidePanelDetail";
 import { useNavigation } from "@react-navigation/native";
 import LottieAnimation from "../components/LottieAnimation";
 
@@ -14,7 +13,7 @@ export default function Discover() {
 
     const [markerPressed, setMarkerPressed] = useState(false);
 
-    const query = useQuery("MARKERS", getMarkersData);
+    const markers = useQuery("MARKERS", getMarkersData);
 
     const navigation = useNavigation();
 
@@ -37,10 +36,10 @@ export default function Discover() {
         })();
     }, []);
 
-    if (query.isLoading) {
+    if (markers.isLoading) {
         return <Text>Loading markers...</Text>;
     }
-    if (query.isError) {
+    if (markers.isError) {
         return <Text>Error markers...</Text>;
     }
 
@@ -48,7 +47,7 @@ export default function Discover() {
         setMarkerPressed(marker);
     };
 
-    if (location) {
+    if (location && markers) {
         return (
             <View style={styles.container}>
                 {/*Render our MapView*/}
@@ -68,7 +67,7 @@ export default function Discover() {
                             longitudeDelta: 0.0043,
                         }}
                         mapType="standard">
-                        {query.data.data.map((marker, index) => (
+                        {markers.data.data.map((marker, index) => (
                             <Marker
                                 key={index}
                                 title={marker.title}
@@ -83,7 +82,7 @@ export default function Discover() {
                         ))}
 
                         {/* Mi ubicación */}
-                        <Marker
+                        {/* <Marker
                             coordinate={{
                                 latitude: location.coords.latitude,
                                 longitude: location.coords.longitude,
@@ -98,7 +97,7 @@ export default function Discover() {
                                 source={require("../assets/userLocation.png")}
                                 style={{ width: 40, height: 40 }}
                             />
-                        </Marker>
+                        </Marker> */}
                     </MapView>
                 </View>
 
@@ -116,8 +115,6 @@ export default function Discover() {
                                 },
                             }))}
                         />
-                        <SlidePanelDetail
-                            markerData={markerPressed}></SlidePanelDetail>
                     </View>
                 )}
             </View>
