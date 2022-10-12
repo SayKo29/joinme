@@ -31,7 +31,7 @@ const LottieAnimation = () => {
 
     return (
         <SafeAreaView>
-            <View style={{ height: "100%", width: "100%" }}>
+            <View className="flex h-full w-[90%] self-center">
                 <LottieView
                     progress={progress}
                     source={require("../assets/animations/loader.json")}

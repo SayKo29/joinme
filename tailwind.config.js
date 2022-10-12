@@ -11,10 +11,12 @@ module.exports = {
             main: "#561F37",
             secondary: "#253237",
         },
-        textColor: {
-            white: "#FFF",
-            black: "#000",
-        },
+        // textColor: {
+        //     white: "#FFF",
+        //     black: "#000",
+        //     main: "#561F37",
+        //     secondary: "#253237",
+        // },
         extend: {},
     },
     // ...

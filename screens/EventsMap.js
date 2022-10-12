@@ -8,12 +8,12 @@ import GallerySwiper from "react-native-gallery-swiper";
 import { useNavigation } from "@react-navigation/native";
 import LottieAnimation from "../components/LottieAnimation";
 
-export default function Discover() {
+export default function Events() {
     const [location, setLocation] = useState(null);
 
     const [markerPressed, setMarkerPressed] = useState(false);
 
-    const markers = useQuery("MARKERS", getMarkersData);
+    const events = useQuery("MARKERS", getMarkersData);
 
     const navigation = useNavigation();
 
@@ -36,18 +36,18 @@ export default function Discover() {
         })();
     }, []);
 
-    if (markers.isLoading) {
-        return <Text>Loading markers...</Text>;
+    if (events.isLoading) {
+        return <Text>Loading events...</Text>;
     }
-    if (markers.isError) {
-        return <Text>Error markers...</Text>;
+    if (events.isError) {
+        return <Text>Error events...</Text>;
     }
 
     const handleMarkerPressed = (marker) => {
         setMarkerPressed(marker);
     };
 
-    if (location && markers) {
+    if (location && events) {
         return (
             <View style={styles.container}>
                 {/*Render our MapView*/}
@@ -67,7 +67,7 @@ export default function Discover() {
                             longitudeDelta: 0.0043,
                         }}
                         mapType="standard">
-                        {markers.data.data.map((marker, index) => (
+                        {events.data.data.map((marker, index) => (
                             <Marker
                                 key={index}
                                 title={marker.title}

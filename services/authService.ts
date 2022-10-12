@@ -3,7 +3,7 @@ export type AuthData = {
     email: string;
     name: string;
 };
-const encodeFormData = (data) => {
+const encodeFormData = (data: any) => {
     return Object.keys(data)
         .map(
             (key) =>
@@ -11,7 +11,7 @@ const encodeFormData = (data) => {
         )
         .join("&");
 };
-const signIn = async (formData) => {
+const signIn = async (formData: any) => {
     // this is a mock of an API call, in a real app
     // will be need connect with some real API,
     // send email and password, and if credential is corret
@@ -23,6 +23,7 @@ const signIn = async (formData) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
+        // "https://landscapediscoverapi.herokuapp.com/api/auth/login",
         "http://192.168.1.199:3000/api/auth/login",
         requestOptions
     );
@@ -36,7 +37,6 @@ const signIn = async (formData) => {
 
     //   setTimeout(() => {
     //     resolve({
-    //       token: JWTTokenMock,
     //       email: email,
     //       name: 'Lucas Garcez',
     //     });
@@ -47,6 +47,3 @@ const signIn = async (formData) => {
 export const authService = {
     signIn,
 };
-
-const JWTTokenMock =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikx1Y2FzIEdhcmNleiIsImlhdCI6MTUxNjIzOTAyMn0.oK5FZPULfF-nfZmiumDGiufxf10Fe2KiGe9G5Njoa64";

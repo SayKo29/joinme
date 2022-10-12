@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const Tab2 = ({ navigation }) => {
+const CreateEvent = ({ navigation }) => {
     return (
         <View style={styles.master}>
-            <Text style={styles.header}>Tab2</Text>
+            <Text style={styles.header}>CreateEvent</Text>
         </View>
     );
 };
@@ -20,4 +20,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Tab2;
+export default CreateEvent;

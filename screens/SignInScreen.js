@@ -14,16 +14,29 @@ import { useAuth } from "../contexts/Auth";
 export const SignInScreen = () => {
     const [loading, isLoading] = useState(false);
     const auth = useAuth();
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState("");
+    const [password, setPassword] = useState("");
     const signIn = async () => {
+        // if (email || password == "") {
+        //     // return new Promise((resolve, reject) => {
+        //     //     resolve();
+        //     // });
+        //     return new Promise((resolve) => {
+        //         setError = "Fill all fields";
+        //         setTimeout(() => {
+        //             resolve("resolved");
+        //         }, 1);
+        //     });
+        // } else {
         isLoading(true);
         await auth.signIn({ email: email, password: password });
         isLoading(false);
+        // }
     };
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
 
     return (
-        <View style={styles.container}>
+        <View>
             {loading ? (
                 <ActivityIndicator
                     color={"#000"}
@@ -31,9 +44,17 @@ export const SignInScreen = () => {
                     size="small"
                 />
             ) : (
-                <SafeAreaView className="h-full justify-center">
+                <SafeAreaView className="h-full justify-center w-full">
                     <View className="p-8">
-                        <Text className="self-center text-4xl">Login</Text>
+                        <Text className="self-center text-4xl text-main font-extrabold">
+                            Login
+                        </Text>
+
+                        {error != "" ? (
+                            <Text className="text-xl">{error}</Text>
+                        ) : (
+                            false
+                        )}
 
                         {/* {state.firstName == '' ? <Text style={tw.style('self-center text-2xl')}></Text> : <Text style={tw.style('self-center text-2xl')}>Login inválido</Text>} */}
                         <Input
@@ -63,12 +84,12 @@ export const SignInScreen = () => {
                             secureTextEntry
                         />
                         <Button title="Login" type="clear" onPress={signIn} />
-                        <View style={styles.link}>
-                            <Text style={styles.text}>
+                        <View>
+                            <Text className="text-sm text-stone-500">
                                 Dont have an account?{" "}
                             </Text>
                             <TouchableOpacity onPress={() => {}}>
-                                <Text style={styles.text}>Sign up Here.</Text>
+                                <Text className="text-sm">Sign up Here.</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
