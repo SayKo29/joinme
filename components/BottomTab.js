@@ -70,11 +70,11 @@ export const BottomTab = () => {
             />
             <Tab.Screen
                 options={{
-                    title: "Segunda pantalla",
+                    title: "Create event",
                     headerStyle: {
                         backgroundColor: "#561F37",
                     },
-                    headerShown: false,
+                    // headerShown: false,
                     headerTintColor: "#fff",
                     headerTitleStyle: {
                         fontWeight: "bold",
