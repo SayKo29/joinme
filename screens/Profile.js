@@ -8,14 +8,14 @@ const Profile = ({ navigation }) => {
         auth.signOut();
     };
     console.log(auth);
-    if (auth.authData) {
+    if (auth.authData.user) {
         return (
             // if has state, show profile
 
             <SafeAreaView className="h-full w-full">
                 <View className="w-full">
                     <Text className="self-center text-4xl text-main">
-                        {auth.authData.firstName} {auth.authData.lastName}
+                        {auth.authData.user.name}
                     </Text>
                     <TouchableOpacity
                         className="self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2"

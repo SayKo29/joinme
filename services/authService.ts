@@ -23,25 +23,17 @@ const signIn = async (formData: any) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
-        // "https://landscapediscoverapi.herokuapp.com/api/auth/login",
-        "http://192.168.1.199:3000/api/auth/login",
+        "https://joinmeapi.onrender.com/api/login",
+        // "http://192.168.1.199:3000/api/auth/login",
         requestOptions
     );
     const json = await response.json();
+    console.log(json);
     if (json?.status == 0) {
         return false;
     } else {
-        return json.data;
+        return json;
     }
-    // return new Promise((resolve) => {
-
-    //   setTimeout(() => {
-    //     resolve({
-    //       email: email,
-    //       name: 'Lucas Garcez',
-    //     });
-    //   }, 1000);
-    // });
 };
 
 export const authService = {

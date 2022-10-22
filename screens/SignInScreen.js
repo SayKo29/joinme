@@ -18,14 +18,16 @@ export const SignInScreen = () => {
     const [error, setError] = useState("");
     const [password, setPassword] = useState("");
     const signIn = async () => {
+        // console.log("entra", email == "", password == "");
         // if (email || password == "") {
         //     // return new Promise((resolve, reject) => {
         //     //     resolve();
         //     // });
         //     return new Promise((resolve) => {
-        //         setError = "Fill all fields";
+        //         console.log("hola");
         //         setTimeout(() => {
         //             resolve("resolved");
+        //             setError("Fill all fields");
         //         }, 1);
         //     });
         // } else {

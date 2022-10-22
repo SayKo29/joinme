@@ -44,6 +44,7 @@ export default function Events() {
     }
 
     const handleMarkerPressed = (marker) => {
+        console.log(marker);
         setMarkerPressed(marker);
     };
 
@@ -67,22 +68,22 @@ export default function Events() {
                             longitudeDelta: 0.0043,
                         }}
                         mapType="standard">
-                        {events.data.data.map((marker, index) => (
+                        {events.data.map((event, index) => (
                             <Marker
                                 key={index}
-                                title={marker.title}
-                                description={marker.description}
+                                title={event.title}
+                                description={event.description}
                                 coordinate={{
-                                    latitude: parseFloat(marker.latitude),
-                                    longitude: parseFloat(marker.longitude),
+                                    latitude: parseFloat(event.latitude),
+                                    longitude: parseFloat(event.longitude),
                                 }}
                                 onPress={(e) =>
-                                    handleMarkerPressed(marker)
+                                    handleMarkerPressed(event)
                                 }></Marker>
                         ))}
 
                         {/* Mi ubicación */}
-                        {/* <Marker
+                        <Marker
                             coordinate={{
                                 latitude: location.coords.latitude,
                                 longitude: location.coords.longitude,
@@ -97,13 +98,13 @@ export default function Events() {
                                 source={require("../assets/userLocation.png")}
                                 style={{ width: 40, height: 40 }}
                             />
-                        </Marker> */}
+                        </Marker>
                     </MapView>
                 </View>
 
                 {/* Show sliding panel if marker pressed */}
 
-                {markerPressed && (
+                {markerPressed.images ? (
                     <View style={styles.slider}>
                         {/* Imagenes preview */}
 
@@ -116,6 +117,8 @@ export default function Events() {
                             }))}
                         />
                     </View>
+                ) : (
+                    <Text>Nah</Text>
                 )}
             </View>
         );
