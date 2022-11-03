@@ -4,7 +4,7 @@ import { Icon } from "react-native-elements";
 import { Text } from "react-native";
 import EventsMap from "../screens/EventsMap";
 import Profile from "../screens/Profile";
-import Create from "../screens/Create";
+import Create from "../screens/CreateEvent";
 
 export const BottomTab = () => {
     const Tab = createBottomTabNavigator();

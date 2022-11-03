@@ -13,7 +13,6 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-navigation/bottom-tabs": "^6.3.1",
-    "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@react-navigation/stack": "^6.2.1",
     "@rneui/base": "^4.0.0-rc.4",
@@ -42,8 +41,7 @@
     "react-native-svg": "12.3.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "0.17.7",
-    "react-query": "^3.39.1",
-    "expo-task-manager": "~10.2.1"
+    "react-query": "^3.39.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
