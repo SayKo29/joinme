@@ -6,13 +6,19 @@ import getEventsData from "../api/EventsData";
 import GallerySwiper from "react-native-gallery-swiper";
 import * as Location from "expo-location";
 import LottieAnimation from "../components/LottieAnimation";
+import { useAuth } from "../contexts/Auth";
 
 export default function Events({ navigation }) {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [markerPressed, setMarkerPressed] = useState(false);
 
-    const events = useQuery("EVENTS", getEventsData);
+    const { isLoading, isError, data, error } = useQuery(
+        "EVENTS",
+        getEventsData
+    );
+
+    const user = useAuth();
 
     // get ios location
     useEffect(() => {
@@ -34,10 +40,10 @@ export default function Events({ navigation }) {
         });
     }, []);
 
-    if (events.isLoading) {
+    if (isLoading) {
         return <Text>Loading events...</Text>;
     }
-    if (events.isError) {
+    if (isError) {
         return <Text>Error events...</Text>;
     }
 
@@ -46,7 +52,7 @@ export default function Events({ navigation }) {
         setMarkerPressed(marker);
     };
 
-    if (events && location) {
+    if (data && location) {
         console.log(location);
         return (
             <View style={styles.container}>
@@ -69,7 +75,7 @@ export default function Events({ navigation }) {
                             longitudeDelta: 0.0043,
                         }}
                         mapType="standard">
-                        {events.data.map((event, index) => (
+                        {data.map((event, index) => (
                             <Marker
                                 key={index}
                                 title={event.title}
@@ -91,12 +97,21 @@ export default function Events({ navigation }) {
                             }}>
                             <Callout style>
                                 <Image
-                                    source={require("../assets/userLocation.png")}
+                                    source={
+                                        user.authData.user.avatar
+                                            ? { uri: user.authData.user.avatar }
+                                            : require("../assets/avatar.jpg")
+                                    }
                                 />
                                 <Text>Mi ubicación</Text>
                             </Callout>
                             <Image
-                                source={require("../assets/userLocation.png")}
+                                className="rounded-full"
+                                source={
+                                    user.authData.user.avatar
+                                        ? { uri: user.authData.user.avatar }
+                                        : require("../assets/avatar.jpg")
+                                }
                                 style={{ width: 40, height: 40 }}
                             />
                         </Marker>
@@ -105,22 +120,24 @@ export default function Events({ navigation }) {
 
                 {/* Show sliding panel if marker pressed */}
 
-                {/* {markerPressed.images ? (
+                {markerPressed.images ? (
                     <View style={styles.slider}>
-                        {/* Imagenes preview *
-
+                        {/* /* Imagenes preview * */}
                         <GallerySwiper
                             style={styles.gallery}
                             images={markerPressed.images.map((image) => ({
                                 source: {
-                                    uri: image,
+                                    uri:
+                                        image != []
+                                            ? image
+                                            : require("../assets/avatar.jpg"),
                                 },
                             }))}
                         />
                     </View>
                 ) : (
                     <Text>Nah</Text>
-                )} */}
+                )}
             </View>
         );
     }

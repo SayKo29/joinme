@@ -31,7 +31,11 @@ const Profile = ({ navigation }) => {
                     {/* foto de perfil redondeada*/}
                     <Image
                         className="self-center rounded-full w-[30%] h-[20%]"
-                        source={require("../assets/avatar.jpg")}
+                        source={
+                            auth.authData.user.avatar
+                                ? { uri: auth.authData.user.avatar }
+                                : require("../assets/avatar.jpg")
+                        }
                     />
                     <Text className="self-center text-2xl text-main">
                         {auth.authData.user.name}
