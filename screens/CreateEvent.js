@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, SafeAreaView, TextInput } from "react-native";
 import getCategories from "../api/CategoryData";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,16 +10,14 @@ import CreateEventPost from "../api/CreateEventPost";
 const CreateEvent = ({ navigation }) => {
     const categories = useQuery("CATEGORIES", getCategories);
     let dataSet = [];
-    const ref = useRef();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState({});
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const { mutate, isLoading, isError, error } = useMutation(CreateEventPost);
+    const queryClient = useQueryClient();
 
-    const handleCreateEvent = () => {
-        // console.log("hoolafdsafsa");
-        // console.log(selectedLocation);
-
+    const handleCreateEvent = async () => {
         const event = {
             name: name,
             description: description,
@@ -28,8 +26,17 @@ const CreateEvent = ({ navigation }) => {
             latitude: selectedLocation?.lat,
             user: "634ed058ba603fa66e53732f",
         };
-        CreateEventPost(event);
-        // console.log(selectedCategory);
+        mutate(event, {
+            onSuccess: () => {
+                queryClient.invalidateQueries("EVENTS");
+                navigation.navigate("Events");
+                //  clear form
+                setName("");
+                setDescription("");
+                setSelectedCategory(null);
+                setSelectedLocation({});
+            },
+        });
     };
 
     if (categories.data) {
@@ -67,7 +74,6 @@ const CreateEvent = ({ navigation }) => {
                 />
                 <Text>Location</Text>
                 <GooglePlacesAutocomplete
-                    ref={ref}
                     placeholder="Search"
                     fetchDetails={true}
                     onPress={(data, details = null) => {

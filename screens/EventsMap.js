@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useQuery } from "react-query";
 import getEventsData from "../api/EventsData";
-import GallerySwiper from "react-native-gallery-swiper";
 import * as Location from "expo-location";
 import LottieAnimation from "../components/LottieAnimation";
 import { useAuth } from "../contexts/Auth";
+import SlidePanel from "../components/SlidePanel";
 
 export default function Events({ navigation }) {
     const [location, setLocation] = useState(null);
@@ -48,12 +48,10 @@ export default function Events({ navigation }) {
     }
 
     const handleMarkerPressed = (marker) => {
-        console.log(marker);
         setMarkerPressed(marker);
     };
 
     if (data && location) {
-        console.log(location);
         return (
             <View style={styles.container}>
                 {/*Render our MapView*/}
@@ -92,19 +90,13 @@ export default function Events({ navigation }) {
                         {/* Mi ubicación */}
                         <Marker
                             coordinate={{
-                                latitude: location.coords.latitude,
-                                longitude: location.coords.longitude,
+                                latitude: parseFloat(
+                                    location?.coords?.latitude
+                                ),
+                                longitude: parseFloat(
+                                    location?.coords?.longitude
+                                ),
                             }}>
-                            <Callout style>
-                                <Image
-                                    source={
-                                        user.authData.user.avatar
-                                            ? { uri: user.authData.user.avatar }
-                                            : require("../assets/avatar.jpg")
-                                    }
-                                />
-                                <Text>Mi ubicación</Text>
-                            </Callout>
                             <Image
                                 className="rounded-full"
                                 source={
@@ -117,27 +109,8 @@ export default function Events({ navigation }) {
                         </Marker>
                     </MapView>
                 </View>
-
-                {/* Show sliding panel if marker pressed */}
-
-                {markerPressed.images ? (
-                    <View style={styles.slider}>
-                        {/* /* Imagenes preview * */}
-                        <GallerySwiper
-                            style={styles.gallery}
-                            images={markerPressed.images.map((image) => ({
-                                source: {
-                                    uri:
-                                        image != []
-                                            ? image
-                                            : require("../assets/avatar.jpg"),
-                                },
-                            }))}
-                        />
-                    </View>
-                ) : (
-                    <Text>Nah</Text>
-                )}
+                {/* Show sliding panel if marker pressed with markerPressed prop*/}
+                {markerPressed && <SlidePanel markerPressed={markerPressed} />}
             </View>
         );
     }
@@ -158,30 +131,10 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    slideContainer: {
-        flex: 1,
-        backgroundColor: "#FFF",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    slider: {
-        width: "100%",
-        height: "30%",
-    },
-    gallery: {
-        width: "100%",
-        height: "100%",
-    },
     panel: {
         flex: 1,
         backgroundColor: "white",
         location: "relative",
-    },
-    panelHeader: {
-        height: "10%",
-        backgroundColor: "#561F37",
-        alignItems: "center",
-        justifyContent: "start",
     },
     lottie: { width: "100%", height: "100%" },
 });
