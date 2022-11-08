@@ -6,7 +6,8 @@ import { AuthData, authService } from '../services/authService';
 type AuthContextData = {
     authData?: AuthData;
     loading: boolean;
-    signIn(): Promise<void>;
+    register: (email: string, password: string) => Promise<void>;
+    signIn(): (email: string, password: string) => Promise<void>;
     signOut(): void;
 };
 
@@ -43,7 +44,7 @@ const AuthProvider: React.FC = ({ children }) => {
         }
     }
 
-    const signIn = async (formData) => {
+    const signIn = async (formData: any) => {
         //call the service passing credential (email and password).
         //In a real App this data will be provided by the user from some InputText components.
         const _authData = await authService.signIn(
@@ -59,6 +60,24 @@ const AuthProvider: React.FC = ({ children }) => {
         AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
     };
 
+    const register = async (formData: any) => {
+        console.log(formData);
+
+        const _authData = await authService.register(
+            formData
+        );
+
+        // handle false
+        if (_authData) {
+            setAuthData(_authData);
+
+            AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
+        } else {
+            console.log('error');
+        }
+
+    };
+
     const signOut = async () => {
         //Remove data from context, so the App can be notified
         //and send the user to the AuthStack
@@ -72,7 +91,7 @@ const AuthProvider: React.FC = ({ children }) => {
     return (
         //This component will be used to encapsulate the whole App,
         //so all components will have access to the Context
-        <AuthContext.Provider value={{ authData, loading, signIn, signOut }}>
+        <AuthContext.Provider value={{ authData, loading, signIn, register, signOut }}>
             {children}
         </AuthContext.Provider>
     );
