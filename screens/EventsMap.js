@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import { StyleSheet, View, Text, Image, Appearance } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useQuery } from 'react-query'
 import getEventsData from '../api/EventsData'
@@ -51,15 +51,20 @@ export default function Events ({ navigation }) {
     setMarkerPressed(marker)
   }
 
+  const colorScheme = Appearance.getColorScheme()
+
+  console.log(colorScheme)
+
   if (data && location) {
     return (
       <View style={styles.container}>
         {/* Render our MapView */}
         <View style={styles.mapContainer}>
           <MapView
+            userInterfaceStyle={colorScheme}
+            provider={PROVIDER_GOOGLE}
             onPress={() =>
               markerPressed ? setMarkerPressed(false) : null}
-            provider={PROVIDER_GOOGLE}
                         // conditional rendering for the map
             style={styles.map}
                         // specify our coordinates.
