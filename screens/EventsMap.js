@@ -71,6 +71,7 @@ export default function Events ({ navigation }) {
         {/* Render our MapView */}
         <View style={styles.mapContainer}>
           <MapView
+            provider='google'
             clusterColor={colors.primary}
             customMapStyle={Appearance.getColorScheme() === 'dark' ? mapStyle : null}
             // provider={PROVIDER_GOOGLE}
