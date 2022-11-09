@@ -112,7 +112,7 @@ const CreateEvent = ({ navigation }) => {
         <Text style={styles.label}>Category</Text>
         <View
           style={[
-            { flex: 1, flexDirection: 'row', alignItems: 'center' },
+            { flex: 1, flexDirection: 'row', alignItems: 'flex-start', maxHeight: 80 },
             Platform.select({ ios: { zIndex: 1 } })
           ]}
         >
@@ -121,14 +121,12 @@ const CreateEvent = ({ navigation }) => {
             controller={controller => {
               dropdownController.current = controller
             }}
-          // initialValue={'1'}
             direction={Platform.select({ ios: 'down' })}
             dataSet={dataSet}
             onSelectItem={setSelectedCategory}
             debounce={600}
             suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
             onClear={onClearPress}
-          //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
             onOpenSuggestionsList={onOpenSuggestionsList}
             loading={loading}
             useFilter={false} // set false to prevent rerender twice
@@ -137,36 +135,31 @@ const CreateEvent = ({ navigation }) => {
               autoCorrect: false,
               autoCapitalize: 'none',
               style: {
-                borderRadius: 25,
-                backgroundColor: '#383b42',
+                borderBottomWidth: 1,
+                backgroundColor: 'transparent',
                 color: '#fff',
-                paddingLeft: 18
+                borderBottomColor: '#fff',
+                paddingLeft: 0,
+                fontSize: 12
               }
             }}
-            rightButtonsContainerStyle={{
-              right: 8,
-              height: 30,
-
-              alignSelf: 'center'
-            }}
             inputContainerStyle={{
-              backgroundColor: '#383b42',
-              borderRadius: 25
+              backgroundColor: 'transparent'
             }}
             suggestionsListContainerStyle={{
-              backgroundColor: '#383b42'
+              backgroundColor: colors.primary
             }}
             containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-            renderItem={(item, text) => <Text style={{ color: '#fff', padding: 15 }}>{item.title}</Text>}
+            renderItem={(item, text) => <Text style={{ color: '#fff', padding: 12 }}>{item.title}</Text>}
             inputHeight={50}
             showChevron={false}
             closeOnBlur={false}
           />
           <View style={{ width: 10 }} />
-          <Button style={{ flexGrow: 0 }} title='Toggle' onPress={() => dropdownController.current.toggle()} />
         </View>
 
-        <Text style={styles.label}>Location</Text>
+        <Text style={styles.label}>Localización del evento</Text>
+        <Text style={styles.description}>Selecciona en el mapa el lugar del evento</Text>
         {/* click on map to get location */}
         {/* render map if user location */}
         {/* when user press show a marker */}
@@ -187,8 +180,8 @@ const CreateEvent = ({ navigation }) => {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
                 // zoom
-                latitudeDelta: 9.0922,
-                longitudeDelta: 9.0421
+                latitudeDelta: 0.6,
+                longitudeDelta: 0.6
 
               }}
             >
@@ -208,7 +201,7 @@ const CreateEvent = ({ navigation }) => {
           style={styles.submitButton}
           onPress={handleCreateEvent}
         >
-          <Text className='text-white text-center text-xl'>
+          <Text style={styles.submitText}>
             Crear evento
           </Text>
         </TouchableOpacity>
@@ -259,8 +252,9 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.white,
     width: '100%',
     height: 40,
-    padding: 10,
-    marginBottom: 10
+    fontSize: 12,
+    marginBottom: 10,
+    color: colors.white
   },
   autocompleteContainer: {
     width: '100%',
@@ -286,14 +280,14 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: 200,
+    height: 250,
     marginBottom: 20,
     zIndex: 2,
     elevation: 2,
     position: 'relative'
   },
   submitButton: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.primary,
     width: '100%',
     height: 40,
     padding: 10,
@@ -307,6 +301,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5
+  },
+  submitText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  description: {
+    paddingTop: 10,
+    color: colors.white,
+    fontSize: 12,
+    marginBottom: 10
   }
 })
 

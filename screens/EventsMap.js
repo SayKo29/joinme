@@ -76,8 +76,8 @@ export default function Events ({ navigation }) {
               latitude: location.coords.latitude,
               // longitude: 43.263,
               longitude: location.coords.longitude,
-              latitudeDelta: 0.0043,
-              longitudeDelta: 0.0043
+              latitudeDelta: 0.6,
+              longitudeDelta: 0.6
             }}
             mapType='standard'
           >
