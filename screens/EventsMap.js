@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, Image, Appearance } from 'react-native'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView from 'react-native-map-clustering'
+import { Marker } from 'react-native-maps'
 import { useQuery } from 'react-query'
 import getEventsData from '../api/EventsData'
 import * as Location from 'expo-location'
@@ -8,6 +9,7 @@ import LottieAnimation from '../components/LottieAnimation'
 import { useAuth } from '../contexts/Auth'
 import SlidePanel from '../components/SlidePanel'
 import mapStyle from '../styles/mapStyle'
+import colors from '../styles/colors'
 
 export default function Events ({ navigation }) {
   const [location, setLocation] = useState(null)
@@ -63,9 +65,9 @@ export default function Events ({ navigation }) {
         {/* Render our MapView */}
         <View style={styles.mapContainer}>
           <MapView
+            clusterColor={colors.primary}
             customMapStyle={Appearance.getColorScheme() === 'dark' ? mapStyle : null}
-            userInterfaceStyle={Appearance.getColorScheme() === 'dark' ? 'dark' : 'light'}
-            provider={PROVIDER_GOOGLE}
+            // provider={PROVIDER_GOOGLE}
             onPress={() =>
               markerPressed ? setMarkerPressed(false) : null}
                         // conditional rendering for the map
@@ -84,6 +86,7 @@ export default function Events ({ navigation }) {
             {data.map((event, index) => (
               <Marker
                 key={index}
+                tracksViewChanges={false}
                 title={event.title}
                 description={event.description}
                 coordinate={{

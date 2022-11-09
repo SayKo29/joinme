@@ -47,7 +47,8 @@ const SignUpScreen = ({ navigation }) => {
   useEffect(() => {
     if (response?.type === 'success') {
       setAccessToken(response.authentication.accessToken)
-      accessToken && fetchGoogleUserInfo() && registerGoogleUser()
+      registerGoogleUser()
+      accessToken && fetchGoogleUserInfo()
     }
   }, [response, accessToken])
 
