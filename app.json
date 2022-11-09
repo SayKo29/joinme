@@ -29,7 +29,7 @@
         "android": {
             "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
+                "foregroundImage": "./assets/img/logoResized.png",
                 "backgroundColor": "#FFFFFF"
             },
             "softwareKeyboardLayoutMode": "pan",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, View, Text, Image, Appearance } from 'react-native'
 import MapView from 'react-native-map-clustering'
 import { Marker } from 'react-native-maps'
@@ -7,14 +7,20 @@ import getEventsData from '../api/EventsData'
 import * as Location from 'expo-location'
 import LottieAnimation from '../components/LottieAnimation'
 import { useAuth } from '../contexts/Auth'
-import SlidePanel from '../components/SlidePanel'
 import mapStyle from '../styles/mapStyle'
 import colors from '../styles/colors'
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import EventDetail from '../components/EventDetail'
 
 export default function Events ({ navigation }) {
   const [location, setLocation] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
   const [markerPressed, setMarkerPressed] = useState(false)
+
+  //   bottom sheet
+  const sheetRef = useRef(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const snapPoints = ['40%', '100%']
 
   const { isLoading, isError, data } = useQuery(
     'EVENTS',
@@ -119,9 +125,24 @@ export default function Events ({ navigation }) {
               />
             </Marker>
           </MapView>
+          {markerPressed && (
+            <BottomSheet
+              onClose={() => setMarkerPressed(false)}
+              backgroundStyle={{ backgroundColor: colors.purple }}
+              handleIndicatorStyle={{
+                backgroundColor: colors.primary
+              }}
+              ref={sheetRef}
+              snapPoints={snapPoints}
+              enablePanDownToClose
+            >
+              <BottomSheetView style={styles.slider}>
+                <EventDetail markerPressed={markerPressed} />
+              </BottomSheetView>
+            </BottomSheet>
+          )}
         </View>
         {/* Show sliding panel if marker pressed with markerPressed prop */}
-        {markerPressed && <SlidePanel markerPressed={markerPressed} />}
       </View>
     )
   }
@@ -129,22 +150,22 @@ export default function Events ({ navigation }) {
 // create our styling code:
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent'
   },
   mapContainer: {
+    backgroundColor: 'transparent',
     flex: 1,
-    width: '100%',
-    height: '50%'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   map: {
     flex: 1,
     width: '100%',
     height: '100%'
   },
-  panel: {
-    flex: 1,
-    backgroundColor: 'white',
-    location: 'relative'
-  },
-  lottie: { width: '100%', height: '100%' }
+  lottie: { width: '100%', height: '100%' },
+  slider: {
+    backgroundColor: colors.purple
+  }
 })

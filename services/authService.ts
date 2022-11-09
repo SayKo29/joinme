@@ -47,8 +47,8 @@ const register = async (formData: any) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
-        // "https://joinmeapi.onrender.com/api/register",
-        "http://192.168.1.199:5000/api/register",
+        "https://joinmeapi.onrender.com/api/register",
+        // "http://192.168.1.199:5000/api/register",
         requestOptions
     );
     const json = await response.json();
