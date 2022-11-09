@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, SafeAreaView, TextInput, StyleSheet, Appearance } from 'react-native'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { View, Text, SafeAreaView, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, Button } from 'react-native'
 import getCategories from '../api/CategoryData'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
@@ -70,6 +70,19 @@ const CreateEvent = ({ navigation }) => {
     })
   }
 
+  const [loading, setLoading] = useState(false)
+  const [suggestionsList, setSuggestionsList] = useState(null)
+  const [selectedItem, setSelectedItem] = useState(null)
+  const dropdownController = useRef(null)
+
+  const searchRef = useRef(null)
+
+  const onClearPress = useCallback(() => {
+    setSuggestionsList(null)
+  }, [])
+
+  const onOpenSuggestionsList = useCallback(isOpened => {}, [])
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -79,7 +92,7 @@ const CreateEvent = ({ navigation }) => {
       />
       <View style={styles.formContainer}>
         <Text style={styles.title}>Crea un nuevo evento</Text>
-        <Text style={styles.label}>Name of the event</Text>
+        <Text style={styles.label}>Nomre del evento</Text>
         <TextInput
           value={name}
           onChangeText={(text) => setName(text)}
@@ -97,18 +110,62 @@ const CreateEvent = ({ navigation }) => {
           multiline
         />
         <Text style={styles.label}>Category</Text>
-        <AutocompleteDropdown
-          inputContainerStyle={styles.autocompleteInput}
-          containerStyle={styles.autocompleteContainer}
-          rightButtonsContainerStyle={styles.rightButtonsContainerStyle}
-          suggestionsListContainerStyle={styles.suggestionsListContainerStyle}
-          suggestionsListTextStyle={styles.suggestionsListTextStyle}
-          clearOnFocus={false}
-          closeOnBlur
-          closeOnSubmit
-          onSelectItem={setSelectedCategory}
-          dataSet={dataSet}
-        />
+        <View
+          style={[
+            { flex: 1, flexDirection: 'row', alignItems: 'center' },
+            Platform.select({ ios: { zIndex: 1 } })
+          ]}
+        >
+          <AutocompleteDropdown
+            ref={searchRef}
+            controller={controller => {
+              dropdownController.current = controller
+            }}
+          // initialValue={'1'}
+            direction={Platform.select({ ios: 'down' })}
+            dataSet={dataSet}
+            onSelectItem={setSelectedCategory}
+            debounce={600}
+            suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
+            onClear={onClearPress}
+          //  onSubmit={(e) => onSubmitSearch(e.nativeEvent.text)}
+            onOpenSuggestionsList={onOpenSuggestionsList}
+            loading={loading}
+            useFilter={false} // set false to prevent rerender twice
+            textInputProps={{
+              placeholder: 'Selecciona una categoría',
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: {
+                borderRadius: 25,
+                backgroundColor: '#383b42',
+                color: '#fff',
+                paddingLeft: 18
+              }
+            }}
+            rightButtonsContainerStyle={{
+              right: 8,
+              height: 30,
+
+              alignSelf: 'center'
+            }}
+            inputContainerStyle={{
+              backgroundColor: '#383b42',
+              borderRadius: 25
+            }}
+            suggestionsListContainerStyle={{
+              backgroundColor: '#383b42'
+            }}
+            containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+            renderItem={(item, text) => <Text style={{ color: '#fff', padding: 15 }}>{item.title}</Text>}
+            inputHeight={50}
+            showChevron={false}
+            closeOnBlur={false}
+          />
+          <View style={{ width: 10 }} />
+          <Button style={{ flexGrow: 0 }} title='Toggle' onPress={() => dropdownController.current.toggle()} />
+        </View>
+
         <Text style={styles.label}>Location</Text>
         {/* click on map to get location */}
         {/* render map if user location */}
@@ -176,11 +233,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   formContainer: {
+    position: 'absolute',
     width: '90%',
     height: '100%',
     flex: 1,
     backgroundColor: 'transparent',
-    alignItems: 'center'
+    alignItems: 'center',
+    // padding for android notch
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
   },
   title: {
     fontSize: 20,
@@ -195,27 +255,15 @@ const styles = StyleSheet.create({
     color: colors.white
   },
   input: {
-
-    // border bottom
     borderBottomWidth: 1,
     borderBottomColor: colors.white,
     width: '100%',
     height: 40,
     padding: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
-
+    marginBottom: 10
   },
   autocompleteContainer: {
     width: '100%',
-    height: 40,
     color: colors.white,
     marginBottom: 20
   },
@@ -223,30 +271,26 @@ const styles = StyleSheet.create({
     width: 0,
     height: 0
   },
-  suggestionsListTextStyle: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1
+  suggestionsListContainerStyle: {
+    backgroundColor: colors.primary,
+    zIndex: 3,
+    elevation: 3
   },
   autocompleteInput: {
     width: '100%',
     height: 40,
-    borderWidth: 1,
-    borderColor: colors.white,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+    borderbottomWidth: 1,
+    borderBottomColor: colors.white,
+    backgroundColor: 'transparent',
+    color: colors.white
   },
   map: {
     width: '100%',
     height: 200,
-    marginBottom: 20
+    marginBottom: 20,
+    zIndex: 2,
+    elevation: 2,
+    position: 'relative'
   },
   submitButton: {
     backgroundColor: colors.white,

@@ -32,7 +32,7 @@
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
             },
-            "softwareKeyboardLayoutMode": "resize",
+            "softwareKeyboardLayoutMode": "pan",
             "permissions": [
                 "ACCESS_FINE_LOCATION",
                 "ACCESS_COARSE_LOCATION",

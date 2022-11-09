@@ -61,5 +61,6 @@ const register = async (formData: any) => {
 };
 
 export const authService = {
-    signIn, register,
+    signIn,
+    register,
 };

@@ -7,7 +7,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image
+  Image,
+  Platform,
+  StatusBar
 } from 'react-native'
 import { useAuth } from '../contexts/Auth'
 
@@ -89,7 +91,9 @@ const profile = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    // padding for android notch
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
   },
   profileImage: {
     width: 200,

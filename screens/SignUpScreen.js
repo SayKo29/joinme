@@ -21,6 +21,7 @@ const SignUpScreen = ({ navigation }) => {
     androidClientId
   })
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   //   const [error, setError] = useState('')
   const [password, setPassword] = useState('')
 
@@ -40,7 +41,7 @@ const SignUpScreen = ({ navigation }) => {
   }
 
   async function registerFormUser () {
-    await auth.register({ email, password })
+    await auth.register({ email, password, name })
   }
 
   useEffect(() => {
@@ -63,6 +64,13 @@ const SignUpScreen = ({ navigation }) => {
               Register
             </Text>
 
+            <TextInput
+              placeholder='Name'
+              placeholderTextColor='white'
+              style={formAuth.input}
+              onChangeText={text => setName(text)}
+              value={name}
+            />
             <TextInput
               placeholder='Email'
               placeholderTextColor='white'
