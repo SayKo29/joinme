@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
-        "userInterfaceStyle": "light",
+        "userInterfaceStyle": "automatic",
         "splash": {
             "image": "./assets/splash.png",
             "resizeMode": "contain",
@@ -16,6 +16,7 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
+            "userInterfaceStyle": "automatic",
             "supportsTablet": true,
             "config": {
                 "googleMapsApiKey": "AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY"
@@ -26,6 +27,7 @@
             "bundleIdentifier": "com.joinme.app"
         },
         "android": {
+            "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"

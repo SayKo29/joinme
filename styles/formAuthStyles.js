@@ -17,19 +17,28 @@ const colors = {
 const formAuth = StyleSheet.create({
   container: {
     width: '100%',
+    height: '100%',
     flex: 1
+  },
+  SignUpScreen: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: -30
   },
   backgroundImageLogo: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height + 30,
-    resizeMode: 'stretch'
+    height: Dimensions.get('window').height + 30
   },
   logo: {
     width: 150,
     height: 150
   },
   logoContainer: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 100,
     alignItems: 'center'
   },
 

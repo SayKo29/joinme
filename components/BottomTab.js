@@ -16,13 +16,22 @@ export const BottomTab = () => {
         tabBarLabel: ({ focused }) => {
           return (
             <Text
-              className={[
-                focused ? 'text-pink-900' : 'text-gray-500'
-              ]}
+              style={{
+                color: focused ? colors.primary : colors.gray,
+                fontSize: 12,
+                fontWeight: 'bold'
+              }}
             >
               {route.name}
             </Text>
           )
+        },
+
+        // change background of tabs
+        tabBarStyle: {
+          backgroundColor: colors.purple,
+          borderTopColor: 'transparent',
+          color: '#fff'
         },
 
         tabBarIcon: ({ focused, color, size }) => {
@@ -60,9 +69,7 @@ export const BottomTab = () => {
       <Tab.Screen
         options={{
           title: 'Map',
-          headerStyle: {
-            backgroundColor: colors.primary
-          },
+          headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold'
@@ -77,7 +84,7 @@ export const BottomTab = () => {
           headerStyle: {
             backgroundColor: colors.primary
           },
-          // headerShown: false,
+          headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold'
@@ -89,9 +96,7 @@ export const BottomTab = () => {
       <Tab.Screen
         options={{
           title: 'Perfil',
-          headerStyle: {
-            backgroundColor: colors.primary
-          },
+          headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold'

@@ -51,68 +51,70 @@ const SignUpScreen = ({ navigation }) => {
   }, [response, accessToken])
 
   return (
-    <ImageBackground style={formAuth.backgroundImageLogo} source={require('../assets/img/logo.gif')}>
-      <SafeAreaView style={formAuth.container}>
-        {/* LOGO */}
-        <View style={formAuth.logoContainer}>
-          <Image source={require('../assets/img/logo.png')} style={formAuth.logo} />
-        </View>
-        <View style={formAuth.formContainer}>
-          <Text style={formAuth.title}>
-            Register
-          </Text>
-
-          <TextInput
-            placeholder='Email'
-            placeholderTextColor='white'
-            style={formAuth.input}
-            onChangeText={text => setEmail(text)}
-            value={email}
-          />
-          <TextInput
-            placeholder='Password'
-            placeholderTextColor='white'
-            style={formAuth.input}
-            onChangeText={text => setPassword(text)}
-            value={password}
-            secureTextEntry
-          />
-
-          <TouchableOpacity
-            style={formAuth.registerButton}
-            onPress={registerFormUser}
-          >
-            <Text style={formAuth.text}>Create Account</Text>
-          </TouchableOpacity>
-
-          {/* or signup with google */}
-          <Text style={formAuth.textContent}>
-            or
-          </Text>
-
-          <TouchableOpacity
-            style={formAuth.googleButtonContainer}
-            onPress={() => {
-              promptAsync()
-            }}
-          >
-            <Image source={require('../assets/img/google.png')} style={formAuth.googleLogo} />
-          </TouchableOpacity>
-
-          <View>
-            <Text style={formAuth.textNormal}>
-              Already have an account?
-            </Text>
-            <TouchableOpacity onPress={() => {
-              navigation.navigate('SignIn')
-            }}
-            >
-              <Text style={formAuth.textNormal}>Log in</Text>
-            </TouchableOpacity>
+    <View style={formAuth.SignUpScreen}>
+      <ImageBackground style={formAuth.backgroundImageLogo} source={require('../assets/img/logo.gif')}>
+        <SafeAreaView style={formAuth.container}>
+          {/* LOGO */}
+          <View style={formAuth.logoContainer}>
+            <Image source={require('../assets/img/logo.png')} style={formAuth.logo} />
           </View>
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+          <View style={formAuth.formContainer}>
+            <Text style={formAuth.title}>
+              Register
+            </Text>
+
+            <TextInput
+              placeholder='Email'
+              placeholderTextColor='white'
+              style={formAuth.input}
+              onChangeText={text => setEmail(text)}
+              value={email}
+            />
+            <TextInput
+              placeholder='Password'
+              placeholderTextColor='white'
+              style={formAuth.input}
+              onChangeText={text => setPassword(text)}
+              value={password}
+              secureTextEntry
+            />
+
+            <TouchableOpacity
+              style={formAuth.registerButton}
+              onPress={registerFormUser}
+            >
+              <Text style={formAuth.text}>Create Account</Text>
+            </TouchableOpacity>
+
+            {/* or signup with google */}
+            <Text style={formAuth.textContent}>
+              or
+            </Text>
+
+            <TouchableOpacity
+              style={formAuth.googleButtonContainer}
+              onPress={() => {
+                promptAsync()
+              }}
+            >
+              <Image source={require('../assets/img/google.png')} style={formAuth.googleLogo} />
+            </TouchableOpacity>
+
+            <View>
+              <Text style={formAuth.textNormal}>
+                Already have an account?
+              </Text>
+              <TouchableOpacity onPress={() => {
+                navigation.navigate('SignIn')
+              }}
+              >
+                <Text style={formAuth.textNormal}>Log in</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+      </ImageBackground>
+    </View>
   )
 }
 

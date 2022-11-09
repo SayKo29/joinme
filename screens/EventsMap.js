@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text, Image, Appearance } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useQuery } from 'react-query'
@@ -7,6 +7,7 @@ import * as Location from 'expo-location'
 import LottieAnimation from '../components/LottieAnimation'
 import { useAuth } from '../contexts/Auth'
 import SlidePanel from '../components/SlidePanel'
+import mapStyle from '../styles/mapStyle'
 
 export default function Events ({ navigation }) {
   const [location, setLocation] = useState(null)
@@ -32,12 +33,10 @@ export default function Events ({ navigation }) {
       const location = await Location.getCurrentPositionAsync({})
       setLocation(location)
     })()
-  }, [])
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false
-    })
+    // clean up function
+    return () => {
+      console.log('clean up')
+    }
   }, [])
 
   if (isLoading) {
@@ -51,9 +50,12 @@ export default function Events ({ navigation }) {
     setMarkerPressed(marker)
   }
 
-  const colorScheme = Appearance.getColorScheme()
-
-  console.log(colorScheme)
+  //   show lottie until location is found
+  if (!location || !data) {
+    return (
+      <LottieAnimation />
+    )
+  }
 
   if (data && location) {
     return (
@@ -61,7 +63,8 @@ export default function Events ({ navigation }) {
         {/* Render our MapView */}
         <View style={styles.mapContainer}>
           <MapView
-            userInterfaceStyle={colorScheme}
+            customMapStyle={Appearance.getColorScheme() === 'dark' ? mapStyle : null}
+            userInterfaceStyle={Appearance.getColorScheme() === 'dark' ? 'dark' : 'light'}
             provider={PROVIDER_GOOGLE}
             onPress={() =>
               markerPressed ? setMarkerPressed(false) : null}
@@ -104,13 +107,12 @@ export default function Events ({ navigation }) {
               }}
             >
               <Image
-                className='rounded-full'
                 source={
-                                    user.authData.user.avatar
-                                      ? { uri: user.authData.user.avatar }
-                                      : require('../assets/avatar.jpg')
-                                }
-                style={{ width: 40, height: 40 }}
+                    user.authData.user.avatar
+                      ? { uri: user.authData.user.avatar }
+                      : require('../assets/avatar.jpg')
+                }
+                style={{ width: 60, height: 60, borderRadius: 50 }}
               />
             </Marker>
           </MapView>
@@ -120,7 +122,6 @@ export default function Events ({ navigation }) {
       </View>
     )
   }
-  return <LottieAnimation />
 }
 // create our styling code:
 const styles = StyleSheet.create({
