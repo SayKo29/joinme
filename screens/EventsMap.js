@@ -65,7 +65,7 @@ export default function Events ({ navigation }) {
     )
   }
 
-  if (data && location) {
+  else {
     return (
       <View style={styles.container}>
         {/* Render our MapView */}
