@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, ScrollView, Button } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import getCategories from '../api/CategoryData'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import CreateEventPost from '../api/CreateEventPost'
 import colors from '../styles/colors'
 import MapView from 'react-native-maps'
@@ -13,7 +12,7 @@ import mapStyle from '../styles/mapStyle'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useAuth } from '../contexts/Auth'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { formatDate } from '../services/functions'
+import { formatToDate, formatToTime } from '../services/functions'
 
 const CreateEvent = ({ navigation }) => {
   // API
@@ -76,12 +75,14 @@ const CreateEvent = ({ navigation }) => {
     mutate(event, {
       onSuccess: () => {
         queryClient.invalidateQueries('EVENTS')
-        navigation.navigate('Events')
+        navigation.navigate('Eventos')
         //  clear form
         setName('')
         setDescription('')
         setSelectedCategory(null)
         setSelectedLocation({})
+        setStartDate(new Date())
+        setEndDate(new Date())
       }
     })
   }
@@ -93,33 +94,48 @@ const CreateEvent = ({ navigation }) => {
     })
   }
   const [mode, setMode] = useState('date')
-  const [show, setShow] = useState(false)
+  const [showStart, setShowStart] = useState(false)
+  const [showEnd, setShowEnd] = useState(false)
 
   const onChangeStartDate = (event, selectedDate) => {
     const currentDate = selectedDate
-    setShow(false)
+    setShowStart(false)
     setStartDate(currentDate)
   }
   const onChangeEndDate = (event, selectedDate) => {
     const currentDate = selectedDate
-    setShow(false)
+    setShowEnd(false)
     setEndDate(currentDate)
   }
 
-  const showMode = (currentMode) => {
+  const showModeStart = (currentMode) => {
     if (Platform.OS === 'android') {
-      setShow(true)
+      setShowStart(true)
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode)
+  }
+  const showModeEnd = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShowEnd(true)
       // for iOS, add a button that closes the picker
     }
     setMode(currentMode)
   }
 
-  const showDatepicker = () => {
-    showMode('date')
+  const showDatepickerStart = () => {
+    showModeStart('date')
   }
 
-  const showTimepicker = () => {
-    showMode('time')
+  const showTimepickerEnd = () => {
+    showModeEnd('time')
+  }
+  const showDatepickerEnd = () => {
+    showModeEnd('date')
+  }
+
+  const showTimepickerStart = () => {
+    showModeStart('time')
   }
 
   return (
@@ -131,7 +147,6 @@ const CreateEvent = ({ navigation }) => {
           alignItems: 'center',
           padding: 20
         }
-
     }
       >
         <LinearGradient
@@ -140,7 +155,7 @@ const CreateEvent = ({ navigation }) => {
           locations={[0.1, 0.8]}
         />
         <Text style={styles.title}>Crea un nuevo evento</Text>
-        <Text style={styles.label}>Nomre del evento</Text>
+        <Text style={styles.label}>Nombre del evento</Text>
         <TextInput
           value={name}
           onChangeText={(text) => setName(text)}
@@ -150,7 +165,7 @@ const CreateEvent = ({ navigation }) => {
         />
         <Text style={styles.label} className='pt-3'>Descripción del evento</Text>
         <TextInput
-          style={styles.input}
+          style={styles.textArea}
           value={description}
           placeholderTextColor={colors.gray}
           onChangeText={(text) => setDescription(text)}
@@ -207,11 +222,14 @@ const CreateEvent = ({ navigation }) => {
           />
         </View>
         <Text style={styles.label}>Fecha de inicio</Text>
-        <View>
-          <Button onPress={showDatepicker} title='Seleccione la fecha' />
-          <Button onPress={showTimepicker} title='Seleccione la hora' />
-          <Text style={styles.label}>{formatDate(startDate)}</Text>
-          {show && (
+        <View style={styles.dateContainer}>
+          <TouchableOpacity style={styles.dateBtn} onPress={showDatepickerStart}>
+            <Text style={styles.dateText}>Selecciona una fecha</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.dateBtn} onPress={showTimepickerStart}>
+            <Text style={styles.dateText}>Selecciona una hora</Text>
+          </TouchableOpacity>
+          {showStart && (
             <DateTimePicker
               testID='dateTimePicker'
               value={startDate}
@@ -222,24 +240,35 @@ const CreateEvent = ({ navigation }) => {
             />
           )}
         </View>
+        <View style={styles.resultDateText}>
+          <Text style={styles.resultDate}>{formatToDate(startDate)}</Text>
+          <Text style={styles.resultDate}>{formatToTime(startDate)}</Text>
+        </View>
         <Text style={styles.label}>Fecha de finalización</Text>
-        <View>
-          <Button onPress={showDatepicker} title='Show date picker!' />
-          <Button onPress={showTimepicker} title='Show time picker!' />
+        <View style={styles.dateContainer}>
+          <TouchableOpacity style={styles.dateBtn} onPress={showDatepickerEnd}>
+            <Text style={styles.dateText}>Selecciona una fecha</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.dateBtn} onPress={showTimepickerEnd}>
+            <Text style={styles.dateText}>Selecciona una hora</Text>
+          </TouchableOpacity>
           {/* show end date in DD-MM-YYYY HH:MM:SS FORMAT */}
-          <Text style={styles.label}>{formatDate(endDate)}</Text>
 
           {/* <Text style={styles.label}>{}</Text> */}
-          {show && (
+          {showEnd && (
             <DateTimePicker
               testID='dateTimePicker'
               value={endDate}
-              minimumDate={startDate || new Date()}
+              minimumDate={startDate}
               mode={mode}
               is24Hour
               onChange={onChangeEndDate}
             />
           )}
+        </View>
+        <View style={styles.resultDateText}>
+          <Text style={styles.resultDate}>{formatToDate(endDate)}</Text>
+          <Text style={styles.resultDate}>{formatToTime(endDate)}</Text>
         </View>
 
         <Text style={styles.label}>Localización del evento</Text>
@@ -426,7 +455,69 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 12,
     marginBottom: 10
+  },
+  dateContainer: {
+    width: '100%',
+    height: 'auto',
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 10
+  },
+  dateBtn: {
+    width: '48%',
+    height: 40,
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    color: colors.white,
+    justifyContent: 'center'
+  },
+  dateText: {
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  resultDate: {
+    width: '48%',
+    textAlign: 'left',
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingBottom: 20
+  },
+  resultDateText: {
+    width: '100%',
+    color: colors.white,
+    justifyContent: 'space-between',
+    fontSize: 16,
+    flexDirection: 'row',
+    fontWeight: 'bold',
+    paddingBottom: 20
+  },
+  textArea: {
+    width: '100%',
+    height: 60,
+    backgroundColor: 'transparent',
+    marginTop: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    color: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.white,
+    justifyContent: 'flex-start',
+    textAlignVertical: 'top'
   }
+
 })
 
 export default CreateEvent

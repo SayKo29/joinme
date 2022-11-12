@@ -38,17 +38,17 @@ export const BottomTab = () => {
           let iconName
 
           switch (route.name) {
-            case 'Events':
+            case 'Eventos':
               iconName = focused ? 'map' : 'ios-map-outline'
               color = focused ? colors.primary : 'lightgray'
               break
-            case 'Create':
+            case 'Crear':
               iconName = focused
                 ? 'ios-add-circle'
                 : 'ios-add-circle-outline'
               color = focused ? colors.primary : 'lightgray'
               break
-            case 'Profile':
+            case 'Perfil':
               iconName = focused ? 'person' : 'person'
               color = focused ? colors.primary : 'lightgray'
               break
@@ -75,7 +75,7 @@ export const BottomTab = () => {
             fontWeight: 'bold'
           }
         }}
-        name='Events'
+        name='Eventos'
         component={EventsMap}
       />
       <Tab.Screen
@@ -90,7 +90,7 @@ export const BottomTab = () => {
             fontWeight: 'bold'
           }
         }}
-        name='Create'
+        name='Crear'
         component={Create}
       />
       <Tab.Screen
@@ -102,7 +102,7 @@ export const BottomTab = () => {
             fontWeight: 'bold'
           }
         }}
-        name='Profile'
+        name='Perfil'
         component={Profile}
       />
     </Tab.Navigator>
