@@ -63,9 +63,7 @@ export default function Events ({ navigation }) {
     return (
       <LottieAnimation />
     )
-  }
-
-  else {
+  } else {
     return (
       <View style={styles.container}>
         {/* Render our MapView */}

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import colors from '../styles/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import {
@@ -18,7 +18,6 @@ const Profile = ({ navigation }) => {
   const signOut = () => {
     auth.signOut()
   }
-  console.log(auth)
   if (auth.authData.user) {
     return (
     // if has state, show profile

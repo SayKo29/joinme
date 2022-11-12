@@ -2,8 +2,54 @@ import { View, StyleSheet, Text } from 'react-native'
 import Gallery from 'react-native-image-gallery'
 import React from 'react'
 import colors from '../styles/colors'
+import getUsersData from '../api/UsersData'
+import { useQuery } from 'react-query'
 
 export default function EventDetail (props) {
+  const users = useQuery('USERS', getUsersData)
+
+  if (users.isLoading) {
+    return <Text>Loading users...</Text>
+  }
+  if (users.isError) {
+    return <Text>Error users...</Text>
+  }
+  if (users.data) {
+    // console.log(users.data)
+
+    const eventCreator = users.data[props.markerPressed?.user]
+    // console.log(eventCreator)
+
+    return (
+      <View style={styles.cardContainer}>
+        {/* /* show gallery images if have it* */}
+        {props.markerPressed.images.length > 0 && (
+          <View style={styles.galleryContainer}>
+            <Gallery
+              style={{ flex: 1, backgroundColor: 'black' }}
+              images={[
+                // map images to gallery
+                ...props.markerPressed.images.map((image) => {
+                  return {
+                    source: {
+                      uri: image
+                    }
+                  }
+                })
+              ]}
+            />
+          </View>
+        )}
+
+        <Text style={styles.title}>{props.markerPressed.name}</Text>
+        <Text style={styles.description}>{props.markerPressed.description}</Text>
+        {/* if eventCreator has name */}
+        {eventCreator && (
+          <Text style={styles.description}>Evento creado por {eventCreator?.name}</Text>
+        )}
+      </View>
+    )
+  }
   return (
     <View style={styles.cardContainer}>
       {/* /* show gallery images if have it* */}
@@ -27,6 +73,7 @@ export default function EventDetail (props) {
 
       <Text style={styles.title}>{props.markerPressed.name}</Text>
       <Text style={styles.description}>{props.markerPressed.description}</Text>
+      {/* <Text style={styles.description}>Evento creado por {users.data[props.markerPressed.user]}</Text> */}
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, Button, ScrollView } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, ScrollView, Button } from 'react-native'
 import getCategories from '../api/CategoryData'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
@@ -11,21 +11,42 @@ import MapView from 'react-native-maps'
 import * as Location from 'expo-location'
 import mapStyle from '../styles/mapStyle'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useAuth } from '../contexts/Auth'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { formatDate } from '../services/functions'
 
 const CreateEvent = ({ navigation }) => {
+  // API
   const categories = useQuery('CATEGORIES', getCategories)
   const dataSet = []
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedLocation, setSelectedLocation] = useState({})
   const [name, setName] = useState('')
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
   const [description, setDescription] = useState('')
   const { mutate } = useMutation(CreateEventPost)
   const queryClient = useQueryClient()
+  const [loading, setLoading] = useState(false)
+  const [suggestionsList, setSuggestionsList] = useState(null)
+  const dropdownController = useRef(null)
+
+  const searchRef = useRef(null)
+
+  const onClearPress = useCallback(() => {
+    setSuggestionsList(null)
+  }, [])
+
+  const onOpenSuggestionsList = useCallback(isOpened => {}, [])
 
   //   get current location
   const [location, setLocation] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [markerPressed, setMarkerPressed] = useState(false)
+  //   const [markerPressed, setMarkerPressed] = useState(false)
+
+  //   datetime picker
+
+  const auth = useAuth()
 
   // get ios location
   useEffect(() => {
@@ -48,7 +69,9 @@ const CreateEvent = ({ navigation }) => {
       category: selectedCategory.id,
       longitude: selectedLocation?.longitude,
       latitude: selectedLocation?.latitude,
-      user: '634ed058ba603fa66e53732f'
+      user: auth.authData?.user?.id,
+      startDate,
+      endDate
     }
     mutate(event, {
       onSuccess: () => {
@@ -69,176 +92,232 @@ const CreateEvent = ({ navigation }) => {
       return dataSet.push({ id: category._id, title: category.name })
     })
   }
+  const [mode, setMode] = useState('date')
+  const [show, setShow] = useState(false)
 
-  const [loading, setLoading] = useState(false)
-  const [suggestionsList, setSuggestionsList] = useState(null)
-  const [selectedItem, setSelectedItem] = useState(null)
-  const dropdownController = useRef(null)
+  const onChangeStartDate = (event, selectedDate) => {
+    const currentDate = selectedDate
+    setShow(false)
+    setStartDate(currentDate)
+  }
+  const onChangeEndDate = (event, selectedDate) => {
+    const currentDate = selectedDate
+    setShow(false)
+    setEndDate(currentDate)
+  }
 
-  const searchRef = useRef(null)
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true)
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode)
+  }
 
-  const onClearPress = useCallback(() => {
-    setSuggestionsList(null)
-  }, [])
+  const showDatepicker = () => {
+    showMode('date')
+  }
 
-  const onOpenSuggestionsList = useCallback(isOpened => {}, [])
+  const showTimepicker = () => {
+    showMode('time')
+  }
 
   return (
-    <ScrollView
-      style={styles.container} contentContainerStyle={
+    <View style={styles.container}>
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+        style={styles.container} contentContainerStyle={
         {
-          flex: 1,
           alignItems: 'center',
           padding: 20
         }
 
     }
-    >
-      <LinearGradient
-        colors={[colors.primary, colors.purple]}
-        style={styles.background}
-        locations={[0.25, 1]}
-      />
-      <Text style={styles.title}>Crea un nuevo evento</Text>
-      <Text style={styles.label}>Nomre del evento</Text>
-      <TextInput
-        value={name}
-        onChangeText={(text) => setName(text)}
-        style={styles.input}
-        placeholder='Padel Game'
-        placeholderTextColor={colors.gray}
-      />
-      <Text style={styles.label} className='pt-3'>Descripción del evento</Text>
-      <TextInput
-        style={styles.input}
-        value={description}
-        placeholderTextColor={colors.gray}
-        onChangeText={(text) => setDescription(text)}
-        placeholder='Breve descripción del evento'
-        multiline
-      />
-      <Text style={styles.label}>Category</Text>
-      <View
-        keyboardShouldPersistTaps='always'
-        style={[
-          { flex: 1, flexDirection: 'row', marginBottom: 80, alignItems: 'flex-start', maxHeight: 80 },
-          Platform.select({ ios: { zIndex: 1 } })
-        ]}
       >
-        <AutocompleteDropdown
-          ref={searchRef}
-          controller={controller => {
-            dropdownController.current = controller
-          }}
-          direction={Platform.select({ ios: 'down' })}
-          dataSet={dataSet}
-          onSelectItem={setSelectedCategory}
-          debounce={600}
-          suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
-          onClear={onClearPress}
-          onOpenSuggestionsList={onOpenSuggestionsList}
-          loading={loading}
-          useFilter={false} // set false to prevent rerender twice
-          textInputProps={{
-            placeholder: 'Selecciona una categoría',
-            autoCorrect: false,
-            autoCapitalize: 'none',
-            style: {
-              borderBottomWidth: 1,
-              backgroundColor: 'transparent',
-              color: '#fff',
-              borderBottomColor: '#fff',
-              paddingLeft: 0,
-              fontSize: 12
-            }
-          }}
-          inputContainerStyle={{
-            backgroundColor: 'transparent'
-          }}
-          suggestionsListContainerStyle={{
-            backgroundColor: colors.primary
-          }}
-          containerStyle={{ flexGrow: 1, flexShrink: 1 }}
-          renderItem={(item, text) => <Text style={{ color: '#fff', padding: 12 }}>{item.title}</Text>}
-          inputHeight={50}
-          showChevron={false}
-          closeOnBlur={false}
+        <LinearGradient
+          colors={[colors.backgroundOrange, colors.purple]}
+          style={styles.background}
+          locations={[0.1, 0.8]}
         />
-      </View>
-
-      <Text style={styles.label}>Localización del evento</Text>
-      <Text style={styles.description}>Selecciona en el mapa el lugar del evento o introduce la dirección a continuación</Text>
-      <View style={{
-        width: '100%',
-        height: 140,
-        paddingTop: 10
-
-      }}
-      >
-        <GooglePlacesAutocomplete
-          placeholder='Search'
-          fetchDetails
-          onPress={(data, details = null) => {
-            if (details) {
-              const loc = {
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng
-              }
-              setSelectedLocation(loc)
-            }
-          }}
-          query={{
-            key: 'AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY',
-            language: 'es',
-            components: 'country:es'
-          }}
+        <Text style={styles.title}>Crea un nuevo evento</Text>
+        <Text style={styles.label}>Nomre del evento</Text>
+        <TextInput
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={styles.input}
+          placeholder='Padel Game'
+          placeholderTextColor={colors.gray}
         />
-      </View>
-
-      {/* click on map to get location */}
-      {/* render map if user location */}
-      {/* when user press show a marker */}
-      {/* show loader when loading location */}
-
-      {!location
-        ? (
-          <Text>Loading...</Text>
-          )
-        : (
-          <MapView
-            style={styles.map} onPress={(e) => setSelectedLocation(e.nativeEvent.coordinate)}
-            customMapStyle={Appearance.getColorScheme() === 'dark' ? mapStyle : null}
-            provider='google'
-            initialRegion={{
-              // user location
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-              // zoom
-              latitudeDelta: 0.6,
-              longitudeDelta: 0.6
-
+        <Text style={styles.label} className='pt-3'>Descripción del evento</Text>
+        <TextInput
+          style={styles.input}
+          value={description}
+          placeholderTextColor={colors.gray}
+          onChangeText={(text) => setDescription(text)}
+          placeholder='Breve descripción del evento'
+          multiline
+        />
+        <Text style={styles.label}>Categoría del evento</Text>
+        <View
+          keyboardShouldPersistTaps='always'
+          style={[
+            { flex: 1, flexDirection: 'row', marginBottom: 20, alignItems: 'flex-start', maxHeight: 80 },
+            Platform.select({ ios: { zIndex: 1 } })
+          ]}
+        >
+          <AutocompleteDropdown
+            ref={searchRef}
+            controller={controller => {
+              dropdownController.current = controller
             }}
-          >
-            {selectedLocation?.latitude && (
-              <MapView.Marker
-                coordinate={selectedLocation}
-                title='Event Location'
-                description='This is the event location'
-              />
+            direction={Platform.select({ ios: 'down' })}
+            dataSet={dataSet}
+            onSelectItem={setSelectedCategory}
+            debounce={600}
+            suggestionsListMaxHeight={Dimensions.get('window').height * 0.4}
+            onClear={onClearPress}
+            onOpenSuggestionsList={onOpenSuggestionsList}
+            loading={loading}
+            useFilter={false} // set false to prevent rerender twice
+            textInputProps={{
+              placeholder: 'Selecciona una categoría',
+              placeholderTextColor: colors.gray,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              style: {
+                borderBottomWidth: 1,
+                backgroundColor: 'transparent',
+                color: '#fff',
+                borderBottomColor: '#fff',
+                paddingLeft: 0,
+                fontSize: 12
+              }
+            }}
+            inputContainerStyle={{
+              backgroundColor: 'transparent'
+            }}
+            suggestionsListContainerStyle={{
+              backgroundColor: colors.primary
+            }}
+            containerStyle={{ flexGrow: 1, flexShrink: 1 }}
+            renderItem={(item, text) => <Text style={{ color: '#fff', padding: 12 }}>{item.title}</Text>}
+            inputHeight={50}
+            showChevron={false}
+            closeOnBlur={false}
+          />
+        </View>
+        <Text style={styles.label}>Fecha de inicio</Text>
+        <View>
+          <Button onPress={showDatepicker} title='Seleccione la fecha' />
+          <Button onPress={showTimepicker} title='Seleccione la hora' />
+          <Text style={styles.label}>{formatDate(startDate)}</Text>
+          {show && (
+            <DateTimePicker
+              testID='dateTimePicker'
+              value={startDate}
+              mode={mode}
+              minimumDate={new Date()}
+              is24Hour
+              onChange={onChangeStartDate}
+            />
+          )}
+        </View>
+        <Text style={styles.label}>Fecha de finalización</Text>
+        <View>
+          <Button onPress={showDatepicker} title='Show date picker!' />
+          <Button onPress={showTimepicker} title='Show time picker!' />
+          {/* show end date in DD-MM-YYYY HH:MM:SS FORMAT */}
+          <Text style={styles.label}>{formatDate(endDate)}</Text>
+
+          {/* <Text style={styles.label}>{}</Text> */}
+          {show && (
+            <DateTimePicker
+              testID='dateTimePicker'
+              value={endDate}
+              minimumDate={startDate || new Date()}
+              mode={mode}
+              is24Hour
+              onChange={onChangeEndDate}
+            />
+          )}
+        </View>
+
+        <Text style={styles.label}>Localización del evento</Text>
+        <Text style={styles.description}>Selecciona en el mapa el lugar del evento o introduce la dirección a continuación</Text>
+        <View style={{
+          width: '100%',
+          height: 'auto',
+          paddingTop: 10,
+          elevation: 5,
+          zIndex: 5
+
+        }}
+        >
+          <GooglePlacesAutocomplete
+            placeholder='Search'
+            fetchDetails
+            onPress={(data, details = null) => {
+              if (details) {
+                const loc = {
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng
+                }
+                setSelectedLocation(loc)
+              }
+            }}
+            query={{
+              key: 'AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY',
+              language: 'es',
+              components: 'country:es'
+            }}
+          />
+        </View>
+
+        {/* click on map to get location */}
+        {/* render map if user location */}
+        {/* when user press show a marker */}
+        {/* show loader when loading location */}
+
+        {!location
+          ? (
+            <Text style={styles.loading}>Loading...</Text>
+            )
+          : (
+            <MapView
+              style={styles.map} onPress={(e) => setSelectedLocation(e.nativeEvent.coordinate)}
+              customMapStyle={Appearance.getColorScheme() === 'dark' ? mapStyle : null}
+              provider='google'
+              initialRegion={{
+              // user location
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                // zoom
+                latitudeDelta: 0.6,
+                longitudeDelta: 0.6
+
+              }}
+            >
+              {selectedLocation?.latitude && (
+                <MapView.Marker
+                  coordinate={selectedLocation}
+                  title='Event Location'
+                  description='This is the event location'
+                />
+              )}
+
+            </MapView>
             )}
 
-          </MapView>
-          )}
-
-      <TouchableOpacity
-        style={styles.submitButton}
-        onPress={handleCreateEvent}
-      >
-        <Text style={styles.submitText}>
-          Crear evento
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleCreateEvent}
+        >
+          <Text style={styles.submitText}>
+            Crear evento
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   )
 }
 
@@ -315,6 +394,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     zIndex: 2,
     elevation: 2
+  },
+  loading: {
+    height: 250
   },
   submitButton: {
     backgroundColor: colors.primary,
