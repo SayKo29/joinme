@@ -5,6 +5,7 @@ import { Text } from 'react-native'
 import EventsMap from '../screens/EventsMap'
 import Profile from '../screens/Profile'
 import Create from '../screens/CreateEvent'
+import ChatScreen from '../screens/Chatroom'
 import colors from '../styles/colors'
 
 export const BottomTab = () => {
@@ -42,6 +43,10 @@ export const BottomTab = () => {
               iconName = focused ? 'map' : 'ios-map-outline'
               color = focused ? colors.primary : 'lightgray'
               break
+            case 'Chat':
+              iconName = focused ? 'chat' : 'chat-outline'
+              color = focused ? colors.primary : 'lightgray'
+              break
             case 'Crear':
               iconName = focused
                 ? 'ios-add-circle'
@@ -77,6 +82,18 @@ export const BottomTab = () => {
         }}
         name='Eventos'
         component={EventsMap}
+      />
+      <Tab.Screen
+        options={{
+          title: 'Chat',
+          headerShown: false,
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          }
+        }}
+        name='Chat'
+        component={ChatScreen}
       />
       <Tab.Screen
         options={{

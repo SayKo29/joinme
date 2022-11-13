@@ -33,6 +33,7 @@ const LottieAnimation = () => {
     <SafeAreaView>
       <View style={lottieStyle.fullLottie}>
         <LottieView
+          style={lottieStyle.lottie}
           progress={progress}
           source={require('../assets/animations/loader.json')}
         />
@@ -43,8 +44,14 @@ const LottieAnimation = () => {
 
 const lottieStyle = StyleSheet.create({
   fullLottie: {
-    width: '100%',
-    height: '100%'
+    Width: '100%',
+    height: '100%',
+    padding: 20
+  },
+  lottie: {
+    // SMALL LOTTIE
+    ...StyleSheet.absoluteFillObject
+
   }
 })
 

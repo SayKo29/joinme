@@ -4,6 +4,7 @@ import React from 'react'
 import colors from '../styles/colors'
 import getUsersData from '../api/UsersData'
 import { useQuery } from 'react-query'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function EventDetail (props) {
   const users = useQuery('USERS', getUsersData)
@@ -47,6 +48,11 @@ export default function EventDetail (props) {
         {eventCreator && (
           <Text style={styles.description}>Evento creado por {eventCreator?.name}</Text>
         )}
+
+        {/* button to join chat event */}
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Chat', { event: props.markerPressed })}>
+          <Text style={styles.buttonText}>Unirse al chat del evento</Text>
+        </TouchableOpacity>
       </View>
     )
   }

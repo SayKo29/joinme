@@ -48,7 +48,7 @@ export default function Events ({ navigation }) {
   }, [])
 
   if (isLoading) {
-    return <Text>Loading events...</Text>
+    return <LottieAnimation />
   }
   if (isError) {
     return <Text>Error events...</Text>
