@@ -43,7 +43,7 @@ export const BottomTab = () => {
               iconName = focused ? 'map' : 'ios-map-outline'
               color = focused ? colors.primary : 'lightgray'
               break
-            case 'Chat':
+            case 'Chats':
               iconName = focused ? 'chat' : 'chat-outline'
               color = focused ? colors.primary : 'lightgray'
               break
@@ -85,14 +85,14 @@ export const BottomTab = () => {
       />
       <Tab.Screen
         options={{
-          title: 'Chat',
+          title: 'Chats',
           headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold'
           }
         }}
-        name='Chat'
+        name='Chats'
         component={ChatScreen}
       />
       <Tab.Screen

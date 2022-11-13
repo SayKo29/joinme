@@ -1,80 +1,56 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
 import { useAuth } from '../contexts/Auth'
 import { io } from 'socket.io-client'
+import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import getEventsByParticipant from '../api/GetParticipantEvents'
+import { useQuery } from 'react-query'
+import LottieAnimation from '../components/LottieAnimation'
+import Chat from '../components/messageChat'
+// import .env socketUrl variable
 
-const Chat = ({ route }) => {
-  // create chat room
-  const URL = 'http://192.168.1.199:8000'
-  const [messages, setMessages] = useState([])
-  const [user, setUser] = useState(null)
+const ChatRooms = () => {
+  // show chat rooms
+  const [chatRooms, setChatRooms] = useState([])
   const auth = useAuth()
+  const { isLoading, isError, data } = useQuery('CHATROOMS', () => getEventsByParticipant(auth.authData.user.id))
+  const [chatroomId, setChatroomId] = useState(null)
 
-  const socket = io(URL, {
-    query: {
-      userId: auth.authData.user.id
-    }
-  })
-  //   join chat room
-  useEffect(() => {
-    socket.emit('joinRoom', { chatroomId: '63711dd3eab3770233bc4990' })
-    setUser(auth.authData.user)
-    socket.on('allMessages', (message) => {
-      const messagesFormated = message.map((message) => {
-        return {
-          _id: message._id,
-          text: message.message,
-          createdAt: message.createdAt,
-          user: {
-            _id: message.user._id
-          }
-        }
-      })
-      //   sort messages by date
-      const sortedMessages = messagesFormated.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
-      setMessages(sortedMessages)
-    })
-    // receive message
-    socket.on('newMessage', (message) => {
-      console.log(message)
-      const formatedMessage = message.map((message) => {
-        return {
-          _id: message._id,
-          text: message.message,
-          createdAt: message.createdAt,
-          user: {
-            _id: message.user._id
-          }
-        }
-      })
-      //   update messages
-      setMessages((previousMessages) =>
-        formatedMessage.concat(previousMessages)
-      )
-    })
-  }, [setMessages])
+  if (isLoading) {
+    return <LottieAnimation />
+  }
+  if (isError) {
+    return <Text>Error</Text>
+  }
 
-  //   send message async
-  const onSend = useCallback((messages = []) => {
-    socket.emit('sendMessage', {
-      chatroomId: '63711dd3eab3770233bc4990',
-      message: messages[0].text
-    })
+  if (data.length === 0) {
+    return <Text>No chatrooms</Text>
+  }
+  console.log(chatroomId)
 
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  }, [])
-
-  return (
-    <GiftedChat
-      messages={messages}
-      onSend={useCallback((messages) => onSend(messages), [])}
-      user={{
-        _id: auth.authData.user._id
-      }}
-    />
-  )
+  if (data) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.chatrooms}>
+          {data.map((chatroom) => {
+            return (
+              <Button
+                key={chatroom._id}
+                title={chatroom.name}
+                onPress={() => setChatroomId(chatroom.chatroom)}
+              />
+            )
+          })}
+        </View>
+        {chatroomId && <Chat chatroomId={chatroomId} />}
+      </SafeAreaView>
+    )
+  }
 }
 
-export default Chat
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
+
+export default ChatRooms
