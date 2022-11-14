@@ -44,7 +44,7 @@ export const BottomTab = () => {
               color = focused ? colors.primary : 'lightgray'
               break
             case 'Chats':
-              iconName = focused ? 'chat' : 'chat-outline'
+              iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline'
               color = focused ? colors.primary : 'lightgray'
               break
             case 'Crear':
