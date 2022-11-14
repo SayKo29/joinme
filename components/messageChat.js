@@ -1,109 +1,126 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/Auth'
 import { io } from 'socket.io-client'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import {
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import colors from '../styles/colors'
 
 const Chat = ({ chatroomId, onBack }) => {
   // create chat room
-  const URL = process.env.SOCKET_URL
+  const URL = 'http://192.168.1.199:3000'
   const [messages, setMessages] = useState([])
-  const [user, setUser] = useState(null)
+  const [newMessage, setNewMessage] = useState('')
+  const [user, setUser] = useState(false)
   const auth = useAuth()
+  const flatListRef = React.useRef(null)
 
   const socket = io(URL, {
     query: {
       userId: auth.authData.user.id
     }
   })
-  //   join chat room
-  useEffect(() => {
-    console.log(chatroomId)
-    socket.emit('joinRoom', { chatroomId })
-    setUser(auth.authData.user)
-    socket.on('allMessages', (message) => {
-      const messagesFormated = message.map((message) => {
-        return {
-          _id: message._id,
-          text: message.message,
-          createdAt: message.createdAt,
-          user: {
-            _id: message.user._id
-          }
-        }
-      })
-      //   sort messages by date
-      const sortedMessages = messagesFormated.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )
-      setMessages(sortedMessages)
-      console.log(messages)
-    })
-    // receive message
-    socket.on('newMessage', (message) => {
-      console.log(message)
-      const formatedMessage = message.map((message) => {
-        return {
-          _id: message._id,
-          text: message.message,
-          createdAt: message.createdAt,
-          user: {
-            _id: message.user._id
-          }
-        }
-      })
-      //   update messages
-      setMessages((previousMessages) =>
-        formatedMessage.concat(previousMessages)
-      )
-    })
-  }, [setMessages, chatroomId])
 
-  //   send message async
-  const onSend = useCallback((messages = []) => {
-    socket.emit('chatroomMessage', {
-      chatroomId,
-      msg: messages[0].text
-    })
-    // recieve message
-    socket.on('newMessage', (message) => {
-      console.log(message)
-      const formatedMessage = message.map((message) => {
-        return {
-          _id: message._id,
-          text: message.message,
-          createdAt: message.createdAt,
-          user: {
-            _id: message.user._id
-          }
-        }
-      })
-      //   update messages
-      setMessages((previousMessages) =>
-        formatedMessage.concat(previousMessages)
-      )
-      setMessages(previousMessages => GiftedChat.append(previousMessages, formatedMessage))
-      //   rerender messages
+  const finishChatRoom = () => {
+    socket.emit('leaveRoom', { chatroomId })
+    onBack()
+  }
+  //   join room only once
+
+  useEffect(() => {
+    socket.emit('joinRoom', { chatroomId })
+    return () => {
+      socket.emit('leaveRoom', { chatroomId })
+    }
+  }, [])
+
+  //   get all earlier messages
+  useEffect(() => {
+    socket.on('allMessages', (data) => {
+      setMessages(data)
     })
   }, [])
 
+  //   receive new messages and add to the first of the array
+
+  useEffect(() => {
+    socket.on('newMessage', (data) => {
+      setMessages((messages) => [data, ...messages])
+    })
+  }, [])
+
+  const sendMessage = () => {
+    socket.emit('chatroomMessage', { chatroomId, msg: newMessage })
+    setNewMessage('')
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onBack}
-      >
+      <TouchableOpacity style={styles.button} onPress={finishChatRoom}>
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
+      {/* render messages like whatsapp */}
+      {/* ios avoid input  */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboard}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 45 : 0}
+      >
+        {/* when new message animate scroll */}
+        <FlatList
+          data={messages}
+          inverted
+          ref={flatListRef}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.message}>
+                {/* if user message is the same of user auth align right */}
+                {item.user._id === auth.authData.user.id && (
+                  <View style={styles.messageRight}>
+                    {/* avatar img */}
+                    {/* <Text style={styles.messageText}>{item.avatar}</Text> */}
+                    <Text style={styles.messageText}>{item.message}</Text>
+                  </View>
+                )}
+                {/* if user message is not the same of user auth align left */}
+                {item.user._id !== auth.authData.user.id && (
+                  <View style={styles.messageLeft}>
+                    <Text style={styles.messageText}>{item.message}</Text>
+                  </View>
+                )}
+              </View>
+            )
+          }}
+        />
 
-      <GiftedChat
-        messages={messages}
-        onSend={useCallback((messages) => onSend(messages), [])}
-        user={{
-          _id: auth.authData.user._id
-        }}
-      />
+        {/* input to send message */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder='Type a message'
+            value={newMessage}
+            onChangeText={setNewMessage}
+          />
+          <TouchableOpacity
+            style={styles.button}
+          // disabled if input is empty
+            disabled={!newMessage}
+            onPress={sendMessage}
+          >
+            <Text style={styles.buttonText}>Send</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -112,7 +129,67 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%'
+  },
+  button: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    margin: 10
+  },
+  buttonText: {
+    // at right
+    height: 18,
+    textAlign: 'right',
+    color: colors.white
+  },
+  message: {
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    maxWidth: '100%'
+  },
+  messageText: {
+    color: colors.white,
+    textAlign: 'center'
+  },
+  inputContainer: {
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 10
+  },
+  input: {
+    backgroundColor: colors.white,
+    padding: 10,
+    borderRadius: 5,
+    width: '80%'
+  },
+  messageRight: {
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderRadius: 8,
+    borderTopRightRadius: 0,
+    margin: 10,
+    maxWidth: '80%',
+    alignSelf: 'flex-end'
+  },
+  messageLeft: {
+    backgroundColor: colors.persianGreen,
+    padding: 10,
+    borderRadius: 5,
+    borderTopLeftRadius: 0,
+    margin: 10,
+    maxWidth: '80%',
+    alignSelf: 'flex-start'
+  },
+  keyboard: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
   }
+
 })
 
 export default Chat
