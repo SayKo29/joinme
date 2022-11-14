@@ -109,17 +109,17 @@ const CreateEvent = ({ navigation }) => {
   }
 
   const showModeStart = (currentMode) => {
-    if (Platform.OS === 'android') {
-      setShowStart(true)
-      // for iOS, add a button that closes the picker
-    }
+    // if (Platform.OS === 'android') {
+    setShowStart(true)
+    // for iOS, add a button that closes the picker
+    // }
     setMode(currentMode)
   }
   const showModeEnd = (currentMode) => {
-    if (Platform.OS === 'android') {
-      setShowEnd(true)
-      // for iOS, add a button that closes the picker
-    }
+    // if (Platform.OS === 'android') {
+    setShowEnd(true)
+    // for iOS, add a button that closes the picker
+    // }
     setMode(currentMode)
   }
 
@@ -229,17 +229,20 @@ const CreateEvent = ({ navigation }) => {
           <TouchableOpacity style={styles.dateBtn} onPress={showTimepickerStart}>
             <Text style={styles.dateText}>Selecciona una hora</Text>
           </TouchableOpacity>
-          {showStart && (
+        </View>
+        {showStart && (
+          <View style={styles.dateContent}>
             <DateTimePicker
               testID='dateTimePicker'
               value={startDate}
               mode={mode}
+              style={styles.datePicker}
               minimumDate={new Date()}
               is24Hour
               onChange={onChangeStartDate}
             />
-          )}
-        </View>
+          </View>
+        )}
         <View style={styles.resultDateText}>
           <Text style={styles.resultDate}>{formatToDate(startDate)}</Text>
           <Text style={styles.resultDate}>{formatToTime(startDate)}</Text>
@@ -255,17 +258,21 @@ const CreateEvent = ({ navigation }) => {
           {/* show end date in DD-MM-YYYY HH:MM:SS FORMAT */}
 
           {/* <Text style={styles.label}>{}</Text> */}
-          {showEnd && (
+        </View>
+        {showEnd && (
+          <View style={styles.dateContent}>
             <DateTimePicker
               testID='dateTimePicker'
               value={endDate}
               minimumDate={startDate}
               mode={mode}
+              style={styles.datePicker}
               is24Hour
               onChange={onChangeEndDate}
             />
-          )}
-        </View>
+          </View>
+        )}
+
         <View style={styles.resultDateText}>
           <Text style={styles.resultDate}>{formatToDate(endDate)}</Text>
           <Text style={styles.resultDate}>{formatToTime(endDate)}</Text>
@@ -456,6 +463,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10
   },
+  dateContent: {
+    width: '100%',
+    height: 250,
+    backgroundColor: colors.primary,
+    zIndex: 3,
+    elevation: 3,
+    marginBottom: 20
+  },
   dateContainer: {
     width: '100%',
     height: 'auto',
@@ -516,6 +531,13 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.white,
     justifyContent: 'flex-start',
     textAlignVertical: 'top'
+  },
+  datePicker: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: 320,
+    height: 260,
+    display: 'flex'
   }
 
 })

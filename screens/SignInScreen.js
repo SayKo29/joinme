@@ -106,8 +106,9 @@ export const SignInScreen = ({ navigation }) => {
                   value={password}
                   secureTextEntry
                 />
-
+                {/* disable if not email and password */}
                 <TouchableOpacity
+                  disabled={email === '' || password === ''}
                   style={formAuth.loginButton}
                   onPress={signIn}
                 >

@@ -58,7 +58,7 @@ const Chat = ({ chatroomId, onBack }) => {
         formatedMessage.concat(previousMessages)
       )
     })
-  }, [setMessages])
+  }, [setMessages, chatroomId])
 
   //   send message async
   const onSend = useCallback((messages = []) => {
@@ -90,7 +90,6 @@ const Chat = ({ chatroomId, onBack }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* button to return back setting chatroomId to null */}
       <TouchableOpacity
         style={styles.button}
         onPress={onBack}
@@ -111,8 +110,8 @@ const Chat = ({ chatroomId, onBack }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: colors.white
+    width: '100%',
+    height: '100%'
   }
 })
 

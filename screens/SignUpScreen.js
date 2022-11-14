@@ -102,6 +102,7 @@ const SignUpScreen = ({ navigation }) => {
 
             <TouchableOpacity
               style={formAuth.googleButtonContainer}
+              disabled={!request}
               onPress={() => {
                 promptAsync()
               }}

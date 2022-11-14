@@ -3,12 +3,13 @@ import Gallery from 'react-native-image-gallery'
 import React from 'react'
 import colors from '../styles/colors'
 import getUsersData from '../api/UsersData'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useAuth } from '../contexts/Auth'
 import JoinEvent from '../api/EventJoinParticipant'
 
 export default function EventDetail ({ markerPressed, navigation }) {
+  const queryClient = useQueryClient()
   const auth = useAuth()
   const { mutate } = useMutation(JoinEvent)
 
@@ -19,6 +20,8 @@ export default function EventDetail ({ markerPressed, navigation }) {
     }
     mutate(event, {
       onSuccess: () => {
+        // uncached query
+        queryClient.invalidateQueries('CHATROOMS')
         navigation.navigate('Chat')
       }
     })
