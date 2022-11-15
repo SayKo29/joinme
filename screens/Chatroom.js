@@ -6,6 +6,7 @@ import { useQuery } from 'react-query'
 import LottieAnimation from '../components/LottieAnimation'
 import Chat from '../components/messageChat'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import colors from '../styles/colors'
 // import .env socketUrl variable
 
 const ChatRooms = () => {
@@ -63,17 +64,16 @@ const ChatRooms = () => {
               return (
               // if chatroom end date is passed disable chatroom
                 <TouchableOpacity
-                  disabled={
-                        new Date(item.endDate) < new Date()
-                    } style={[
-                      styles.card,
-                      {
-                        backgroundColor:
+                  disabled={new Date(item.endDate) < new Date()}
+                  style={[
+                    styles.card,
+                    {
+                      backgroundColor:
                             new Date(item.endDate) < new Date()
                               ? '#e0e0e0'
                               : '#fff'
-                      }
-                    ]} onPress={() => setChatroomId(item.chatroom)}
+                    }
+                  ]} onPress={() => setChatroomId(item.chatroom)}
                 >
                   {/* if chatroom has image show it at left */}
                   {item.image && (
@@ -106,12 +106,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Platform.OS === 'android' ? 25 : 0
   },
-  chatrooms: {
-    // padding for android
-    paddingTop: Platform.OS === 'android' ? 25 : 0
-  },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.primary,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
