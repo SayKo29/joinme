@@ -20,3 +20,10 @@ export function formatToTime (date) {
     padTo2Digits(date.getSeconds())
   )
 }
+export function formatToTimeWithoutSeconds (date) {
+  return (
+    padTo2Digits(date.getHours()) +
+    ':' +
+    padTo2Digits(date.getMinutes())
+  )
+}

@@ -11,6 +11,7 @@ import mapStyle from '../styles/mapStyle'
 import colors from '../styles/colors'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import EventDetail from '../components/EventDetail'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Events ({ navigation }) {
   const [location, setLocation] = useState(null)
@@ -48,6 +49,8 @@ export default function Events ({ navigation }) {
   }, [])
 
   if (isLoading) {
+    // remove actual storage event data
+    AsyncStorage.removeItem('eventData')
     return <LottieAnimation />
   }
   if (isError) {
@@ -64,6 +67,9 @@ export default function Events ({ navigation }) {
       <LottieAnimation />
     )
   } else {
+    // storage events data to async storage
+    AsyncStorage.setItem('events', JSON.stringify(data))
+
     return (
       <View style={styles.container}>
         {/* Render our MapView */}

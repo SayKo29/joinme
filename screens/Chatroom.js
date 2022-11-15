@@ -1,19 +1,39 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/Auth'
-import { io } from 'socket.io-client'
-import { Button, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import getEventsByParticipant from '../api/GetParticipantEvents'
 import { useQuery } from 'react-query'
 import LottieAnimation from '../components/LottieAnimation'
 import Chat from '../components/messageChat'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // import .env socketUrl variable
 
 const ChatRooms = () => {
   // show chat rooms
-  const [chatRooms, setChatRooms] = useState([])
+//   const [chatRooms, setChatRooms] = useState([])
   const auth = useAuth()
   const { isLoading, isError, data } = useQuery('CHATROOMS', () => getEventsByParticipant(auth.authData.user.id))
   const [chatroomId, setChatroomId] = useState(null)
+  const [events, setEvents] = useState([])
+  //   get all events from async storage
+  useEffect(() => {
+    AsyncStorage.getItem('events').then((events) => {
+    // format events by chatroom
+      const eventsArray = JSON.parse(events)
+      const eventsByChatroom = eventsArray.map((event) => {
+        return {
+          id: event._id,
+          name: event.name,
+          chatroomId: event.chatroom,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          participants: event.participants
+        }
+      })
+
+      setEvents(eventsByChatroom)
+    })
+  }, [])
 
   const handleBack = () => {
     setChatroomId(null)
@@ -29,35 +49,53 @@ const ChatRooms = () => {
   if (data.length === 0) {
     return <Text>No chatrooms</Text>
   }
-  console.log(chatroomId)
 
   if (data) {
     return (
       <SafeAreaView style={styles.container}>
         {/* show if not chatroom id */}
         {!chatroomId && (
-
-          <View style={styles.chatrooms}>
-            {data.map((chatroom, index) => {
+        // flatlist of events
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => {
               return (
-                <TouchableOpacity style={styles.card} onPress={() => setChatroomId(chatroom.chatroom)} key={index}>
+              // if chatroom end date is passed disable chatroom
+                <TouchableOpacity
+                  disabled={
+                        new Date(item.endDate) < new Date()
+                    } style={[
+                      styles.card,
+                      {
+                        backgroundColor:
+                            new Date(item.endDate) < new Date()
+                              ? '#e0e0e0'
+                              : '#fff'
+                      }
+                    ]} onPress={() => setChatroomId(item.chatroom)}
+                >
                   {/* if chatroom has image show it at left */}
-                  {chatroom.image && (
-                    <Image style={styles.image} source={{ uri: chatroom.image ? chatroom.image : require('../assets/img/logo.png') }} />
+                  {item.image && (
+                    <Image style={styles.image} source={{ uri: item.image ? item.image : require('../assets/img/logo.png') }} />
                   )}
                   {/* show default image for event if doesnt have */}
-                  {!chatroom.image && (
+                  {!item.image && (
                     <Image style={styles.image} source={require('../assets/img/logo.png')} />
                   )}
 
-                  <Text key={chatroom.id} style={styles.chatroom}>{chatroom.name}</Text>
+                  <Text key={item.id} style={styles.chatroom}>{item.name}</Text>
                 </TouchableOpacity>
 
               )
-            })}
-          </View>
+            }}
+          />
         )}
-        {chatroomId && <Chat onBack={handleBack} chatroomId={chatroomId} />}
+        {chatroomId && (
+          <Chat chatroomId={chatroomId} onBack={handleBack} event={events.find((event) => event.chatroomId === chatroomId)} />
+        )}
+
+        {/* {chatroomId && <Chat onBack={handleBack} chatroomId={chatroomId}  />} */}
       </SafeAreaView>
     )
   }
@@ -65,7 +103,8 @@ const ChatRooms = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? 25 : 0
   },
   chatrooms: {
     // padding for android
