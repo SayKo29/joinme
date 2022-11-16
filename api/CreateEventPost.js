@@ -1,6 +1,5 @@
 export default async function CreateEventPost (event) {
   // post event
-  console.log(event)
   // x-www-form-urlencoded post
   const response = await fetch(
     'https://joinmeapi.onrender.com/api/events',

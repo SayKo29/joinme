@@ -44,7 +44,7 @@
         "react-native-gesture-handler": "~2.2.1",
         "react-native-gifted-chat": "^1.0.4",
         "react-native-google-places-autocomplete": "^2.4.1",
-        "react-native-image-gallery": "^2.1.5",
+        "react-native-image-gallery": "archriss/react-native-image-gallery#152/head",
         "react-native-keyboard-aware-scroll-view": "^0.9.5",
         "react-native-keyboard-spacer": "^0.4.1",
         "react-native-map-clustering": "^3.4.2",

@@ -23,9 +23,13 @@ export default function Events ({ navigation }) {
   const [isOpen, setIsOpen] = useState(false)
   const snapPoints = ['40%', '100%']
 
+  //   refetch every 5 minutes
   const { isLoading, isError, data } = useQuery(
     'EVENTS',
-    getEventsData
+    getEventsData, {
+      refetchInterval: 300000
+    }
+
   )
 
   const user = useAuth()

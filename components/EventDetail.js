@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text } from 'react-native'
 import Gallery from 'react-native-image-gallery'
-import React from 'react'
+import React, { useState } from 'react'
 import colors from '../styles/colors'
 import getUsersData from '../api/UsersData'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
@@ -12,15 +12,18 @@ export default function EventDetail ({ markerPressed, navigation }) {
   const queryClient = useQueryClient()
   const auth = useAuth()
   const { mutate } = useMutation(JoinEvent)
+  const [loading, setLoading] = useState(false)
 
   const handleJoinEvent = () => {
     const event = {
       id: markerPressed._id,
       participants: [...markerPressed.participants ? markerPressed.participants : [], auth.authData.user.id]
     }
+    setLoading(true)
     mutate(event, {
       onSuccess: () => {
         // uncached query
+        setLoading(false)
         queryClient.invalidateQueries('CHATROOMS')
         navigation.navigate('Chat')
       }
@@ -47,7 +50,7 @@ export default function EventDetail ({ markerPressed, navigation }) {
         {markerPressed.images.length > 0 && (
           <View style={styles.galleryContainer}>
             <Gallery
-              style={{ flex: 1, backgroundColor: 'black' }}
+              style={{ flex: 1, backgroundColor: '#fff' }}
               images={[
                 // map images to gallery
                 ...markerPressed.images.map((image) => {
@@ -69,10 +72,13 @@ export default function EventDetail ({ markerPressed, navigation }) {
           <Text style={styles.description}>Evento creado por {eventCreator?.name}</Text>
         )}
 
-        {/* button to join chat event */}
-        <TouchableOpacity style={styles.button} onPress={handleJoinEvent}>
-          <Text style={styles.buttonText}>Unirse al chat del evento</Text>
-        </TouchableOpacity>
+        {/* button to join chat event if u are not creator of the event && you are not a participant of the event */}
+        {auth.authData.user.id !== markerPressed.user && !markerPressed.participants?.includes(auth.authData.user.id) && (
+          <TouchableOpacity style={styles.button} disabled={loading} onPress={handleJoinEvent}>
+            <Text style={styles.buttonText}>Unirse al chat del evento</Text>
+          </TouchableOpacity>
+        )}
+
       </View>
     )
   }

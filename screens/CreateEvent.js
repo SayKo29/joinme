@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Appearance, Platform, StatusBar, Dimensions, ScrollView, TouchableOpacity, Image } from 'react-native'
 import getCategories from '../api/CategoryData'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useAuth } from '../contexts/Auth'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { formatToDate, formatToTime } from '../services/functions'
+import * as ImagePicker from 'expo-image-picker'
 
 const CreateEvent = ({ navigation }) => {
   // API
@@ -29,6 +30,7 @@ const CreateEvent = ({ navigation }) => {
   const [loading, setLoading] = useState(false)
   const [suggestionsList, setSuggestionsList] = useState(null)
   const dropdownController = useRef(null)
+  const [image, setImage] = useState(null)
 
   const searchRef = useRef(null)
 
@@ -136,6 +138,22 @@ const CreateEvent = ({ navigation }) => {
 
   const showTimepickerStart = () => {
     showModeStart('time')
+  }
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      allowsMultipleSelection: true,
+      mediaTypes: 'Images',
+      aspect: [4, 3],
+      quality: 1
+    })
+
+    console.log(result)
+
+    if (!result.cancelled) {
+      setImage(result.uri)
+    }
   }
 
   return (
@@ -276,6 +294,17 @@ const CreateEvent = ({ navigation }) => {
         <View style={styles.resultDateText}>
           <Text style={styles.resultDate}>{formatToDate(endDate)}</Text>
           <Text style={styles.resultDate}>{formatToTime(endDate)}</Text>
+        </View>
+
+        {/* imagen/es del evento / image picker */}
+        <Text style={styles.label}>Imagen del evento</Text>
+        <View style={styles.imageContainer}>
+          <TouchableOpacity style={styles.imageBtn} onPress={pickImage}>
+            <Text style={styles.imageText}>Selecciona una imagen</Text>
+          </TouchableOpacity>
+          <View style={styles.imageContent}>
+            {image && <Image source={{ uri: image }} style={styles.image} />}
+          </View>
         </View>
 
         <Text style={styles.label}>Localización del evento</Text>
@@ -538,6 +567,40 @@ const styles = StyleSheet.create({
     width: 320,
     height: 260,
     display: 'flex'
+  },
+  imageContainer: {
+    paddingTop: 10,
+    flex: 1,
+    marginBottom: 20
+  },
+  image: {
+    width: 'auto',
+    height: 150
+  },
+  imageBtn: {
+    width: '100%',
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    height: 40,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+
+  },
+  imageText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 
 })

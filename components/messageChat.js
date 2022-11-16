@@ -33,7 +33,6 @@ const Chat = ({ chatroomId, onBack, event }) => {
       userId: auth.authData.user.id
     }
   })
-  console.log(event)
 
   const finishChatRoom = () => {
     socket.emit('leaveRoom', { chatroomId })
@@ -70,15 +69,28 @@ const Chat = ({ chatroomId, onBack, event }) => {
     socket.emit('chatroomMessage', { chatroomId, msg: newMessage })
     setNewMessage('')
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={finishChatRoom}>
-          {/* <Text style={styles.backButtonText}>Back</Text> */}
           <Icon name='chevron-left' size={40} color={colors.white} />
-
         </TouchableOpacity>
+        {/* if has image show it  */}
+        {event.images
+          ? (
+            <Image
+              style={styles.iconImage}
+              source={{ uri: event.images[0] }}
+            />
+            )
+          : (
+            <Image
+              style={styles.iconImage}
+              source={require('../assets/img/image-placeholder.jpg')}
+            />
+            )}
+        {/* <Image style={styles.image} source={{ uri: event?.image?.length > 0 ? event.image : require('../assets/img/logo.png') }} /> */}
+
         <Text style={styles.headerText}>{event?.name}</Text>
       </View>
 
@@ -109,8 +121,10 @@ const Chat = ({ chatroomId, onBack, event }) => {
                         <Text style={styles.messageTextRight}>{item.message}</Text>
                         <View style={styles.timeContainerRight}>
                           <Text style={styles.messageTime}>
-                            {formatToTimeWithoutSeconds(new Date(item.createdAt))}
+                            {item?.createdAt && formatToTimeWithoutSeconds(new Date(item?.createdAt))}
                           </Text>
+                          {/* {formatToTimeWithoutSeconds(new Date(item?.createdAt))} */}
+                          {/* </Text> */}
                         </View>
                       </View>
                     )}
@@ -122,7 +136,7 @@ const Chat = ({ chatroomId, onBack, event }) => {
                         {/* time container */}
                         <View style={styles.timeContainerLeft}>
                           {/*  */}
-                          <Text style={styles.timeText}>{formatToTimeWithoutSeconds(new Date(item.createdAt))}</Text>
+                          <Text style={styles.timeText}>{formatToTimeWithoutSeconds(new Date(item?.createdAt))}</Text>
                         </View>
                       </View>
                     )}
@@ -167,17 +181,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   headerText: {
     color: colors.white,
     fontSize: 20,
     fontWeight: 'bold'
-  },
-  backButton: {
-    position: 'absolute',
-    left: 10,
-    top: 35
   },
 
   message: {
@@ -202,7 +211,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: 10,
     borderRadius: 5,
-    width: '80%'
+    width: '80%',
+    height: 50
   },
   messageRight: {
     backgroundColor: colors.primary,
@@ -267,6 +277,12 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 10,
     paddingTop: 5
+  },
+  iconImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10
   }
 
 })

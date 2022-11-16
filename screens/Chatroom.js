@@ -27,6 +27,7 @@ const ChatRooms = () => {
           name: event.name,
           chatroomId: event.chatroom,
           startDate: event.startDate,
+          images: event.images,
           endDate: event.endDate,
           participants: event.participants
         }
@@ -70,21 +71,28 @@ const ChatRooms = () => {
                     {
                       backgroundColor:
                             new Date(item.endDate) < new Date()
-                              ? '#e0e0e0'
-                              : '#fff'
+                              ? colors.gray
+                              : colors.primary
                     }
                   ]} onPress={() => setChatroomId(item.chatroom)}
                 >
                   {/* if chatroom has image show it at left */}
-                  {item.image && (
-                    <Image style={styles.image} source={{ uri: item.image ? item.image : require('../assets/img/logo.png') }} />
+                  {item.images.length > 0 && (
+                    <Image style={styles.image} source={{ uri: item.images[0] }} />
                   )}
                   {/* show default image for event if doesnt have */}
-                  {!item.image && (
+                  {item.images.length === 0 && (
                     <Image style={styles.image} source={require('../assets/img/logo.png')} />
                   )}
-
-                  <Text key={item.id} style={styles.chatroom}>{item.name}</Text>
+                  <View style={styles.cardContent}>
+                    <Text key={item.id} style={styles.chatroom}>{item.name}</Text>
+                    {/* número de participantes */}
+                    <Text style={styles.participants}>{item.participants.length} {item.participants.length == 1 ? 'participante' : 'participantes'}</Text>
+                    {/* if event has ended show text */}
+                    {new Date(item.endDate) < new Date() && (
+                      <Text style={styles.participants}>Evento finalizado</Text>
+                    )}
+                  </View>
                 </TouchableOpacity>
 
               )
@@ -112,14 +120,37 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
   image: {
     width: 50,
     height: 50,
     borderRadius: 50,
     marginRight: 10
+  },
+  cardContent: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  chatroom: {
+    fontSize: 18,
+    color: colors.white
+  },
+  participants: {
+    fontSize: 14,
+    color: colors.white
   }
+
 })
 
 export default ChatRooms
