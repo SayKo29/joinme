@@ -23,7 +23,7 @@ const signIn = async (formData: any) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
-        "https://joinmeapi.onrender.com/api/login",
+        "https://calm-lime-armadillo.cyclic.app/api/login",
         // "http://192.168.1.199:5000/api/login",
         requestOptions
     );
@@ -47,7 +47,7 @@ const register = async (formData: any) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
-        "https://joinmeapi.onrender.com/api/register",
+        "https://calm-lime-armadillo.cyclic.app/api/register",
         // "http://192.168.1.199:5000/api/register",
         requestOptions
     );

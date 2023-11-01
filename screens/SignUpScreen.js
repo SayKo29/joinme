@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/Auth";
-import * as Google from "expo-auth-session/providers/google";
+// import * as Google from "expo-auth-session/providers/google";
 import { formAuth } from "../styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
 
@@ -20,12 +20,12 @@ import { clientId, iosClientId, androidClientId } from "@env";
 
 const SignUpScreen = ({ navigation }) => {
     const [accessToken, setAccessToken] = useState(null);
-    const [googleUser, setGoogleUser] = useState(null);
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        clientId,
-        iosClientId,
-        androidClientId,
-    });
+    // const [googleUser, setGoogleUser] = useState(null);
+    // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    // clientId,
+    // iosClientId,
+    // androidClientId,
+    // });
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     //   const [error, setError] = useState('')

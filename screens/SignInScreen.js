@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 
-import * as Google from "expo-auth-session/providers/google";
+// import * as Google from "expo-auth-session/providers/google";
 import { Icon } from "react-native-elements";
 import { formAuth } from "../styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
@@ -29,11 +29,11 @@ export const SignInScreen = ({ navigation }) => {
     };
     const [accessToken, setAccessToken] = useState(null);
     const [googleUser, setGoogleUser] = useState(null);
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        clientId,
-        iosClientId,
-        androidClientId,
-    });
+    // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    //     clientId,
+    //     iosClientId,
+    //     androidClientId,
+    // });
 
     const signInWithGoogle = async () => {
         isLoading(true);
@@ -41,23 +41,23 @@ export const SignInScreen = ({ navigation }) => {
         isLoading(false);
     };
 
-    async function fetchGoogleUserInfo() {
-        const response = await fetch(
-            "https://www.googleapis.com/userinfo/v2/me",
-            {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            }
-        );
-        const useInfo = await response.json();
-        setGoogleUser(useInfo);
-    }
+    // async function fetchGoogleUserInfo() {
+    //     const response = await fetch(
+    //         "https://www.googleapis.com/userinfo/v2/me",
+    //         {
+    //             headers: { Authorization: `Bearer ${accessToken}` },
+    //         }
+    //     );
+    //     const useInfo = await response.json();
+    //     setGoogleUser(useInfo);
+    // }
 
-    useEffect(() => {
-        if (response?.type === "success") {
-            setAccessToken(response.authentication.accessToken);
-            accessToken && fetchGoogleUserInfo() && signInWithGoogle();
-        }
-    }, [response, accessToken]);
+    // useEffect(() => {
+    //     if (response?.type === "success") {
+    //         setAccessToken(response.authentication.accessToken);
+    //         accessToken && fetchGoogleUserInfo() && signInWithGoogle();
+    //     }
+    // }, [response, accessToken]);
 
     return (
         <ImageBackground

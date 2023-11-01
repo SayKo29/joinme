@@ -2,8 +2,8 @@ export default async function CreateEventPost(event) {
     // post event
     // x-www-form-urlencoded post
     const response = await fetch(
-        // 'https://joinmeapi.onrender.com/api/events',
-        "http://192.168.1.199:3000/api/events",
+        "https://calm-lime-armadillo.cyclic.app/api/events",
+        // "http://192.168.1.199:3000/api/events",
         {
             method: "POST",
             headers: {
