@@ -17,6 +17,12 @@
                 {
                     "photosPermission": "The app accesses your photos to let you share them with your friends."
                 }
+            ],
+            [
+                "expo-location",
+                {
+                    "locationAlwaysAndWhenInUsePermission": "Esta app necesita que le des permiso para acceder a tu ubicación."
+                }
             ]
         ],
         "updates": {

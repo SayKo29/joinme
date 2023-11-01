@@ -20,44 +20,19 @@ export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false);
     const auth = useAuth();
     const [email, setEmail] = useState("");
+    const [error, setError] = useState("");
     //   const [error, setError] = useState('')
     const [password, setPassword] = useState("");
     const signIn = async () => {
         isLoading(true);
-        await auth.signIn({ email, password });
+        // call auth context and pass email and password to signIn function and show what returns
+        const response = await auth.signIn({ email, password });
+        if (response.error) {
+            setError(response.error);
+        }
         isLoading(false);
     };
     const [accessToken, setAccessToken] = useState(null);
-    const [googleUser, setGoogleUser] = useState(null);
-    // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    //     clientId,
-    //     iosClientId,
-    //     androidClientId,
-    // });
-
-    const signInWithGoogle = async () => {
-        isLoading(true);
-        await auth.signIn(googleUser);
-        isLoading(false);
-    };
-
-    // async function fetchGoogleUserInfo() {
-    //     const response = await fetch(
-    //         "https://www.googleapis.com/userinfo/v2/me",
-    //         {
-    //             headers: { Authorization: `Bearer ${accessToken}` },
-    //         }
-    //     );
-    //     const useInfo = await response.json();
-    //     setGoogleUser(useInfo);
-    // }
-
-    // useEffect(() => {
-    //     if (response?.type === "success") {
-    //         setAccessToken(response.authentication.accessToken);
-    //         accessToken && fetchGoogleUserInfo() && signInWithGoogle();
-    //     }
-    // }, [response, accessToken]);
 
     return (
         <ImageBackground
@@ -80,15 +55,12 @@ export const SignInScreen = ({ navigation }) => {
                         <View style={formAuth.formContainer}>
                             <Text style={formAuth.title}>Login</Text>
 
-                            {/* {error !== ''
-                  ? (
-                    <Text className='text-xl'>{error}</Text>
-                    )
-                  : (
-                      false
-                    )} */}
+                            {error !== "" ? (
+                                <Text className="text-xl">{error}</Text>
+                            ) : (
+                                false
+                            )}
 
-                            {/* {state.firstName == '' ? <Text style={tw.style('self-center text-2xl')}></Text> : <Text style={tw.style('self-center text-2xl')}>Login inválido</Text>} */}
                             <TextInput
                                 placeholder="Email"
                                 placeholderTextColor="white"
@@ -104,7 +76,7 @@ export const SignInScreen = ({ navigation }) => {
                                 value={password}
                                 secureTextEntry
                             />
-                            {/* disable if not email and password */}
+                            {/* /* disable if not email and password */}
                             <TouchableOpacity
                                 disabled={email === "" || password === ""}
                                 style={formAuth.loginButton}

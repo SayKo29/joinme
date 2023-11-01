@@ -32,10 +32,13 @@ const AuthProvider: React.FC = ({ children }) => {
         try {
             //Try get the data from Async Storage
             const authDataSerialized = await AsyncStorage.getItem('@AuthData');
+            if (!JSON.parse(authDataSerialized).token) {
+                return;
+            }
             if (authDataSerialized) {
                 //If there are data, it's converted to an Object and the state is updated.
-                const _authData: AuthData = JSON.parse(authDataSerialized);
-                setAuthData(_authData);
+                const authData: AuthData = JSON.parse(authDataSerialized);
+                setAuthData(authData);
             }
         } catch (error) {
         } finally {
@@ -47,31 +50,36 @@ const AuthProvider: React.FC = ({ children }) => {
     const signIn = async (formData: any) => {
         //call the service passing credential (email and password).
         //In a real App this data will be provided by the user from some InputText components.
-        const _authData = await authService.signIn(
+        const authData = await authService.signIn(
             formData
         );
 
+        if (authData.error) {
+            return authData;
+        }
+
         //Set the data in the context, so the App can be notified
         //and send the user to the AuthStack
-        setAuthData(_authData);
+        setAuthData(authData);
 
         //Persist the data in the Async Storage
         //to be recovered in the next user session.
-        AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
+        AsyncStorage.setItem('@AuthData', JSON.stringify(authData));
+
+        return authData;
     };
 
     const register = async (formData: any) => {
-        console.log(formData);
 
-        const _authData = await authService.register(
+        const authData = await authService.register(
             formData
         );
 
         // handle false
-        if (_authData) {
-            setAuthData(_authData);
+        if (authData) {
+            setAuthData(authData);
 
-            AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
+            AsyncStorage.setItem('@AuthData', JSON.stringify(authData));
         } else {
             console.log('error');
         }

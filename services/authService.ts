@@ -23,14 +23,13 @@ const signIn = async (formData: any) => {
         body: encodeFormData(formData),
     };
     const response = await fetch(
-        "https://calm-lime-armadillo.cyclic.app/api/login",
-        // "http://192.168.1.199:5000/api/login",
+        // "https://calm-lime-armadillo.cyclic.app/api/login",
+        "http://192.168.1.199:3000/api/login",
         requestOptions
     );
     const json = await response.json();
-    console.log(json);
-    if (json?.status == 0) {
-        return false;
+    if (json.error) {
+        return json;
     } else {
         return json;
     }
