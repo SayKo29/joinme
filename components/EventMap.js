@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, View, Text, Image, Appearance } from "react-native";
+import { View, Text, StyleSheet, Appearance, Image } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import colors from "../styles/colors";
+import { useQuery } from "react-query";
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
-import { useQuery } from "react-query";
 import getEventsData from "../api/EventsData";
 import * as Location from "expo-location";
-import LottieAnimation from "../components/LottieAnimation";
+import LottieAnimation from "./LottieAnimation";
 import { useAuth } from "../contexts/Auth";
 import mapStyle from "../styles/mapStyle";
-import colors from "../styles/colors";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import EventDetail from "../components/EventDetail";
+import EventDetail from "./EventDetail";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Events({ navigation }) {
+const EventMap = ({ data }) => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [markerPressed, setMarkerPressed] = useState(false);
@@ -22,11 +22,6 @@ export default function Events({ navigation }) {
     const sheetRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const snapPoints = ["40%", "100%"];
-
-    //   refetch every 5 minutes
-    const { isLoading, isError, data } = useQuery("EVENTS", getEventsData, {
-        refetchInterval: 300000,
-    });
 
     const user = useAuth();
 
@@ -94,15 +89,6 @@ export default function Events({ navigation }) {
                 console.log("clean up");
             };
         }, []);
-    }
-
-    if (isLoading) {
-        // remove actual storage event data
-        AsyncStorage.removeItem("eventData");
-        return <LottieAnimation />;
-    }
-    if (isError) {
-        return <Text>Error events...</Text>;
     }
 
     const handleMarkerPressed = (marker) => {
@@ -192,7 +178,8 @@ export default function Events({ navigation }) {
             {/* Show sliding panel if marker pressed with markerPressed prop */}
         </View>
     );
-}
+};
+
 // create our styling code:
 const styles = StyleSheet.create({
     container: {
@@ -215,3 +202,5 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
 });
+
+export default EventMap;

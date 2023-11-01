@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import { Text } from "react-native";
-import EventsMap from "../screens/EventsMap";
+import EventNavigation from "../screens/EventNavigation";
 import Profile from "../screens/Profile";
 import Create from "../screens/CreateEvent";
 import ChatScreen from "../screens/Chatroom";
@@ -83,7 +83,7 @@ export const BottomTab = () => {
                     },
                 }}
                 name="Eventos"
-                component={EventsMap}
+                component={EventNavigation}
             />
             <Tab.Screen
                 options={{
