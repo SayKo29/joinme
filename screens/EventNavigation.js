@@ -10,12 +10,22 @@ import { useQuery } from "react-query";
 import getEventsData from "../api/EventsData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieAnimation from "../components/LottieAnimation";
+import getUsersData from "../api/UsersData";
 
 const Stack = createStackNavigator();
 
 export default function EventNavigation({ navigation }) {
     //   refetch every 5 minutes
-    const { isLoading, isError, data } = useQuery("EVENTS", getEventsData, {
+
+    const eventsQuery = useQuery({
+        queryKey: ["EVENTS"],
+        queryFn: getEventsData,
+        refetchInterval: 300000,
+    });
+
+    const usersQuery = useQuery({
+        queryKey: ["USERS"],
+        queryFn: getUsersData,
         refetchInterval: 300000,
     });
 
@@ -26,12 +36,10 @@ export default function EventNavigation({ navigation }) {
         navigation.navigate(value === "new" ? "EventScroll" : "EventMap");
     };
 
-    if (isLoading) {
-        // remove actual storage event data
-        AsyncStorage.removeItem("eventData");
+    if (eventsQuery.isLoading) {
         return <LottieAnimation />;
     }
-    if (isError) {
+    if (eventsQuery.isError) {
         return <Text>Error events...</Text>;
     }
 
@@ -49,10 +57,16 @@ export default function EventNavigation({ navigation }) {
                     screenOptions={{ headerShown: false }}
                 >
                     <Stack.Screen name="EventScroll">
-                        {(props) => <EventScroll {...props} data={data} />}
+                        {(props) => (
+                            <EventScroll
+                                {...props}
+                                data={eventsQuery}
+                                users={usersQuery}
+                            />
+                        )}
                     </Stack.Screen>
                     <Stack.Screen name="EventMap">
-                        {(props) => <EventMap {...props} data={data} />}
+                        {(props) => <EventMap {...props} data={eventsQuery} />}
                     </Stack.Screen>
                 </Stack.Navigator>
             </View>

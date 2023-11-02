@@ -123,7 +123,7 @@ const EventMap = ({ data }) => {
                     initialRegion={INITIAL_REGION}
                     mapType="standard"
                 >
-                    {data.map((event, index) => (
+                    {data.data.map((event, index) => (
                         <Marker
                             key={index}
                             tracksViewChanges={false}
