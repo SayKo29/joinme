@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 
 const HeaderNavigationEvent = ({ selected, setSelected }) => {
     const handleSelect = (value) => {

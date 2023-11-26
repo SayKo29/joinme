@@ -16,7 +16,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import LottieAnimation from "./LottieAnimation";
 
 const Chat = ({ chatroomId, onBack, event }) => {
@@ -69,6 +69,7 @@ const Chat = ({ chatroomId, onBack, event }) => {
         socket.emit("chatroomMessage", { chatroomId, msg: newMessage });
         setNewMessage("");
     };
+    console.log(event);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -79,7 +80,7 @@ const Chat = ({ chatroomId, onBack, event }) => {
                     <Icon name="chevron-left" size={40} color={colors.white} />
                 </TouchableOpacity>
                 {/* if has image show it  */}
-                {event.images ? (
+                {event?.images ? (
                     <Image
                         style={styles.iconImage}
                         source={{ uri: event.images[0] }}

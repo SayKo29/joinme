@@ -11,7 +11,7 @@ import {
 
 // import * as Google from "expo-auth-session/providers/google";
 import { Icon } from "react-native-elements";
-import { formAuth } from "../styles/formAuthStyles";
+import { formAuth } from "@/styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
 
 import { useAuth } from "../contexts/Auth";

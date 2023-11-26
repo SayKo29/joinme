@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/Auth";
 // import * as Google from "expo-auth-session/providers/google";
-import { formAuth } from "../styles/formAuthStyles";
+import { formAuth } from "@/styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
 
 // web : 670475111068-of7eu5va1ug1j2cgjuafb7l6nkm93clf.apps.googleusercontent.com

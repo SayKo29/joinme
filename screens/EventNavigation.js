@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Platform } from "react-native";
 
-import colors from "../styles/colors";
-import EventMap from "../components/EventMap";
-import HeaderNavigationEvent from "../components/HeaderNavigationEvent";
-import EventScroll from "../components/EventScroll";
+import colors from "@/styles/colors";
+import EventMap from "@/components/EventMap";
+import HeaderNavigationEvent from "@/components/HeaderNavigationEvent";
+import EventScroll from "@/components/EventScroll";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useQuery } from "react-query";
 import getEventsData from "../api/EventsData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import LottieAnimation from "../components/LottieAnimation";
+import LottieAnimation from "@/components/LottieAnimation";
 import getUsersData from "../api/UsersData";
 
 const Stack = createStackNavigator();
@@ -44,7 +44,7 @@ export default function EventNavigation({ navigation }) {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
                 <HeaderNavigationEvent
                     selected={selected}
@@ -83,5 +83,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
         height: "100%",
+        flex: 1,
     },
 });

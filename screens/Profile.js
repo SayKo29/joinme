@@ -1,5 +1,5 @@
 import React from "react";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import {
     SafeAreaView,
     View,
@@ -13,7 +13,7 @@ import {
 import { useAuth } from "../contexts/Auth";
 import getCategories from "../api/CategoryData";
 import { useQuery } from "react-query";
-import Tag from "../components/tag";
+import Tag from "@/components/tag";
 
 const Profile = ({ navigation }) => {
     const auth = useAuth();
@@ -34,45 +34,48 @@ const Profile = ({ navigation }) => {
     }
     if (user) {
         return (
-            // if has state, show profile
-
             <SafeAreaView style={profile.container}>
-                <View style={profile.userBox}>
-                    <Image
-                        style={profile.profileImage}
-                        source={
-                            user.avatar
-                                ? { uri: user.avatar }
-                                : require("../assets/avatar.jpg")
-                        }
-                    />
-                    <Text style={profile.name}>
-                        {user.username ? user.username : "SayKo29"}
-                    </Text>
-                    <Text style={profile.fullName}>{user.name}</Text>
-                    <Text style={profile.location}>
-                        {user.location
-                            ? user.location
-                            : "Vilassar de Mar, Spain"}
-                    </Text>
-                </View>
-                <View style={profile.interests}>
-                    <Text style={profile.title}>Intereses</Text>
-                    <View style={profile.tagsContainer}>
-                        {allCategories.map((category) => {
-                            return (
-                                <Tag name={category.name} key={category.id} />
-                            );
-                        })}
+                <View style={profile.content}>
+                    <View style={profile.userBox}>
+                        <Image
+                            style={profile.profileImage}
+                            source={
+                                user.avatar
+                                    ? { uri: user.avatar }
+                                    : require("../assets/avatar.jpg")
+                            }
+                        />
+                        <Text style={profile.name}>
+                            {user.username ? user.username : "SayKo29"}
+                        </Text>
+                        <Text style={profile.fullName}>{user.name}</Text>
+                        <Text style={profile.location}>
+                            {user.location
+                                ? user.location
+                                : "Vilassar de Mar, Spain"}
+                        </Text>
                     </View>
-                </View>
+                    <View style={profile.interests}>
+                        <Text style={profile.title}>Intereses</Text>
+                        <View style={profile.tagsContainer}>
+                            {allCategories.map((category) => {
+                                return (
+                                    <Tag
+                                        name={category.name}
+                                        key={category.id}
+                                    />
+                                );
+                            })}
+                        </View>
+                    </View>
 
-                <TouchableOpacity
-                    style={profile.signoutButton}
-                    onPress={signOut}
-                >
-                    <Text style={profile.signoutText}>Cerrar Sesión</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={profile.signoutButton}
+                        onPress={signOut}
+                    >
+                        <Text style={profile.signoutText}>Cerrar Sesión</Text>
+                    </TouchableOpacity>
+                </View>
             </SafeAreaView>
         );
     }
@@ -84,7 +87,7 @@ const Profile = ({ navigation }) => {
                     className="self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2"
                     onPress={signOut}
                 >
-                    <Text className=" text-xl w-auto text-white ">
+                    <Text className="text-xl w-auto text-white ">
                         Iniciar Sesión
                     </Text>
                 </TouchableOpacity>
@@ -104,10 +107,17 @@ const profile = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "flex-start",
-        paddingHorizontal: 20,
         justifyContent: "flex-start",
         // padding for android notch
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    content: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width: "100%",
+        paddingHorizontal: 20,
+        backgroundColor: colors.background,
     },
     userBox: {
         width: "100%",

@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from "react-native";
 import Gallery from "react-native-image-gallery";
 import React, { useState } from "react";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import getUsersData from "../api/UsersData";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TouchableOpacity } from "react-native-gesture-handler";

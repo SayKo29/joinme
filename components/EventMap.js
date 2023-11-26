@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Appearance, Image } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import { useQuery } from "react-query";
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
@@ -8,7 +8,7 @@ import getEventsData from "../api/EventsData";
 import * as Location from "expo-location";
 import LottieAnimation from "./LottieAnimation";
 import { useAuth } from "../contexts/Auth";
-import mapStyle from "../styles/mapStyle";
+import mapStyle from "@/styles/mapStyle";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import EventDetail from "./EventDetail";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,6 +24,7 @@ const EventMap = ({ data }) => {
     const snapPoints = ["40%", "100%"];
 
     const user = useAuth();
+    const userLoggedIn = user.authData.user;
 
     const INITIAL_REGION = {
         latitude: 52.5,
@@ -101,7 +102,6 @@ const EventMap = ({ data }) => {
     }
     // storage events data to async storage
     AsyncStorage.setItem("events", JSON.stringify(data));
-
     return (
         <View style={styles.container}>
             {/* Render our MapView */}
@@ -140,21 +140,17 @@ const EventMap = ({ data }) => {
                     {/* Mi ubicación */}
                     <Marker
                         coordinate={{
-                            latitude: parseFloat(location?.latitude),
-                            longitude: parseFloat(location?.longitude),
+                            latitude: parseFloat(location?.coords?.latitude),
+                            longitude: parseFloat(location?.coords?.longitude),
                         }}
                     >
                         <Image
                             source={
-                                user.authData.user.avatar
-                                    ? { uri: user.authData.user.avatar }
+                                userLoggedIn?.avatar
+                                    ? { uri: userLoggedIn?.avatar }
                                     : require("../assets/avatar.jpg")
                             }
-                            style={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: 50,
-                            }}
+                            style={styles.avatar}
                         />
                     </Marker>
                 </MapView>
@@ -175,7 +171,6 @@ const EventMap = ({ data }) => {
                     </BottomSheet>
                 )}
             </View>
-            {/* Show sliding panel if marker pressed with markerPressed prop */}
         </View>
     );
 };
@@ -197,9 +192,17 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    lottie: { width: "100%", height: "100%" },
+    lottie: {
+        width: "100%",
+        height: "100%",
+    },
     slider: {
         backgroundColor: colors.background,
+    },
+    avatar: {
+        width: 30,
+        height: 30,
+        borderRadius: 50,
     },
 });
 

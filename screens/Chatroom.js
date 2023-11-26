@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 import {
     FlatList,
     Image,
@@ -12,10 +12,10 @@ import {
 } from "react-native";
 import getEventsByParticipant from "../api/GetParticipantEvents";
 import { useQuery } from "react-query";
-import LottieAnimation from "../components/LottieAnimation";
-import Chat from "../components/messageChat";
+import LottieAnimation from "@/components/LottieAnimation";
+import Chat from "@/components/messageChat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 // import .env socketUrl variable
 
 const ChatRooms = () => {
@@ -27,25 +27,30 @@ const ChatRooms = () => {
     );
     const [chatroomId, setChatroomId] = useState(null);
     const [events, setEvents] = useState([]);
-    //   get all events from async storage
+    //   get all events from async storage maybe doesnt have events
     useEffect(() => {
-        AsyncStorage.getItem("events").then((events) => {
-            // format events by chatroom
-            const eventsArray = JSON.parse(events);
-            const eventsByChatroom = eventsArray.map((event) => {
-                return {
-                    id: event._id,
-                    name: event.name,
-                    chatroomId: event.chatroom,
-                    startDate: event.startDate,
-                    images: event.images,
-                    endDate: event.endDate,
-                    participants: event.participants,
-                };
-            });
+        AsyncStorage.getItem("events")
+            .then((events) => {
+                // format events by chatroom
+                const eventsArray = JSON.parse(events);
+                if (!eventsArray) {
+                    return;
+                }
+                const eventsByChatroom = eventsArray.map((event) => {
+                    return {
+                        id: event._id,
+                        name: event.name,
+                        chatroomId: event.chatroom,
+                        startDate: event.startDate,
+                        images: event.images,
+                        endDate: event.endDate,
+                        participants: event.participants,
+                    };
+                });
 
-            setEvents(eventsByChatroom);
-        });
+                setEvents(eventsByChatroom);
+            })
+            .catch((err) => console.log(err));
     }, []);
 
     const handleBack = () => {

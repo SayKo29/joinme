@@ -2,11 +2,11 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import { Text } from "react-native";
-import EventNavigation from "../screens/EventNavigation";
-import Profile from "../screens/Profile";
-import Create from "../screens/CreateEvent";
-import ChatScreen from "../screens/Chatroom";
-import colors from "../styles/colors";
+import EventNavigation from "@/screens/EventNavigation";
+import Profile from "@/screens/Profile";
+import Create from "@/screens/CreateEvent";
+import ChatScreen from "@/screens/Chatroom";
+import colors from "@/styles/colors";
 
 export const BottomTab = () => {
     const Tab = createBottomTabNavigator();

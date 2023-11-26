@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import {type Event } from "../types/event.type";
 import { type User } from "../types/user.type";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import { Image } from "react-native-elements";
 import { formatDate } from "../lib/utils";
 

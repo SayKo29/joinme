@@ -1,32 +1,50 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, FlatList, Text, View } from "react-native";
 import React from "react";
-import colors from "../styles/colors";
+import colors from "@/styles/colors";
 import EventCard from "./EventCard";
 
 const EventScroll = ({ data, users }) => {
-    // get all users data and pass to eventcard the user owner of the event
     const user = users.data;
-    return (
-        // <View style={styles.container}>
-        //     {data.data.map((event) => (
-        //         <EventCard key={event._id} event={event} user={user} />
-        //     ))}
-        // </View>
 
-        <ScrollView
+    if (data.isLoading) {
+        return <LottieAnimation />;
+    }
+
+    if (data.data.length === 0) {
+        return (
+            <View style={styles.center}>
+                <Text style={styles.noEvents}>No hay eventos disponibles</Text>
+            </View>
+        );
+    }
+
+    return (
+        <FlatList
             style={styles.container}
-            showsVerticalScrollIndicator={false}
-        >
-            {data.data.map((event) => (
-                <EventCard key={event._id} event={event} user={user} />
-            ))}
-        </ScrollView>
+            data={data.data}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <EventCard event={item} user={user} />}
+        />
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: colors.background,
+        width: "100%",
+        height: "100%",
         flex: 1,
+    },
+    center: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    noEvents: {
+        color: colors.white,
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
     },
 });
 
