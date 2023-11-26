@@ -1,11 +1,37 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import getCategories from "@/api/CategoryData";
+import { useQuery } from "react-query";
+import CategoryCard from "./CategoryCard";
 
-const SelectCategory = () => {
+const SelectCategory = ({ navigation, categorySelected }) => {
+    const categories = useQuery("CATEGORIES", getCategories);
+
+    if (categories.isLoading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (categories.isError) {
+        return <Text>Error</Text>;
+    }
+
+    const handleCategoryPressed = (category) => {
+        categorySelected(category);
+    };
     return (
         <View style={styles.container}>
-            <Text>Selecciona una categoría</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>
+                    Selecciona la categoría del evento
+                </Text>
+            </View>
+            {categories.data.map((category) => (
+                <CategoryCard
+                    key={category._id}
+                    category={category}
+                    categorySelected={handleCategoryPressed}
+                />
+            ))}
         </View>
     );
 };
@@ -14,6 +40,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: "100%",
+    },
+    titleContainer: {
+        alignItems: "center",
+        paddingVertical: 20,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "white",
     },
 });
 

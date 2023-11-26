@@ -3,14 +3,50 @@ import React from "react";
 import Stepper from "react-native-stepper-ui";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
+import EventInfo from "components/CreateEvent/EventInfo";
 
 const CreateEvent = ({ navigation }) => {
+    const stepperRef = React.useRef(null);
     const [active, setActive] = React.useState(0);
+    const [category, setCategory] = React.useState("");
+    const [event, setEvent] = React.useState({
+        name: "",
+        description: "",
+        category: "",
+        latitude: "",
+        longitude: "",
+        images: [],
+        user: "",
+        startDate: "",
+        endDate: "",
+        participants: [],
+        chatroom: "",
+    });
+    const handleEvent = (event) => {
+        let newEvent = { ...event };
+        newEvent.category = category;
+        setEvent(newEvent);
+    };
+
+    const handleEventInfo = (eventInfo) => {
+        let newEvent = { ...event };
+        newEvent = { ...newEvent, ...eventInfo };
+        setEvent(newEvent);
+    };
+
+    // when select category change active to 1
+    React.useEffect(() => {
+        if (category !== "") {
+            setActive(1);
+        }
+    }, [category]);
+
     const content = [
-        <SelectCategory navigation={navigation} />,
-        <SelectCategory navigation={navigation} />,
-        <SelectCategory navigation={navigation} />,
-        <SelectCategory navigation={navigation} />,
+        <SelectCategory
+            navigation={navigation}
+            categorySelected={setCategory}
+        />,
+        <EventInfo eventInfo={handleEventInfo} />,
     ];
     return (
         <SafeAreaView style={styles.container}>
@@ -18,6 +54,7 @@ const CreateEvent = ({ navigation }) => {
                 <Text style={styles.title}>Crear evento</Text>
             </View>
             <Stepper
+                ref={stepperRef}
                 active={active}
                 content={content}
                 onBack={() => setActive((p) => p - 1)}
@@ -29,6 +66,7 @@ const CreateEvent = ({ navigation }) => {
                 buttonStyle={{ backgroundColor: colors.primary }}
                 stepStyle={{ backgroundColor: colors.accent }}
                 stepTextStyle={{ color: colors.white }}
+                showButton={false}
             />
         </SafeAreaView>
     );
@@ -39,6 +77,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        marginHorizontal: 20,
     },
     titleContainer: {
         alignItems: "center",
