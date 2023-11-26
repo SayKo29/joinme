@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import getEventsByParticipant from "../api/GetParticipantEvents";
+import getEventsByParticipant from "@/api/GetParticipantEvents";
 import { useQuery } from "react-query";
 import LottieAnimation from "@/components/LottieAnimation";
 import Chat from "@/components/messageChat";

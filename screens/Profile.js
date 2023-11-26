@@ -10,8 +10,8 @@ import {
     Platform,
     StatusBar,
 } from "react-native";
-import { useAuth } from "../contexts/Auth";
-import getCategories from "../api/CategoryData";
+import { useAuth } from "@/contexts/Auth";
+import getCategories from "@/api/CategoryData";
 import { useQuery } from "react-query";
 import Tag from "@/components/tag";
 

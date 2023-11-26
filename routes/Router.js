@@ -7,7 +7,7 @@ import {
 
 import { AppStack } from "./AppStack";
 import { AuthStack } from "./AuthStack";
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 import { Loading } from "@/components/Loading";
 import { useColorScheme } from "react-native";
 import colors from "@/styles/colors";

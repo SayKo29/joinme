@@ -14,7 +14,7 @@ import { Icon } from "react-native-elements";
 import { formAuth } from "@/styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
 
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 
 export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false);

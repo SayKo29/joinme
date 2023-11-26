@@ -7,10 +7,10 @@ import HeaderNavigationEvent from "@/components/HeaderNavigationEvent";
 import EventScroll from "@/components/EventScroll";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useQuery } from "react-query";
-import getEventsData from "../api/EventsData";
+import getEventsData from "@/api/EventsData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieAnimation from "@/components/LottieAnimation";
-import getUsersData from "../api/UsersData";
+import getUsersData from "@/api/UsersData";
 
 const Stack = createStackNavigator();
 

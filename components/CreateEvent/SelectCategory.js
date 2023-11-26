@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import getCategories from "@/api/CategoryData";
 
 const SelectCategory = () => {
     return (

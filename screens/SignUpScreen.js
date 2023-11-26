@@ -9,7 +9,7 @@ import {
     ImageBackground,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 // import * as Google from "expo-auth-session/providers/google";
 import { formAuth } from "@/styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";

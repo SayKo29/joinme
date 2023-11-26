@@ -12,18 +12,18 @@ import {
     TouchableOpacity,
     Image,
 } from "react-native";
-import getCategories from "../api/CategoryData";
+import getCategories from "@/api/CategoryData";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import CreateEventPost from "../api/CreateEventPost";
+import CreateEventPost from "@/api/CreateEventPost";
 import colors from "@/styles/colors";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import mapStyle from "@/styles/mapStyle";
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatToDate, formatToTime } from "../services/functions";
+import { formatToDate, formatToTime } from "@/services/functions";
 import * as ImagePicker from "expo-image-picker";
 
 const CreateEvent = ({ navigation }) => {

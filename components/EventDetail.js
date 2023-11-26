@@ -2,11 +2,11 @@ import { View, StyleSheet, Text } from "react-native";
 import Gallery from "react-native-image-gallery";
 import React, { useState } from "react";
 import colors from "@/styles/colors";
-import getUsersData from "../api/UsersData";
+import getUsersData from "@/api/UsersData";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useAuth } from "../contexts/Auth";
-import JoinEvent from "../api/EventJoinParticipant";
+import { useAuth } from "@/contexts/Auth";
+import JoinEvent from "@/api/EventJoinParticipant";
 
 export default function EventDetail({ markerPressed, navigation }) {
     const queryClient = useQueryClient();

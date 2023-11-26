@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 import { io } from "socket.io-client";
 import { SOCKET_URL } from "@env";
 import { Icon } from "react-native-elements";
-import { formatToTimeWithoutSeconds } from "../services/functions";
+import { formatToTimeWithoutSeconds } from "@/services/functions";
 import {
     FlatList,
     Image,
