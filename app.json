@@ -26,6 +26,12 @@
                 {
                     "locationAlwaysAndWhenInUsePermission": "Esta app necesita que le des permiso para acceder a tu ubicación."
                 }
+            ],
+            [
+                "expo-screen-orientation",
+                {
+                    "initialOrientation": "PORTRAIT"
+                }
             ]
         ],
         "updates": {
@@ -33,6 +39,7 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
+            "requireFullScreen": true,
             "userInterfaceStyle": "automatic",
             "supportsTablet": true,
             "config": {

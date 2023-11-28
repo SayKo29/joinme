@@ -32,7 +32,7 @@ export const BottomTab = () => {
                 tabBarStyle: {
                     backgroundColor: colors.tabs,
                     borderTopColor: colors.tabs,
-                    color: "#fff",
+                    color: colors.text,
                 },
 
                 tabBarIcon: ({ focused, color, size }) => {
@@ -77,7 +77,7 @@ export const BottomTab = () => {
                 options={{
                     title: "Map",
                     headerShown: false,
-                    headerTintColor: "#fff",
+                    headerTintColor: colors.text,
                     headerTitleStyle: {
                         fontWeight: "bold",
                     },
@@ -89,7 +89,7 @@ export const BottomTab = () => {
                 options={{
                     title: "Chats",
                     headerShown: false,
-                    headerTintColor: "#fff",
+                    headerTintColor: colors.text,
                     headerTitleStyle: {
                         fontWeight: "bold",
                     },
@@ -104,7 +104,7 @@ export const BottomTab = () => {
                         backgroundColor: colors.accent,
                     },
                     headerShown: false,
-                    headerTintColor: "#fff",
+                    headerTintColor: colors.text,
                     headerTitleStyle: {
                         fontWeight: "bold",
                     },
@@ -116,7 +116,7 @@ export const BottomTab = () => {
                 options={{
                     title: "Perfil",
                     headerShown: false,
-                    headerTintColor: "#fff",
+                    headerTintColor: colors.text,
                     headerTitleStyle: {
                         fontWeight: "bold",
                     },

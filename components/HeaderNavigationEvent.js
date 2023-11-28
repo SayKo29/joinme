@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     },
     selected: {
         fontWeight: "bold",
-        color: colors.white,
+        color: colors.text,
         borderBottomWidth: 1,
         borderBottomColor: colors.gray,
         fontSize: 16,

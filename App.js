@@ -1,17 +1,23 @@
-import * as React from 'react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { Router } from './routes/Router'
-import { AuthProvider } from './contexts/Auth'
+import * as React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Router } from "./routes/Router";
+import { AuthProvider } from "./contexts/Auth";
+// import * as ScreenOrientation from "expo-screen-orientation";
 
 export default () => {
-  // Create a client
-  const queryClient = new QueryClient()
+    // Lock screen orientation to portrait
+    // React.useEffect(() => {
+    //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    // }, []);
 
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-      </QueryClientProvider>
-    </AuthProvider>
-  )
-}
+    // Create a client
+    const queryClient = new QueryClient();
+
+    return (
+        <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+                <Router />
+            </QueryClientProvider>
+        </AuthProvider>
+    );
+};

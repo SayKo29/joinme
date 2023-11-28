@@ -14,6 +14,9 @@ import getUsersData from "@/api/UsersData";
 
 const Stack = createStackNavigator();
 
+const MemoizedEventScroll = React.memo(EventScroll);
+const MemoizedEventMap = React.memo(EventMap);
+
 export default function EventNavigation({ navigation }) {
     //   refetch every 5 minutes
 
@@ -33,7 +36,7 @@ export default function EventNavigation({ navigation }) {
 
     const handleSelect = (value) => {
         setSelected(value);
-        navigation.navigate(value === "new" ? "EventScroll" : "EventMap");
+        // navigation.navigate(value === "new" ? "EventScroll" : "EventMap");
     };
 
     if (eventsQuery.isLoading) {
@@ -52,27 +55,19 @@ export default function EventNavigation({ navigation }) {
                 />
             </View>
             <View style={styles.container}>
-                <Stack.Navigator
-                    initialRouteName="EventScroll"
-                    screenOptions={{ headerShown: false }}
-                >
-                    <Stack.Screen name="EventScroll">
-                        {(props) => (
-                            <EventScroll
-                                {...props}
-                                data={eventsQuery}
-                                users={usersQuery}
-                            />
-                        )}
-                    </Stack.Screen>
-                    <Stack.Screen name="EventMap">
-                        {(props) => <EventMap {...props} data={eventsQuery} />}
-                    </Stack.Screen>
-                </Stack.Navigator>
+                {selected === "new" ? (
+                    <MemoizedEventScroll
+                        data={eventsQuery}
+                        users={usersQuery}
+                    />
+                ) : (
+                    <MemoizedEventMap data={eventsQuery} />
+                )}
             </View>
         </SafeAreaView>
     );
 }
+
 // create our styling code:
 const styles = StyleSheet.create({
     headerContainer: {

@@ -3,8 +3,9 @@ import React from "react";
 import getCategories from "@/api/CategoryData";
 import { useQuery } from "react-query";
 import CategoryCard from "./CategoryCard";
+import colors from "@/styles/colors";
 
-const SelectCategory = ({ navigation, categorySelected }) => {
+const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     const categories = useQuery("CATEGORIES", getCategories);
 
     if (categories.isLoading) {
@@ -30,6 +31,7 @@ const SelectCategory = ({ navigation, categorySelected }) => {
                     key={category._id}
                     category={category}
                     categorySelected={handleCategoryPressed}
+                    activeCategory={activeCategory}
                 />
             ))}
         </View>
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "white",
+        color: colors.text,
     },
 });
 

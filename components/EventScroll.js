@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     noEvents: {
-        color: colors.white,
+        color: colors.text,
         fontSize: 20,
         fontWeight: "bold",
         textAlign: "center",

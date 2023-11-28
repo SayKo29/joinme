@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import {type Event } from "../types/event.type";
 import { type User } from "../types/user.type";
 import colors from "@/styles/colors";
-import { Image } from "react-native-elements";
 import { formatDate } from "../lib/utils";
+import Swiper from "react-native-swiper";
 
 type Props = {
     event: Event;
@@ -37,12 +37,20 @@ const EventCard = ({ event, user }: Props) => {
                 </View>
             </View>
             <View style={styles.eventImageContainer}>
-                <Image
-                    style={styles.eventImage}
-                    source={{
-                        uri: event.images[0]
-                    }} 
-                />
+                <Swiper
+                activeDotStyle={styles.activeDotStyle}
+                >
+                    {event.images.map((image, index) => (
+                        <View key={index} style={styles.slide}>
+                            <Image
+                                style={styles.eventImage}
+                                source={{
+                                    uri: image,
+                                }}
+                            />
+                        </View>
+                    ))}
+                </Swiper>
             </View>
         </View>
     );
@@ -80,10 +88,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.white,
+        color: colors.text,
     },
     text: {
-        color: colors.white,
+        color: colors.text,
     },
     eventImageContainer: {
         marginTop: 10,
@@ -95,5 +103,14 @@ const styles = StyleSheet.create({
         width: "100%",
         borderRadius: 20,
     },
+    slide: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    activeDotStyle: {
+        backgroundColor: colors.accent,
+    },
+
 });
 export default EventCard;
