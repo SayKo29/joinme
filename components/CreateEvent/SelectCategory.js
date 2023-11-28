@@ -4,16 +4,13 @@ import getCategories from "@/api/CategoryData";
 import { useQuery } from "react-query";
 import CategoryCard from "./CategoryCard";
 import colors from "@/styles/colors";
+import LottieAnimation from "components/LottieAnimation";
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     const categories = useQuery("CATEGORIES", getCategories);
 
     if (categories.isLoading) {
-        return <Text>Loading...</Text>;
-    }
-
-    if (categories.isError) {
-        return <Text>Error</Text>;
+        return <LottieAnimation />;
     }
 
     const handleCategoryPressed = (category) => {

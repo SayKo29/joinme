@@ -28,30 +28,30 @@ const ChatRooms = () => {
     const [chatroomId, setChatroomId] = useState(null);
     const [events, setEvents] = useState([]);
     //   get all events from async storage maybe doesnt have events
-    useEffect(() => {
-        AsyncStorage.getItem("events")
-            .then((events) => {
-                // format events by chatroom
-                const eventsArray = JSON.parse(events);
-                if (!eventsArray) {
-                    return;
-                }
-                const eventsByChatroom = eventsArray.map((event) => {
-                    return {
-                        id: event._id,
-                        name: event.name,
-                        chatroomId: event.chatroom,
-                        startDate: event.startDate,
-                        images: event.images,
-                        endDate: event.endDate,
-                        participants: event.participants,
-                    };
-                });
+    // useEffect(() => {
+    //     AsyncStorage.getItem("events")
+    //         .then((events) => {
+    //             // format events by chatroom
+    //             const eventsArray = JSON.parse(events);
+    //             if (!eventsArray) {
+    //                 return;
+    //             }
+    //             const eventsByChatroom = eventsArray.map((event) => {
+    //                 return {
+    //                     id: event._id,
+    //                     name: event.name,
+    //                     chatroomId: event.chatroom,
+    //                     startDate: event.startDate,
+    //                     images: event.images,
+    //                     endDate: event.endDate,
+    //                     participants: event.participants,
+    //                 };
+    //             });
 
-                setEvents(eventsByChatroom);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    //             setEvents(eventsByChatroom);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, []);
 
     const handleBack = () => {
         setChatroomId(null);

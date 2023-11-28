@@ -38,7 +38,7 @@ const HeaderNavigationEvent = ({ selected, setSelected }) => {
                             : styles.unselected,
                     ]}
                 >
-                    Eventos Cercanos
+                    Mostrar Cercanos
                 </Text>
             </TouchableOpacity>
         </View>

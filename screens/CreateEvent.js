@@ -4,6 +4,7 @@ import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
 import EventInfo from "components/CreateEvent/EventInfo";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
+import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
 
 const CreateEvent = ({ navigation }) => {
     const [category, setCategory] = React.useState("");
@@ -73,6 +74,7 @@ const CreateEvent = ({ navigation }) => {
                         nextBtnText="Siguiente"
                         previousBtnStyle={styles.previousBtnStyle}
                         previousBtnTextStyle={styles.previousBtnTextStyle}
+                        previousBtnText="Atrás"
                     >
                         <EventInfo
                             eventInfo={updateEvent}
@@ -83,11 +85,15 @@ const CreateEvent = ({ navigation }) => {
                         label="Información avanzada"
                         nextBtnStyle={styles.nextBtnStyle}
                         nextBtnTextStyle={styles.nextBtnTextStyle}
-                        nextBtnText="Siguiente"
+                        previousBtnStyle={styles.previousBtnStyle}
+                        previousBtnTextStyle={styles.previousBtnTextStyle}
+                        previousBtnText="Atrás"
+                        finishBtnText="Crear evento"
                     >
-                        <View style={{ alignItems: "center" }}>
-                            <Text>This is the content within step 3!</Text>
-                        </View>
+                        <AdvancedEventInfo
+                            eventInfo={handleEvent}
+                            currentEvent={event}
+                        />
                     </ProgressStep>
                 </ProgressSteps>
             </View>
