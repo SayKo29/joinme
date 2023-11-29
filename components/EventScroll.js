@@ -9,7 +9,6 @@ const EventScroll = ({ data, users }) => {
     if (data.isLoading) {
         return <LottieAnimation />;
     }
-    console.log(data);
     if (data.data.length === 0) {
         return (
             <View style={styles.center}>

@@ -1,12 +1,54 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Alert,
+    TextInput,
+    Button,
+} from "react-native";
 import React from "react";
 import colors from "styles/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { formatDateTime } from "lib/utils";
-// import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
+
+    // code for search bar results:
+    const [query, setQuery] = React.useState("");
+    const [results, setResults] = React.useState([]);
+    const [inputValue, setInputValue] = React.useState("");
+    const [debouncedInputValue, setDebouncedInputValue] = React.useState("");
+
+    const handleInputChange = (value) => {
+        setInputValue(value);
+    };
+
+    React.useEffect(() => {
+        const delayInputTimeoutId = setTimeout(() => {
+            setDebouncedInputValue(inputValue);
+        }, 500);
+        return () => clearTimeout(delayInputTimeoutId);
+    }, [inputValue]);
+
+    React.useEffect(() => {
+        const handleSearch = async () => {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${debouncedInputValue}`
+                );
+                const data = await response.json();
+                setResults(data);
+            } catch (error) {
+                console.error("Error de búsqueda:", error);
+            }
+        };
+
+        if (debouncedInputValue) {
+            handleSearch();
+        }
+    }, [debouncedInputValue]);
 
     const [isDatePickerVisible, setDatePickerVisibility] =
         React.useState(false);
@@ -52,26 +94,32 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.googleAutocomplete}>
-                <GooglePlacesAutocomplete
-                    placeholder="Search"
-                    fetchDetails
-                    onPress={(data, details = null) => {
-                        if (details) {
-                            const loc = {
-                                latitude: details.geometry.location.lat,
-                                longitude: details.geometry.location.lng,
-                            };
-                            setSelectedLocation(loc);
-                        }
-                    }}
-                    query={{
-                        key: "AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY",
-                        language: "es",
-                        components: "country:es",
-                    }}
+            <View style={styles.placesAutocomplete}>
+                <Text style={styles.label}>Lugar del evento</Text>
+                <TextInput
+                    placeholder="Buscar lugar"
+                    value={inputValue}
+                    onChangeText={handleInputChange}
+                    style={styles.inputAutocomplete}
                 />
-            </View> */}
+                <View>
+                    {results.map((result) => (
+                        // make selectable results to put it in the text input
+                        <TouchableOpacity
+                            key={result.place_id}
+                            onPress={() => {
+                                setInputValue(result.display_name);
+                                updateEvent("latitude", result.lat);
+                                updateEvent("longitude", result.lon);
+                            }}
+                        >
+                            <Text style={styles.label}>
+                                {result.display_name}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </View>
             <View style={styles.datePicker}>
                 <Text style={styles.label}>
                     Fecha y hora de inicio del evento
@@ -158,6 +206,18 @@ const styles = StyleSheet.create({
     label: {
         color: colors.text,
         fontSize: 16,
+    },
+    placesAutocomplete: {
+        width: "100%",
+        height: "auto",
+    },
+    inputAutocomplete: {
+        backgroundColor: colors.primary,
+        borderRadius: 10,
+        padding: 20,
+        marginVertical: 10,
+        width: "100%",
+        color: colors.text,
     },
 });
 
