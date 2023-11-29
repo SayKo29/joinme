@@ -22,12 +22,6 @@
                 }
             ],
             [
-                "expo-location",
-                {
-                    "locationAlwaysAndWhenInUsePermission": "Esta app necesita que le des permiso para acceder a tu ubicación."
-                }
-            ],
-            [
                 "expo-screen-orientation",
                 {
                     "initialOrientation": "PORTRAIT"
@@ -42,12 +36,6 @@
             "requireFullScreen": true,
             "userInterfaceStyle": "automatic",
             "supportsTablet": true,
-            "config": {
-                "googleMapsApiKey": "AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY"
-            },
-            "infoPlist": {
-                "UIBackgroundModes": ["location", "fetch"]
-            },
             "bundleIdentifier": "com.joinme.app"
         },
         "android": {
@@ -57,16 +45,6 @@
                 "backgroundColor": "#FFFFFF"
             },
             "softwareKeyboardLayoutMode": "pan",
-            "permissions": [
-                "ACCESS_FINE_LOCATION",
-                "ACCESS_COARSE_LOCATION",
-                "ACCESS_BACKGROUND_LOCATION"
-            ],
-            "config": {
-                "googleMaps": {
-                    "apiKey": "AIzaSyCXI6UDD5VVeeDwYwCFY5SKyTCQjbt3OIY"
-                }
-            },
             "package": "com.joinme.app"
         },
         "web": {

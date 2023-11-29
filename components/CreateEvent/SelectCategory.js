@@ -14,7 +14,7 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     }
 
     const handleCategoryPressed = (category) => {
-        categorySelected(category);
+        categorySelected(category._id);
     };
     return (
         <View style={styles.container}>

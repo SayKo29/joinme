@@ -9,7 +9,7 @@ const CategoryCard = ({ category, categorySelected, activeCategory }) => {
                 styles.card,
                 {
                     backgroundColor:
-                        activeCategory === category
+                        activeCategory === category._id
                             ? colors.accent
                             : colors.primary,
                 },

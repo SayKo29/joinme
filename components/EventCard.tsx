@@ -38,6 +38,7 @@ const EventCard = ({ event, user }: Props) => {
             </View>
             <View style={styles.eventImageContainer}>
                 <Swiper
+                showsButtons={true}
                 activeDotStyle={styles.activeDotStyle}
                 >
                     {event.images.map((image, index) => (

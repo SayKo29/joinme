@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import React from "react";
 import colors from "styles/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDate } from "lib/utils";
+import { formatDateTime } from "lib/utils";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
@@ -11,6 +11,8 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [isDatePickerVisible, setDatePickerVisibility] =
         React.useState(false);
 
+    const [isDatePickerVisible2, setDatePickerVisibility2] =
+        React.useState(false);
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
@@ -18,9 +20,12 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         setDatePickerVisibility(false);
     };
 
-    const handleConfirm = (date) => {
-        hideDatePicker();
-        updateEvent("startDate", date);
+    const showDatePicker2 = () => {
+        setDatePickerVisibility2(true);
+    };
+
+    const hideDatePicker2 = () => {
+        setDatePickerVisibility2(false);
     };
 
     const updateEvent = (key, value) => {
@@ -31,15 +36,19 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         eventInfo(key, value);
     };
 
-    const formatDate = (date) => {
-        // format date to 01/01/2021 12:00
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // Sumar 1 porque los meses van de 0 a 11
-        const year = date.getFullYear();
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
-    };
+    // validate startDate and endDate
+    React.useEffect(() => {
+        if (event.startDate && event.endDate) {
+            if (event.startDate > event.endDate) {
+                updateEvent("startDate", "");
+                updateEvent("endDate", "");
+                Alert.alert(
+                    "Error",
+                    "La fecha de inicio no puede ser mayor que la fecha fin"
+                );
+            }
+        }
+    }, [event.startDate, event.endDate]);
 
     return (
         <View style={styles.container}>
@@ -64,22 +73,57 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                 />
             </View> */}
             <View style={styles.datePicker}>
+                <Text style={styles.label}>
+                    Fecha y hora de inicio del evento
+                </Text>
                 <TouchableOpacity onPress={showDatePicker} style={styles.input}>
                     {event.startDate ? (
                         <Text style={styles.label}>
                             Fecha y hora del evento:{" "}
-                            {formatDate(event.startDate)}
+                            {formatDateTime(event.startDate)}
                         </Text>
                     ) : (
                         <Text style={styles.label}>
-                            Selecciona la fecha u hora del evento
+                            Selecciona la fecha y hora del evento
                         </Text>
                     )}
                 </TouchableOpacity>
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible}
                     mode="datetime"
-                    onConfirm={handleConfirm}
+                    locale="es_ES"
+                    onConfirm={(date) => {
+                        updateEvent("startDate", date);
+                        hideDatePicker();
+                    }}
+                    onCancel={hideDatePicker}
+                />
+            </View>
+            <View style={styles.datePicker}>
+                <Text style={styles.label}>Fecha y hora de fin del evento</Text>
+                <TouchableOpacity
+                    onPress={showDatePicker2}
+                    style={styles.input}
+                >
+                    {event.endDate ? (
+                        <Text style={styles.label}>
+                            Fecha y hora del evento:{" "}
+                            {formatDateTime(event.endDate)}
+                        </Text>
+                    ) : (
+                        <Text style={styles.label}>
+                            Selecciona la fecha y hora del evento
+                        </Text>
+                    )}
+                </TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible2}
+                    mode="datetime"
+                    locale="es_ES"
+                    onConfirm={(date) => {
+                        updateEvent("endDate", date);
+                        hideDatePicker2();
+                    }}
                     onCancel={hideDatePicker}
                 />
             </View>
@@ -113,6 +157,7 @@ const styles = StyleSheet.create({
     },
     label: {
         color: colors.text,
+        fontSize: 16,
     },
 });
 

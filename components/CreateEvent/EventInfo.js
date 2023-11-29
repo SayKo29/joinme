@@ -17,8 +17,8 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
 
     // useeffect to set the image if previous image exists
     React.useEffect(() => {
-        if (currentEvent.images.length > 0) {
-            setImage(currentEvent.images[0]);
+        if (currentEvent && currentEvent?.images?.length > 0) {
+            setImage(currentEvent?.images[0]);
         }
     }, []);
 

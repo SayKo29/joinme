@@ -5,6 +5,7 @@ import colors from "@/styles/colors";
 import EventInfo from "components/CreateEvent/EventInfo";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
+import CreateEventPost from "api/CreateEventPost";
 
 const CreateEvent = ({ navigation }) => {
     const [category, setCategory] = React.useState("");
@@ -34,6 +35,19 @@ const CreateEvent = ({ navigation }) => {
             ...oldEvent,
             [key]: value,
         }));
+    };
+
+    const handleEventCreation = () => {
+        return async () => {
+            console.log(event, "event");
+            const response = await CreateEventPost(event);
+            console.log(response, "response");
+            // if (response.status) {
+            //     navigation.navigate("Event", { id: response.event._id });
+            // } else {
+            //     setErrors(true);
+            // }
+        };
     };
 
     return (
@@ -89,9 +103,10 @@ const CreateEvent = ({ navigation }) => {
                         previousBtnTextStyle={styles.previousBtnTextStyle}
                         previousBtnText="Atrás"
                         finishBtnText="Crear evento"
+                        onSubmit={handleEventCreation()}
                     >
                         <AdvancedEventInfo
-                            eventInfo={handleEvent}
+                            eventInfo={updateEvent}
                             currentEvent={event}
                         />
                     </ProgressStep>

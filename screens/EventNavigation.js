@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, Platform } from "react-native";
 
 import colors from "@/styles/colors";
-import EventMap from "@/components/EventMap";
+// import EventMap from "@/components/EventMap";
 import HeaderNavigationEvent from "@/components/HeaderNavigationEvent";
 import EventScroll from "@/components/EventScroll";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,11 +11,12 @@ import getEventsData from "@/api/EventsData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieAnimation from "@/components/LottieAnimation";
 import getUsersData from "@/api/UsersData";
+import ForYouEvent from "components/ForYouEvent";
 
 const Stack = createStackNavigator();
 
 const MemoizedEventScroll = React.memo(EventScroll);
-const MemoizedEventMap = React.memo(EventMap);
+const MemoizedForYouEvent = React.memo(ForYouEvent);
 
 export default function EventNavigation({ navigation }) {
     //   refetch every 5 minutes
@@ -61,7 +62,10 @@ export default function EventNavigation({ navigation }) {
                         users={usersQuery}
                     />
                 ) : (
-                    <MemoizedEventMap data={eventsQuery} />
+                    <MemoizedForYouEvent
+                        data={eventsQuery}
+                        users={usersQuery}
+                    />
                 )}
             </View>
         </SafeAreaView>
