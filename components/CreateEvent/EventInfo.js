@@ -5,7 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 
 const EventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
-    const [image, setImage] = React.useState(null);
+    const [image, setImage] = React.useState({});
 
     const updateEvent = (key, value) => {
         setEvent((oldEvent) => ({
@@ -17,8 +17,8 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
 
     // useeffect to set the image if previous image exists
     React.useEffect(() => {
-        if (currentEvent && currentEvent?.images?.length > 0) {
-            setImage(currentEvent?.images[0]);
+        if (currentEvent && currentEvent?.images) {
+            setImage(currentEvent?.images);
         }
     }, []);
 
@@ -30,11 +30,24 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             quality: 1,
         });
 
-        // set the image if the user selects one
-        updateEvent("images", [result.assets[0].uri]);
-
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            const localUri = result.assets[0].uri;
+            const filename = localUri.split("/").pop();
+
+            // Añade la imagen al formulario
+            let image = {
+                uri: localUri,
+                name: filename,
+                type: "image/jpeg", // Ajusta según el tipo de archivo de tu imagen
+            };
+            // set the image if the user selects one
+            updateEvent("images", image);
+
+            setImage(image);
+        }
+
+        if (result.canceled) {
+            setImage(null);
         }
     };
 
@@ -82,9 +95,9 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                         />
                     )
                 }
-                {image && (
+                {image && image?.uri && (
                     <Image
-                        source={{ uri: image }}
+                        source={{ uri: image?.uri }}
                         style={{ width: 200, height: 200, alignSelf: "center" }}
                     />
                 )}

@@ -6,6 +6,7 @@ import EventInfo from "components/CreateEvent/EventInfo";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
 import CreateEventPost from "api/CreateEventPost";
+import { useAuth } from "contexts/Auth";
 
 const CreateEvent = ({ navigation }) => {
     const [category, setCategory] = React.useState("");
@@ -14,20 +15,17 @@ const CreateEvent = ({ navigation }) => {
         name: "",
         description: "",
         category: "",
-        latitude: "",
-        longitude: "",
-        images: [],
+        location: "",
+        images: {},
         user: "",
         startDate: "",
         endDate: "",
         participants: [],
         chatroom: "",
     });
-    const handleEvent = (event) => {
-        let newEvent = { ...event };
-        newEvent.category = category;
-        setEvent(newEvent);
-    };
+
+    const auth = useAuth();
+    const user = auth?.authData?.user;
 
     // updateEvent changes the event state with the key and value passed
     const updateEvent = (key, value) => {
@@ -37,17 +35,16 @@ const CreateEvent = ({ navigation }) => {
         }));
     };
 
-    const handleEventCreation = () => {
-        return async () => {
-            console.log(event, "event");
-            const response = await CreateEventPost(event);
-            console.log(response, "response");
-            // if (response.status) {
-            //     navigation.navigate("Event", { id: response.event._id });
-            // } else {
-            //     setErrors(true);
-            // }
+    const handleEventCreation = async () => {
+        let eventToSend = {
+            ...event,
+            category: category,
+            startDate: new Date(event.startDate).toISOString(),
+            endDate: new Date(event.endDate).toISOString(),
+            user: user.id,
         };
+        const response = await CreateEventPost(eventToSend);
+        console.log(response, "response");
     };
 
     return (
@@ -103,7 +100,7 @@ const CreateEvent = ({ navigation }) => {
                         previousBtnTextStyle={styles.previousBtnTextStyle}
                         previousBtnText="Atrás"
                         finishBtnText="Crear evento"
-                        onSubmit={handleEventCreation()}
+                        onSubmit={handleEventCreation}
                     >
                         <AdvancedEventInfo
                             eventInfo={updateEvent}

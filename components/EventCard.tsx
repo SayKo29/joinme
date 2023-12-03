@@ -16,6 +16,7 @@ const EventCard = ({ event, user }: Props) => {
         return null;
     }
 
+
     const eventOwner = user[event.user];
     return (
         <View style={styles.container}>

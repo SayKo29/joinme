@@ -1,20 +1,30 @@
 export default async function CreateEventPost(event) {
-    // post event
-    // x-www-form-urlencoded post
-    const response = await fetch(
-        "https://calm-lime-armadillo.cyclic.app/api/events",
-        // "http://192.168.1.199:3000/api/events",
-        {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(event),
-        }
-    );
-    if (!response.status) {
-        throw new Error("NO va");
+    const formData = new FormData();
+
+    // Agrega los datos del evento al formulario
+    formData.append("name", event.name);
+    formData.append("description", event.description);
+    formData.append("category", event.category);
+    formData.append("location", event.location);
+    formData.append("startDate", event.startDate);
+    formData.append("endDate", event.endDate);
+    formData.append("user", event.user);
+    formData.append("participants", event.participants);
+    formData.append("chatroom", event.chatroom);
+    formData.append("images", event.images);
+
+    // Realiza la solicitud utilizando 'multipart/form-data'
+    // "https://calm-lime-armadillo.cyclic.app/api/events",
+    console.log(formData, "formData");
+    const response = await fetch("http://192.168.1.199:3000/api/events", {
+        // const response = await fetch("https://calm-lime-armadillo.cyclic.app/api/events", {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Error al enviar el evento");
     }
+
     return response.json();
 }
