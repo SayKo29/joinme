@@ -18,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "@/styles/colors";
 // import .env socketUrl variable
 
-const ChatRooms = () => {
+const ChatRooms = ({ navigation }) => {
     // show chat rooms
     //   const [chatRooms, setChatRooms] = useState([])
     const auth = useAuth();
@@ -27,31 +27,6 @@ const ChatRooms = () => {
     );
     const [chatroomId, setChatroomId] = useState(null);
     const [events, setEvents] = useState([]);
-    //   get all events from async storage maybe doesnt have events
-    // useEffect(() => {
-    //     AsyncStorage.getItem("events")
-    //         .then((events) => {
-    //             // format events by chatroom
-    //             const eventsArray = JSON.parse(events);
-    //             if (!eventsArray) {
-    //                 return;
-    //             }
-    //             const eventsByChatroom = eventsArray.map((event) => {
-    //                 return {
-    //                     id: event._id,
-    //                     name: event.name,
-    //                     chatroomId: event.chatroom,
-    //                     startDate: event.startDate,
-    //                     images: event.images,
-    //                     endDate: event.endDate,
-    //                     participants: event.participants,
-    //                 };
-    //             });
-
-    //             setEvents(eventsByChatroom);
-    //         })
-    //         .catch((err) => console.log(err));
-    // }, []);
 
     const handleBack = () => {
         setChatroomId(null);
@@ -65,7 +40,21 @@ const ChatRooms = () => {
     }
 
     if (data.length === 0) {
-        return <Text>No chatrooms</Text>;
+        return (
+            <SafeAreaView style={styles.container}>
+                <TouchableOpacity
+                    style={styles.content}
+                    onPress={() => navigation.navigate("Eventos")}
+                >
+                    <View style={styles.title}>
+                        <Text style={styles.text}>
+                            No hay chats disponibles, para crear uno,
+                        </Text>
+                        <Text style={styles.btn}>únete a un evento</Text>
+                    </View>
+                </TouchableOpacity>
+            </SafeAreaView>
+        );
     }
 
     if (data) {
@@ -194,6 +183,23 @@ const styles = StyleSheet.create({
     participants: {
         fontSize: 14,
         color: colors.white,
+    },
+    content: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    title: {
+        alignItems: "center",
+    },
+    text: {
+        color: colors.white,
+        fontSize: 18,
+    },
+    btn: {
+        color: colors.accent,
+        fontSize: 18,
+        fontWeight: "bold",
     },
 });
 

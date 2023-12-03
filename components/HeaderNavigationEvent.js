@@ -26,19 +26,21 @@ const HeaderNavigationEvent = ({ selected, setSelected }) => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => handleSelect("near")}
+                onPress={() => handleSelect("myevents")}
                 style={[
-                    selected === "near" ? styles.selected : styles.unselected,
+                    selected === "myevents"
+                        ? styles.selected
+                        : styles.unselected,
                 ]}
             >
                 <Text
                     style={[
-                        selected === "near"
+                        selected === "myevents"
                             ? styles.selected
                             : styles.unselected,
                     ]}
                 >
-                    Eventos para ti
+                    Mis eventos
                 </Text>
             </TouchableOpacity>
         </View>

@@ -43,7 +43,7 @@ const Profile = ({ navigation }) => {
                                 source={
                                     user.avatar
                                         ? { uri: user.avatar }
-                                        : require("@/assets/avatar.avif")
+                                        : require("@/assets/avatar.png")
                                 }
                             />
                         </View>

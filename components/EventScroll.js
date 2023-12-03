@@ -3,7 +3,12 @@ import React from "react";
 import colors from "@/styles/colors";
 import EventCard from "./EventCard";
 
-const EventScroll = ({ data, users }) => {
+const EventScroll = ({ data, users, navigation }) => {
+    const handleEventPress = (event, user) => {
+        // Navegar a la pantalla de detalles del evento
+        navigation.navigate("EventDetailScreen", { event, user });
+    };
+
     const user = users.data;
 
     if (data.isLoading) {
@@ -22,7 +27,13 @@ const EventScroll = ({ data, users }) => {
             style={styles.container}
             data={data.data}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <EventCard event={item} user={user} />}
+            renderItem={({ item }) => (
+                <EventCard
+                    event={item}
+                    user={user}
+                    onEventPress={handleEventPress}
+                />
+            )}
         />
     );
 };

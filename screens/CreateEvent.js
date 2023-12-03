@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
@@ -7,9 +7,20 @@ import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
 import CreateEventPost from "api/CreateEventPost";
 import { useAuth } from "contexts/Auth";
+import { useQuery } from "react-query";
+import getEventsData from "api/EventsData";
+import LottieAnimation from "components/LottieAnimation";
+getEventsData;
 
 const CreateEvent = ({ navigation }) => {
+    const eventsQuery = useQuery({
+        queryKey: ["EVENTS"],
+        queryFn: getEventsData,
+        refetchInterval: 300000,
+    });
+
     const [category, setCategory] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
     const [errors, setErrors] = React.useState(Boolean);
     const [event, setEvent] = React.useState({
         name: "",
@@ -36,6 +47,7 @@ const CreateEvent = ({ navigation }) => {
     };
 
     const handleEventCreation = async () => {
+        setLoading(true);
         let eventToSend = {
             ...event,
             category: category,
@@ -44,8 +56,20 @@ const CreateEvent = ({ navigation }) => {
             user: user.id,
         };
         const response = await CreateEventPost(eventToSend);
-        console.log(response, "response");
+        if (response.status === 200) {
+            // invalidate EVENTS query to refetch data
+            eventsQuery.refetch();
+            navigation.navigate("Event", { event: response.data });
+            setLoading(false);
+        } else {
+            setLoading(false);
+            setErrors(true);
+        }
     };
+
+    if (loading) {
+        return <LottieAnimation />;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -129,7 +153,8 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     stepWrapper: {
-        flex: 1,
+        width: "100%",
+        height: "100%",
         paddingHorizontal: 20,
     },
     nextBtnStyle: {

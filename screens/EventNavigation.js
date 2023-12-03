@@ -5,18 +5,14 @@ import colors from "@/styles/colors";
 // import EventMap from "@/components/EventMap";
 import HeaderNavigationEvent from "@/components/HeaderNavigationEvent";
 import EventScroll from "@/components/EventScroll";
-import { createStackNavigator } from "@react-navigation/stack";
 import { useQuery } from "react-query";
 import getEventsData from "@/api/EventsData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import LottieAnimation from "@/components/LottieAnimation";
 import getUsersData from "@/api/UsersData";
-import ForYouEvent from "components/ForYouEvent";
-
-const Stack = createStackNavigator();
+import MyEvents from "components/MyEvents";
 
 const MemoizedEventScroll = React.memo(EventScroll);
-const MemoizedForYouEvent = React.memo(ForYouEvent);
+const MemoizedMyEvents = React.memo(MyEvents);
 
 export default function EventNavigation({ navigation }) {
     //   refetch every 5 minutes
@@ -58,14 +54,12 @@ export default function EventNavigation({ navigation }) {
             <View style={styles.container}>
                 {selected === "new" ? (
                     <MemoizedEventScroll
+                        navigation={navigation}
                         data={eventsQuery}
                         users={usersQuery}
                     />
                 ) : (
-                    <MemoizedForYouEvent
-                        data={eventsQuery}
-                        users={usersQuery}
-                    />
+                    <MemoizedMyEvents data={eventsQuery} users={usersQuery} />
                 )}
             </View>
         </SafeAreaView>

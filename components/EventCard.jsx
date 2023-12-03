@@ -1,51 +1,57 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
 import { formatDate } from "../lib/utils";
 import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 
-
-
-const EventCard = ({ event, user }) => {
+const EventCard = ({ event, user, onEventPress }) => {
     if (!event || !user) {
         return null;
     }
+    const handlePress = () => {
+        // Llama a la función de navegación pasada como prop
+        onEventPress(event, user);
+    };
+
+    let smallDescription = event?.description.substring(0, 23) + "...";
 
     const eventOwner = user[event.user];
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={handlePress}>
             <View style={styles.userRowContainer}>
                 <View style={styles.userLeft}>
-                <Image
-                    style={styles.userImage}
-                    source={
-                        eventOwner.avatar
-                            ? { uri: eventOwner.avatar }
-                            : require("@/assets/avatar.avif")
-                    }
-                />
-                <View style={styles.userTextContent}>
-                    <Text style={styles.title}>{eventOwner.name}</Text>
-                    <Text style={styles.text}>{event.name}</Text>
+                    <Image
+                        style={styles.userImage}
+                        source={
+                            eventOwner && eventOwner.avatar != null
+                                ? { uri: eventOwner.avatar }
+                                : require("@/assets/avatar.png")
+                        }
+                    />
+                    <View style={styles.userTextContent}>
+                        <Text style={styles.title}>{event.name}</Text>
+                        <Text style={styles.eventDescription}>
+                            {smallDescription}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.userTextContainer}>
-                    <Text style={styles.text}>{formatDate(event.createdAt)}</Text>
+                    <Text style={styles.text}>
+                        {formatDate(event.createdAt)}
+                    </Text>
                 </View>
             </View>
             <View style={styles.eventImageContainer}>
                 <Swiper
-                showsButtons={true}
-                activeDotStyle={styles.activeDotStyle}
-                loadMinimalLoader={
-                    <LottieAnimation />
-                }
+                    activeDotStyle={styles.activeDotStyle}
+                    loadMinimalLoader={<LottieAnimation />}
                 >
                     {event.images.map((image, index) => (
                         <View key={index} style={styles.slide}>
                             <Image
                                 style={styles.eventImage}
+                                resizeMode="cover"
                                 source={{
                                     uri: image,
                                 }}
@@ -54,7 +60,7 @@ const EventCard = ({ event, user }) => {
                     ))}
                 </Swiper>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -76,11 +82,12 @@ const styles = StyleSheet.create({
     },
     userTextContainer: {
         justifyContent: "center",
-        marginHorizontal: 10,
+        width: "auto",
     },
     userLeft: {
         flexDirection: "row",
         alignItems: "center",
+        maxWidth: "70%",
     },
     userTextContent: {
         flexDirection: "column",
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.text,
+        color: colors.accent,
     },
     text: {
         color: colors.text,
@@ -101,17 +108,25 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     eventImage: {
-        width:'100%',
-        height: '100%',
+        flex: 1,
+        width: "100%",
+        height: "100%",
+        borderRadius: 10,
     },
     slide: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: colors.white,
+        borderRadius: 10,
     },
     activeDotStyle: {
         backgroundColor: colors.accent,
     },
-
+    eventDescription: {
+        width: "100%",
+        fontSize: 16,
+        color: colors.gray,
+    },
 });
 export default EventCard;

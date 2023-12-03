@@ -27,6 +27,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
+            aspect: [16, 9], // [4, 3], [1, 1], [16, 9
             quality: 1,
         });
 
@@ -78,7 +79,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 <Text style={styles.label}>Imagenes del evento</Text>
                 {
                     // show Seleccionar imagen button if there is no image
-                    image === null && (
+                    image && !image?.uri && (
                         <Button
                             title="Seleccionar imagen"
                             onPress={pickImage}
@@ -87,7 +88,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 }
                 {
                     // show Cambiar imagen button if there is an image
-                    image !== null && (
+                    image && image?.uri && (
                         <Button
                             color={colors.accent}
                             title="Cambiar imagen"
