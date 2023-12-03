@@ -1,21 +1,16 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
-import {type Event } from "../types/event.type";
-import { type User } from "../types/user.type";
 import colors from "@/styles/colors";
 import { formatDate } from "../lib/utils";
 import Swiper from "react-native-swiper";
+import LottieAnimation from "./LottieAnimation";
 
-type Props = {
-    event: Event;
-    user: User;
-};
 
-const EventCard = ({ event, user }: Props) => {
+
+const EventCard = ({ event, user }) => {
     if (!event || !user) {
         return null;
     }
-
 
     const eventOwner = user[event.user];
     return (
@@ -24,9 +19,11 @@ const EventCard = ({ event, user }: Props) => {
                 <View style={styles.userLeft}>
                 <Image
                     style={styles.userImage}
-                    source={{
-                        uri: eventOwner.avatar
-                    }} 
+                    source={
+                        eventOwner.avatar
+                            ? { uri: eventOwner.avatar }
+                            : require("@/assets/avatar.avif")
+                    }
                 />
                 <View style={styles.userTextContent}>
                     <Text style={styles.title}>{eventOwner.name}</Text>
@@ -41,6 +38,9 @@ const EventCard = ({ event, user }: Props) => {
                 <Swiper
                 showsButtons={true}
                 activeDotStyle={styles.activeDotStyle}
+                loadMinimalLoader={
+                    <LottieAnimation />
+                }
                 >
                     {event.images.map((image, index) => (
                         <View key={index} style={styles.slide}>
@@ -101,9 +101,8 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     eventImage: {
-        height: 200,
-        width: "100%",
-        borderRadius: 20,
+        width:'100%',
+        height: '100%',
     },
     slide: {
         flex: 1,

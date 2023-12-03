@@ -37,14 +37,16 @@ const Profile = ({ navigation }) => {
             <SafeAreaView style={profile.container}>
                 <View style={profile.content}>
                     <View style={profile.userBox}>
-                        <Image
-                            style={profile.profileImage}
-                            source={
-                                user.avatar
-                                    ? { uri: user.avatar }
-                                    : require("../assets/avatar.jpg")
-                            }
-                        />
+                        <View style={profile.profileContainer}>
+                            <Image
+                                style={profile.profileImage}
+                                source={
+                                    user.avatar
+                                        ? { uri: user.avatar }
+                                        : require("@/assets/avatar.avif")
+                                }
+                            />
+                        </View>
                         <Text style={profile.name}>
                             {user.username ? user.username : "SayKo29"}
                         </Text>
@@ -144,12 +146,16 @@ const profile = StyleSheet.create({
         paddingTop: 10,
         gap: 10,
     },
-    profileImage: {
-        width: 90,
-        height: 90,
+    profileContainer: {
+        width: 100,
+        height: 100,
         borderRadius: 100,
-        overflow: "hidden",
-        borderWidth: 3,
+        backgroundColor: colors.gray,
+    },
+    profileImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
     },
     name: {
         fontSize: 20,
