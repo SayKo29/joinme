@@ -59,7 +59,11 @@ export default function EventNavigation({ navigation }) {
                         users={usersQuery}
                     />
                 ) : (
-                    <MemoizedMyEvents data={eventsQuery} users={usersQuery} />
+                    <MemoizedMyEvents
+                        navigation={navigation}
+                        data={eventsQuery}
+                        users={usersQuery}
+                    />
                 )}
             </View>
         </SafeAreaView>

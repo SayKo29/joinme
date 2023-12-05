@@ -1,11 +1,4 @@
-import {
-    SafeAreaView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-} from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
@@ -62,18 +55,28 @@ const CreateEvent = ({ navigation }) => {
             endDate: new Date(event.endDate).toISOString(),
             user: user.id,
         };
-        const response = await CreateEventPost(eventToSend);
-        console.log(response, "response");
-        if (response.status === 200) {
-            console.log("entra if");
-            // invalidate EVENTS query to refetch data
-            await eventsQuery.refetch();
-            console.log("refetch done");
-            navigation.navigate("Eventos");
-            console.log("navigate done");
-            setLoading(false);
-        } else {
-            console.log("entra else");
+        try {
+            const response = await CreateEventPost(eventToSend);
+            if (response) {
+                try {
+                    // invalidate EVENTS query to refetch data
+                    await eventsQuery.refetch();
+                    navigation.navigate("Eventos");
+                    setLoading(false);
+                } catch (error) {
+                    console.error(
+                        "Error al recargar los datos de los eventos:",
+                        error
+                    );
+                    setLoading(false);
+                    setErrors(true);
+                }
+            } else {
+                setLoading(false);
+                setErrors(true);
+            }
+        } catch (error) {
+            console.error("Error al crear el evento:", error);
             setLoading(false);
             setErrors(true);
         }

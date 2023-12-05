@@ -25,7 +25,7 @@ export default async function CreateEventPost(event) {
     );
 
     if (!response.ok) {
-        throw new Error("Error al enviar el evento");
+        throw new Error("Error al enviar el evento" + response.status);
     }
 
     return response.json();
