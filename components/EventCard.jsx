@@ -53,7 +53,9 @@ const EventCard = ({ event, user, onEventPress }) => {
                                 style={styles.eventImage}
                                 resizeMode="cover"
                                 source={{
-                                    uri: image,
+                                    uri:
+                                        image ||
+                                        "https://s3joinme.s3.eu-north-1.amazonaws.com/eventImages/image-placeholder.jpg",
                                 }}
                             />
                         </View>

@@ -10,8 +10,8 @@ const CategoryCard = ({ category, categorySelected, activeCategory }) => {
                 {
                     backgroundColor:
                         activeCategory === category._id
-                            ? colors.accent
-                            : colors.primary,
+                            ? colors.primary
+                            : colors.background,
                 },
             ]}
             onPress={() => categorySelected(category)}
@@ -23,11 +23,12 @@ const CategoryCard = ({ category, categorySelected, activeCategory }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: colors.primary,
         borderRadius: 10,
         padding: 20,
         marginVertical: 10,
         width: "100%",
+        borderWidth: 2,
+        borderColor: colors.primary,
     },
     text: {
         color: colors.text,

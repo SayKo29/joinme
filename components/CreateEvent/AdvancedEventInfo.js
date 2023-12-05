@@ -5,13 +5,14 @@ import {
     TouchableOpacity,
     Alert,
     TextInput,
-    Button,
 } from "react-native";
 import React from "react";
 import colors from "styles/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { formatDateTime } from "lib/utils";
 import { Icon } from "react-native-elements";
+import formStyles from "styles/formStyles";
+formStyles;
 
 const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
@@ -108,11 +109,12 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                         placeholder="Buscar lugar"
                         value={inputValue}
                         onChangeText={handleInputChange}
+                        placeholderTextColor={colors.gray}
                         style={[
                             inputValue.length > 0
-                                ? styles.inputAutocomplete
+                                ? formStyles.inputAutocomplete
                                 : {
-                                      ...styles.inputAutocomplete,
+                                      ...formStyles.inputAutocomplete,
                                       width: "100%",
                                   },
                         ]}
@@ -147,17 +149,20 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                 </View>
             </View>
             <View style={styles.datePicker}>
-                <Text style={styles.label}>
+                <Text style={formStyles.label}>
                     Fecha y hora de inicio del evento
                 </Text>
-                <TouchableOpacity onPress={showDatePicker} style={styles.input}>
+                <TouchableOpacity
+                    onPress={showDatePicker}
+                    style={formStyles.input}
+                >
                     {event.startDate ? (
                         <Text style={styles.label}>
                             Fecha y hora del evento:{" "}
                             {formatDateTime(event.startDate)}
                         </Text>
                     ) : (
-                        <Text style={styles.label}>
+                        <Text style={{ color: colors.gray }}>
                             Selecciona la fecha y hora del evento
                         </Text>
                     )}
@@ -174,10 +179,12 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                 />
             </View>
             <View style={styles.datePicker}>
-                <Text style={styles.label}>Fecha y hora de fin del evento</Text>
+                <Text style={formStyles.label}>
+                    Fecha y hora de fin del evento
+                </Text>
                 <TouchableOpacity
                     onPress={showDatePicker2}
-                    style={styles.input}
+                    style={formStyles.input}
                 >
                     {event.endDate ? (
                         <Text style={styles.label}>
@@ -185,7 +192,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                             {formatDateTime(event.endDate)}
                         </Text>
                     ) : (
-                        <Text style={styles.label}>
+                        <Text style={{ color: colors.gray }}>
                             Selecciona la fecha y hora del evento
                         </Text>
                     )}
@@ -216,6 +223,7 @@ const styles = StyleSheet.create({
     datePicker: {
         width: "100%",
         height: "auto",
+        marginBottom: 10,
     },
     title: {
         fontSize: 18,
@@ -236,14 +244,6 @@ const styles = StyleSheet.create({
     placesAutocomplete: {
         width: "100%",
         height: "auto",
-    },
-    inputAutocomplete: {
-        backgroundColor: colors.primary,
-        borderRadius: 10,
-        padding: 20,
-        marginVertical: 10,
-        width: "90%",
-        color: colors.text,
     },
     inputContainer: {
         width: "100%",

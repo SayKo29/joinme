@@ -1,7 +1,16 @@
-import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    Image,
+    TouchableOpacity,
+} from "react-native";
 import React from "react";
 import colors from "styles/colors";
 import * as ImagePicker from "expo-image-picker";
+import formStyles from "styles/formStyles";
+formStyles;
 
 const EventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
@@ -48,7 +57,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
         }
 
         if (result.canceled) {
-            setImage(null);
+            setImage({});
         }
     };
 
@@ -58,17 +67,23 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 <Text style={styles.title}>Información del evento</Text>
             </View>
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Nombre del evento</Text>
+                <Text style={formStyles.label}>Nombre del evento</Text>
                 <TextInput
-                    style={styles.input}
+                    style={formStyles.input}
+                    placeholderTextColor={colors.gray}
+                    placeholder="Partido de fútbol"
                     onChangeText={(text) => updateEvent("name", text)}
                     value={event.name}
                 />
             </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Descripción del evento</Text>
+            <View style={formStyles.inputContainer}>
+                <Text style={formStyles.label}>Descripción del evento</Text>
                 <TextInput
-                    style={styles.input}
+                    style={formStyles.input}
+                    placeholderTextColor={colors.gray}
+                    placeholder="Partido de fútbol en el parque del ayuntamiento..."
+                    multiline={true}
+                    maxLength={200}
                     onChangeText={(description) =>
                         updateEvent("description", description)
                     }
@@ -76,30 +91,40 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 />
             </View>
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Imagenes del evento</Text>
+                <Text style={formStyles.label}>Imagen del evento</Text>
                 {
                     // show Seleccionar imagen button if there is no image
                     image && !image?.uri && (
-                        <Button
-                            title="Seleccionar imagen"
+                        <TouchableOpacity
+                            style={formStyles.input}
                             onPress={pickImage}
-                        />
+                        >
+                            <Text style={formStyles.text}>
+                                Seleccionar imagen
+                            </Text>
+                        </TouchableOpacity>
                     )
                 }
                 {
                     // show Cambiar imagen button if there is an image
                     image && image?.uri && (
-                        <Button
-                            color={colors.accent}
-                            title="Cambiar imagen"
+                        <TouchableOpacity
+                            style={formStyles.input}
                             onPress={pickImage}
-                        />
+                        >
+                            <Text style={formStyles.text}>Cambiar imagen</Text>
+                        </TouchableOpacity>
                     )
                 }
                 {image && image?.uri && (
                     <Image
                         source={{ uri: image?.uri }}
-                        style={{ width: 200, height: 200, alignSelf: "center" }}
+                        style={{
+                            width: 200,
+                            height: 200,
+                            alignSelf: "center",
+                            marginVertical: 15,
+                        }}
                     />
                 )}
             </View>
@@ -120,18 +145,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         color: "white",
-    },
-    inputContainer: {
-        marginVertical: 10,
-    },
-    input: {
-        backgroundColor: colors.white,
-        borderRadius: 10,
-        padding: 10,
-    },
-    label: {
-        color: colors.white,
-        fontWeight: "bold",
     },
 });
 

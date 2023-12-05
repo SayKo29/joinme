@@ -1,4 +1,11 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+} from "react-native";
 import React from "react";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
@@ -56,12 +63,17 @@ const CreateEvent = ({ navigation }) => {
             user: user.id,
         };
         const response = await CreateEventPost(eventToSend);
+        console.log(response, "response");
         if (response.status === 200) {
+            console.log("entra if");
             // invalidate EVENTS query to refetch data
-            eventsQuery.refetch();
-            navigation.navigate("Event", { event: response.data });
+            await eventsQuery.refetch();
+            console.log("refetch done");
+            navigation.navigate("Eventos");
+            console.log("navigate done");
             setLoading(false);
         } else {
+            console.log("entra else");
             setLoading(false);
             setErrors(true);
         }
@@ -96,6 +108,9 @@ const CreateEvent = ({ navigation }) => {
                         nextBtnTextStyle={styles.nextBtnTextStyle}
                         nextBtnText="Siguiente"
                         nextBtnDisabled={category === ""}
+                        scrollViewProps={{
+                            showsVerticalScrollIndicator: false,
+                        }}
                     >
                         <SelectCategory
                             categorySelected={setCategory}
@@ -110,6 +125,9 @@ const CreateEvent = ({ navigation }) => {
                         previousBtnStyle={styles.previousBtnStyle}
                         previousBtnTextStyle={styles.previousBtnTextStyle}
                         previousBtnText="Atrás"
+                        nextBtnDisabled={
+                            event.name === "" || event.description === ""
+                        }
                     >
                         <EventInfo
                             eventInfo={updateEvent}
@@ -125,6 +143,11 @@ const CreateEvent = ({ navigation }) => {
                         previousBtnText="Atrás"
                         finishBtnText="Crear evento"
                         onSubmit={handleEventCreation}
+                        nextBtnDisabled={
+                            event.location === "" ||
+                            event.startDate === "" ||
+                            event.endDate === ""
+                        }
                     >
                         <AdvancedEventInfo
                             eventInfo={updateEvent}
@@ -145,7 +168,6 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         alignItems: "center",
-        paddingBottom: 20,
     },
     title: {
         fontSize: 20,
@@ -153,8 +175,7 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     stepWrapper: {
-        width: "100%",
-        height: "100%",
+        flex: 1,
         paddingHorizontal: 20,
     },
     nextBtnStyle: {

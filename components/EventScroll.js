@@ -1,7 +1,8 @@
-import { StyleSheet, FlatList, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
 import EventCard from "./EventCard";
+import { FlashList } from "@shopify/flash-list";
 
 const EventScroll = ({ data, users, navigation }) => {
     const handleEventPress = (event, user) => {
@@ -23,10 +24,8 @@ const EventScroll = ({ data, users, navigation }) => {
     }
 
     return (
-        <FlatList
-            style={styles.container}
+        <FlashList
             data={data.data}
-            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
                 <EventCard
                     event={item}
@@ -34,6 +33,7 @@ const EventScroll = ({ data, users, navigation }) => {
                     onEventPress={handleEventPress}
                 />
             )}
+            estimatedItemSize={20}
         />
     );
 };
