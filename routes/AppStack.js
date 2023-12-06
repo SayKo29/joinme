@@ -11,7 +11,7 @@ export const AppStack = () => {
         <Stack.Navigator>
             <Stack.Screen
                 options={{ headerShown: false }}
-                name="Home"
+                name="BottomTab"
                 component={BottomTab}
             />
             <Stack.Screen
