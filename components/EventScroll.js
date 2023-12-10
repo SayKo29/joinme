@@ -26,7 +26,7 @@ const EventScroll = ({ data, users, navigation }) => {
 
     const user = users.data;
 
-    if (data.isLoading) {
+    if (data.isLoading && !data.isError && !data.isSuccess) {
         return <LottieAnimation />;
     }
     if (data.data.length === 0) {

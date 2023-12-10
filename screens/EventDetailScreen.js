@@ -12,11 +12,13 @@ export default function EventDetailScreen({ route, navigation }) {
     const { event, user } = route.params;
     const queryClient = useQueryClient();
     const auth = useAuth();
+    const userLogged = auth.authData.user;
     const { mutate } = useMutation(JoinEvent);
     const [loading, setLoading] = useState(false);
-
     const handleJoinEvent = () => {
         setLoading(true);
+        // add participant to event
+        event.participants.push(auth.authData.user.id);
         mutate(event, {
             onSuccess: () => {
                 // uncached query

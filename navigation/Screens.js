@@ -1,5 +1,6 @@
 // Screens.js
 import EventDetailScreen from "screens/EventDetailScreen";
+import ChatScreen from "screens/ChatScreen";
 // Importa otras pantallas según sea necesario
 
 export const screens = {
@@ -8,4 +9,8 @@ export const screens = {
         component: EventDetailScreen,
     },
     // Agrega otras pantallas según sea necesario
+    ChatScreen: {
+        name: "ChatScreen",
+        component: ChatScreen,
+    },
 };

@@ -17,9 +17,11 @@ import {
     View,
 } from "react-native";
 import colors from "@/styles/colors";
-import LottieAnimation from "./LottieAnimation";
+import LottieAnimation from "../components/LottieAnimation";
 
-const Chat = ({ chatroomId, onBack, event }) => {
+const ChatScreen = ({ route, navigation }) => {
+    let event = route.params.event;
+    let chatroomId = route.params.event.chatroom;
     // create chat room
     const URL = SOCKET_URL;
     const [messages, setMessages] = useState([]);
@@ -36,7 +38,7 @@ const Chat = ({ chatroomId, onBack, event }) => {
 
     const finishChatRoom = () => {
         socket.emit("leaveRoom", { chatroomId });
-        onBack();
+        navigation.navigate("Chats");
     };
     //   join room only once
 
@@ -69,7 +71,7 @@ const Chat = ({ chatroomId, onBack, event }) => {
         socket.emit("chatroomMessage", { chatroomId, msg: newMessage });
         setNewMessage("");
     };
-    console.log(event);
+    // console.log(event);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -322,4 +324,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Chat;
+export default ChatScreen;

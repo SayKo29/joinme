@@ -21,6 +21,11 @@ export const AppStack = () => {
                 // pass navigation prop to screen
                 initialParams={{ navigation: null }}
             />
+            <Stack.Screen
+                options={{ headerShown: false }}
+                name="ChatScreen"
+                component={screens.ChatScreen.component}
+            />
         </Stack.Navigator>
     );
 };
