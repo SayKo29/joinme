@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/Auth";
 import { io } from "socket.io-client";
 import { SOCKET_URL } from "@env";
 import { Icon } from "react-native-elements";
 import { formatToTimeWithoutSeconds } from "@/services/functions";
 import {
-    FlatList,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -18,60 +17,95 @@ import {
 } from "react-native";
 import colors from "@/styles/colors";
 import LottieAnimation from "../components/LottieAnimation";
+import { FlashList } from "@shopify/flash-list";
+import getUserParticipants from "api/GetUserParticipants";
+getUserParticipants;
+import { useQuery } from "react-query";
 
 const ChatScreen = ({ route, navigation }) => {
-    let event = route.params.event;
-    let chatroomId = route.params.event.chatroom;
-    // create chat room
+    const event = route.params.event;
+    const chatroomId = route.params.event.chatroom;
+
     const URL = SOCKET_URL;
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const auth = useAuth();
-    const flatListRef = React.useRef(null);
+    const flatListRef = useRef(null);
     const [loading, setLoading] = useState(false);
+    const userLogged = auth.authData.user;
+    const [participants, setParticipants] = useState([]);
 
-    const socket = io(URL, {
-        query: {
-            userId: auth.authData.user.id,
-        },
-    });
+    const participantsQuery = useQuery(
+        ["PARTICIPANTS", event?.participants],
+        () => getUserParticipants(event?.participants),
+        {
+            enabled: !!event?.participants,
+        }
+    );
+
+    useEffect(() => {
+        if (participantsQuery?.data) {
+            setLoading(false);
+            setParticipants(participantsQuery?.data);
+            console.log("participants", participantsQuery?.data);
+        }
+
+        if (participantsQuery?.isLoading) {
+            setLoading(true);
+        }
+    }, [participantsQuery?.data]);
+
+    const socket = useRef(io(URL, { query: { userId: userLogged.id } }));
 
     const finishChatRoom = () => {
-        socket.emit("leaveRoom", { chatroomId });
-        navigation.navigate("Chats");
+        navigation.goBack();
     };
-    //   join room only once
 
     useEffect(() => {
-        socket.emit("joinRoom", { chatroomId });
-        return () => {
-            socket.emit("leaveRoom", { chatroomId });
+        const socketInstance = socket.current;
+
+        const handleConnect = () => {};
+
+        const handleDisconnect = () => {};
+
+        const handleAllMessages = (message) => {
+            setMessages(message);
         };
-    }, []);
 
-    //   get all message and use loader to show them
+        const handleNewMessage = (message) => {
+            console.log("new message", message);
+            console.log("messages", messages);
+            setMessages((prevMessages) => [message, ...prevMessages]);
+        };
+
+        socketInstance.on("connect", handleConnect);
+        socketInstance.on("disconnect", handleDisconnect);
+        socketInstance.on("allMessages", handleAllMessages);
+        socketInstance.on("newMessage", handleNewMessage);
+
+        return () => {
+            // Cleanup on component unmount
+            socketInstance.off("connect", handleConnect);
+            socketInstance.off("disconnect", handleDisconnect);
+            socketInstance.off("allMessages", handleAllMessages);
+            socketInstance.off("newMessage", handleNewMessage);
+        };
+    }, [socket]);
 
     useEffect(() => {
-        setLoading(true);
-        socket.on("allMessages", (data) => {
-            setMessages(data);
-            setLoading(false);
-        });
-    }, []);
+        socket.current.emit("joinRoom", { chatroomId });
 
-    //   receive new messages and add to the first of the array
-
-    useEffect(() => {
-        socket.on("newMessage", (data) => {
-            setMessages((messages) => [data, ...messages]);
-        });
-    }, []);
+        return () => {
+            // Cleanup on component unmount
+            socket.current.emit("leaveRoom", { chatroomId });
+        };
+    }, [chatroomId]);
 
     const sendMessage = () => {
-        socket.emit("chatroomMessage", { chatroomId, msg: newMessage });
+        socket.current.emit("chatroomMessage", { chatroomId, msg: newMessage });
         setNewMessage("");
     };
-    // console.log(event);
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -81,7 +115,6 @@ const ChatScreen = ({ route, navigation }) => {
                 >
                     <Icon name="chevron-left" size={40} color={colors.white} />
                 </TouchableOpacity>
-                {/* if has image show it  */}
                 {event?.images ? (
                     <Image
                         style={styles.iconImage}
@@ -93,93 +126,78 @@ const ChatScreen = ({ route, navigation }) => {
                         source={require("../assets/img/image-placeholder.jpg")}
                     />
                 )}
-                {/* <Image style={styles.image} source={{ uri: event?.image?.length > 0 ? event.image : require('../assets/img/logo.png') }} /> */}
-
                 <Text style={styles.headerText}>{event?.name}</Text>
             </View>
 
-            {/* render messages like whatsapp */}
-            {/* ios avoid input  */}
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.keyboard}
                 keyboardVerticalOffset={Platform.OS === "ios" ? 45 : 0}
             >
-                {/* show loader until messages are loaded */}
                 {loading ? (
                     <LottieAnimation />
                 ) : (
-                    <FlatList
+                    <FlashList
                         data={messages}
                         inverted
+                        estimatedItemSize={40}
+                        showsVerticalScrollIndicator={false}
                         ref={flatListRef}
-                        keyExtractor={(item) => item._id}
+                        keyExtractor={(item) => item?._id}
                         renderItem={({ item }) => {
+                            const isUserMessage =
+                                item?.user?._id === userLogged.id;
+
                             return (
-                                <View style={styles.message}>
-                                    {/* if user message is the same of user auth align right */}
-                                    {item.user._id ===
-                                        auth.authData.user.id && (
-                                        <View style={styles.messageRight}>
-                                            <Text
-                                                style={styles.messageTextRight}
-                                            >
-                                                {item.message}
-                                            </Text>
-                                            <View
-                                                style={
-                                                    styles.timeContainerRight
-                                                }
-                                            >
-                                                <Text
-                                                    style={styles.messageTime}
-                                                >
-                                                    {item?.createdAt &&
-                                                        formatToTimeWithoutSeconds(
-                                                            new Date(
-                                                                item?.createdAt
-                                                            )
-                                                        )}
-                                                </Text>
-                                                {/* {formatToTimeWithoutSeconds(new Date(item?.createdAt))} */}
-                                                {/* </Text> */}
-                                            </View>
-                                        </View>
-                                    )}
-                                    {/* if user message is not the same of user auth align left */}
-                                    {item.user._id !==
-                                        auth.authData.user.id && (
-                                        <View style={styles.messageLeft}>
+                                <View
+                                    style={[
+                                        styles.message,
+                                        isUserMessage
+                                            ? styles.messageRight
+                                            : styles.messageLeft,
+                                    ]}
+                                >
+                                    {!isUserMessage && (
+                                        <>
+                                            {/* <Image
+                                                style={styles.iconImage}
+                                                source={{
+                                                    uri: item?.user?.avatar[0],
+                                                }}
+                                            /> */}
                                             <Text style={styles.userName}>
-                                                {item.user.name}
+                                                {item?.user?.name}
                                             </Text>
-                                            <Text
-                                                style={styles.messageTextLeft}
-                                            >
-                                                {item.message}
-                                            </Text>
-                                            {/* time container */}
-                                            <View
-                                                style={styles.timeContainerLeft}
-                                            >
-                                                {/*  */}
-                                                <Text style={styles.timeText}>
-                                                    {formatToTimeWithoutSeconds(
-                                                        new Date(
-                                                            item?.createdAt
-                                                        )
-                                                    )}
-                                                </Text>
-                                            </View>
-                                        </View>
+                                        </>
                                     )}
+                                    <Text
+                                        style={
+                                            isUserMessage
+                                                ? styles.messageTextRight
+                                                : styles.messageTextLeft
+                                        }
+                                    >
+                                        {item.message}
+                                    </Text>
+                                    <View
+                                        style={
+                                            isUserMessage
+                                                ? styles.timeContainerRight
+                                                : styles.timeContainerLeft
+                                        }
+                                    >
+                                        <Text style={styles.timeText}>
+                                            {formatToTimeWithoutSeconds(
+                                                new Date(item?.createdAt)
+                                            )}
+                                        </Text>
+                                    </View>
                                 </View>
                             );
                         }}
                     />
                 )}
 
-                {/* input to send message */}
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
@@ -189,7 +207,6 @@ const ChatScreen = ({ route, navigation }) => {
                     />
                     <TouchableOpacity
                         style={styles.sendMessageButton}
-                        // disabled if input is empty
                         disabled={!newMessage}
                         onPress={sendMessage}
                     >
@@ -205,11 +222,11 @@ const ChatScreen = ({ route, navigation }) => {
         </SafeAreaView>
     );
 };
-
 const styles = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
+        backgroundColor: colors.background,
         // paddingtop for android
     },
     header: {

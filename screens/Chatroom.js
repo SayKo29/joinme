@@ -14,6 +14,7 @@ import getEventsByParticipant from "@/api/GetParticipantEvents";
 import { useQuery } from "react-query";
 import LottieAnimation from "@/components/LottieAnimation";
 import colors from "@/styles/colors";
+import { FlashList } from "@shopify/flash-list";
 
 const ChatRooms = ({ navigation }) => {
     const auth = useAuth();
@@ -31,17 +32,23 @@ const ChatRooms = ({ navigation }) => {
 
     const events = data ?? [];
 
+    // sort events by date
+    events.sort((a, b) => {
+        return new Date(b.endDate) - new Date(a.endDate);
+    });
+
     return (
         <SafeAreaView style={styles.container}>
-            <FlatList
+            <FlashList
                 data={events}
+                estimatedItemSize={20}
                 keyExtractor={(item) => item._id}
                 ListEmptyComponent={() => (
                     <TouchableOpacity
-                        style={styles.content}
+                        style={styles.emptyContainer}
                         onPress={() => navigation.navigate("Eventos")}
                     >
-                        <View style={styles.title}>
+                        <View style={styles.emptyContainer}>
                             <Text style={styles.text}>
                                 No hay chats disponibles, para crear uno,
                             </Text>
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.white,
     },
-    content: {
+    emptyContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

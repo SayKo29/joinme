@@ -26,10 +26,7 @@ const EventScroll = ({ data, users, navigation }) => {
 
     const user = users.data;
 
-    if (data.isLoading && !data.isError && !data.isSuccess) {
-        return <LottieAnimation />;
-    }
-    if (data.data.length === 0) {
+    if (data.length === 0) {
         return (
             <View style={styles.center}>
                 <Text style={styles.noEvents}>No hay eventos disponibles</Text>
