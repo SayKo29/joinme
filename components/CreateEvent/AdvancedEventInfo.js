@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: colors.primary,
         borderRadius: 10,
-        padding: 20,
+        padding: 10,
         marginVertical: 10,
         width: "100%",
     },
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     },
     inputAutocompleteSearch: {
         backgroundColor: colors.primary,
-        padding: 20,
+        padding: 10,
         width: "90%",
         color: colors.text,
     },

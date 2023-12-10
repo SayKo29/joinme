@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: colors.primary,
-        padding: 20,
+        padding: 10,
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 10,

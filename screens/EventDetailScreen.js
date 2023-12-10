@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
         width: "100%",
         height: "100%",
-        padding: 20,
+        padding: 10,
     },
     galleryContainer: {
         width: "100%",

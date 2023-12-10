@@ -125,7 +125,7 @@ const profile = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
         width: "100%",
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         backgroundColor: colors.background,
     },
     userBox: {

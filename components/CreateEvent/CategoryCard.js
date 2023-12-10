@@ -24,7 +24,7 @@ const CategoryCard = ({ category, categorySelected, activeCategory }) => {
 const styles = StyleSheet.create({
     card: {
         borderRadius: 10,
-        padding: 20,
+        padding: 10,
         marginVertical: 10,
         width: "100%",
         borderWidth: 2,

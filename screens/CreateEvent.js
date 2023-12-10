@@ -193,12 +193,12 @@ const styles = StyleSheet.create({
     },
     stepWrapper: {
         flex: 1,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     nextBtnStyle: {
         backgroundColor: colors.accent,
         borderRadius: 4,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     nextBtnTextStyle: {
         color: colors.white,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     previousBtnStyle: {
         backgroundColor: colors.gray,
         borderRadius: 4,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     previousBtnTextStyle: {
         color: colors.white,

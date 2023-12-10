@@ -21,7 +21,7 @@ const formStyles = {
     },
     inputAutocomplete: {
         borderRadius: 10,
-        padding: 20,
+        padding: 10,
         marginVertical: 10,
         width: "90%",
         color: colors.text,

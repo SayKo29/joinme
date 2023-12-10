@@ -115,7 +115,7 @@ const EventCard = ({ event, user, onEventPress }) => {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
-        padding: 20,
+        padding: 10,
     },
     userRowContainer: {
         flexDirection: "row",

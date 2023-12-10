@@ -74,7 +74,7 @@ export default function EventNavigation({ navigation }) {
 const styles = StyleSheet.create({
     headerContainer: {
         backgroundColor: colors.background,
-        height: Platform.OS === "android" ? 80 : 50,
+        height: Platform.OS === "android" ? 70 : 50,
         paddingTop: Platform.OS === "android" ? 25 : 0,
     },
     container: {
