@@ -61,6 +61,20 @@ const CreateEvent = ({ navigation }) => {
                 try {
                     // invalidate EVENTS query to refetch data
                     await eventsQuery.refetch();
+                    // clear event state
+                    setEvent({
+                        name: "",
+                        description: "",
+                        category: "",
+                        location: "",
+                        images: {},
+                        user: "",
+                        startDate: "",
+                        endDate: "",
+                        participants: [],
+                        chatroom: "",
+                    });
+                    // navigate to Events screen
                     navigation.navigate("Eventos");
                     setLoading(false);
                 } catch (error) {

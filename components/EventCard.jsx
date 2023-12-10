@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
-import { formatDate } from "../lib/utils";
+import { formatDate, formatDateTime, openGoogleMaps } from "../lib/utils";
 import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
+import useEventStore from "@/store/EventStore";
+import { Icon } from "react-native-elements";
 
 const EventCard = ({ event, user, onEventPress }) => {
     if (!event || !user) {
@@ -14,7 +16,24 @@ const EventCard = ({ event, user, onEventPress }) => {
         onEventPress(event, user);
     };
 
-    let smallDescription = event?.description.substring(0, 23) + "...";
+    const shortDescription =
+        event.description.length > 23
+            ? `${event.description.substring(0, 23)}...`
+            : event.description;
+
+    const { categories, isInitialized, fetchCategories } = useEventStore();
+
+    let eventCategory = categories.find(
+        (category) => category._id === event.category
+    );
+
+    // validate if image exist
+
+    React.useEffect(() => {
+        if (!isInitialized) {
+            fetchCategories();
+        }
+    }, [isInitialized]);
 
     const eventOwner = user[event.user];
     return (
@@ -24,15 +43,15 @@ const EventCard = ({ event, user, onEventPress }) => {
                     <Image
                         style={styles.userImage}
                         source={
-                            eventOwner && eventOwner.avatar != null
-                                ? { uri: eventOwner.avatar }
-                                : require("@/assets/avatar.png")
+                            eventCategory?.icon
+                                ? { uri: eventCategory.icon }
+                                : require("../assets/img/google.png")
                         }
                     />
                     <View style={styles.userTextContent}>
                         <Text style={styles.title}>{event.name}</Text>
                         <Text style={styles.eventDescription}>
-                            {smallDescription}
+                            {shortDescription}
                         </Text>
                     </View>
                 </View>
@@ -62,6 +81,33 @@ const EventCard = ({ event, user, onEventPress }) => {
                     ))}
                 </Swiper>
             </View>
+            <View style={styles.eventInfoContainer}>
+                {/* event category */}
+                <View style={styles.eventInfoRow}>
+                    <Text style={styles.text}>{eventCategory?.name}</Text>
+                </View>
+                {/* event startDate and endDate */}
+                <View style={styles.eventInfoRow}>
+                    <Text style={styles.text}>
+                        {/* format string to date */}
+                        Del {formatDateTime(new Date(event.startDate))} al{" "}
+                        {formatDateTime(new Date(event.endDate))}
+                    </Text>
+                </View>
+                {/* event location */}
+                <View style={styles.eventInfoRow}>
+                    {/* link */}
+                    <Icon name="place" size={20} color={colors.text} />
+                    <TouchableOpacity
+                        onPress={() => openGoogleMaps(event.location)}
+                        style={styles.linkMaps}
+                    >
+                        <Text style={styles.linkGoogleMaps}>
+                            {event.location}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </TouchableOpacity>
     );
 };
@@ -70,7 +116,6 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
         padding: 20,
-        marginVertical: 10,
     },
     userRowContainer: {
         flexDirection: "row",
@@ -129,6 +174,24 @@ const styles = StyleSheet.create({
         width: "100%",
         fontSize: 16,
         color: colors.gray,
+    },
+    eventInfoContainer: {
+        marginTop: 10,
+    },
+    eventInfoRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginVertical: 5,
+    },
+    linkMaps: {
+        paddingLeft: 5,
+        width: "100%",
+    },
+    linkGoogleMaps: {
+        color: colors.text,
+        textDecorationLine: "underline",
+        fontSize: 12,
     },
 });
 export default EventCard;

@@ -11,27 +11,34 @@ import {
     StatusBar,
 } from "react-native";
 import { useAuth } from "@/contexts/Auth";
-import getCategories from "@/api/CategoryData";
-import { useQuery } from "react-query";
+import useEventStore from "store/EventStore";
 import Tag from "@/components/tag";
 
 const Profile = ({ navigation }) => {
     const auth = useAuth();
-    const categories = useQuery("CATEGORIES", getCategories);
+    const { categories, isInitialized, fetchCategories } = useEventStore();
     let user = auth.authData.user;
     const signOut = () => {
         auth.signOut();
     };
     let allCategories = [];
-    if (categories.data) {
+    if (categories.length > 0) {
         // format data for autocomplete
-        categories.data.map((category) => {
+        categories.map((category) => {
             allCategories.push({
                 id: category._id,
                 name: category.name,
             });
         });
     }
+
+    React.useEffect(() => {
+        // Llamar a fetchCategories solo si no está inicializado
+        if (!isInitialized) {
+            fetchCategories();
+        }
+    }, [isInitialized]);
+
     if (user) {
         return (
             <SafeAreaView style={profile.container}>

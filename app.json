@@ -9,7 +9,7 @@
         "splash": {
             "image": "./assets/img/logo.png",
             "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#161F2A"
         },
         "experiments": {
             "tsconfigPaths": true
@@ -42,7 +42,7 @@
             "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/img/logoResized.png",
-                "backgroundColor": "#FFFFFF"
+                "backgroundColor": "#161F2A"
             },
             "softwareKeyboardLayoutMode": "pan",
             "package": "com.joinme.app"

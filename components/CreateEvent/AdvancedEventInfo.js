@@ -37,11 +37,21 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     React.useEffect(() => {
         const handleSearch = async () => {
             try {
+                const encodedAddress = encodeURIComponent(debouncedInputValue);
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&q=${debouncedInputValue}`
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`
                 );
                 const data = await response.json();
+                // si no hay resultados, añadir un resultado con el texto de búsqueda
                 setResults(data);
+                if (data.length === 0) {
+                    setResults([
+                        {
+                            display_name: debouncedInputValue,
+                            place_id: debouncedInputValue,
+                        },
+                    ]);
+                }
             } catch (error) {
                 console.error("Error de búsqueda:", error);
             }
@@ -93,6 +103,13 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
             }
         }
     }, [event.startDate, event.endDate]);
+
+    // if has selected location and is changing the input value, reset the hasSelectedLocation state
+    React.useEffect(() => {
+        if (hasSelectedLocation && inputValue.length > 0) {
+            setHasSelectedLocation(false);
+        }
+    }, [inputValue]);
 
     const handlePressLocation = (result) => {
         setInputValue(result.display_name);

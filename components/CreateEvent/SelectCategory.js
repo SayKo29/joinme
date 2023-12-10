@@ -1,13 +1,19 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import getCategories from "@/api/CategoryData";
-import { useQuery } from "react-query";
 import CategoryCard from "./CategoryCard";
 import colors from "@/styles/colors";
 import LottieAnimation from "components/LottieAnimation";
+import useEventStore from "@/store/EventStore";
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
-    const categories = useQuery("CATEGORIES", getCategories);
+    const { categories, isInitialized, fetchCategories } = useEventStore();
+
+    React.useEffect(() => {
+        // Llamar a fetchCategories solo si no está inicializado
+        if (!isInitialized) {
+            fetchCategories();
+        }
+    }, [isInitialized]);
 
     if (categories.isLoading) {
         return <LottieAnimation />;
@@ -23,7 +29,7 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
                     Selecciona la categoría del evento
                 </Text>
             </View>
-            {categories.data.map((category) => (
+            {categories.map((category) => (
                 <CategoryCard
                     key={category._id}
                     category={category}
