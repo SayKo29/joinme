@@ -25,8 +25,7 @@ const EventScroll = ({ data, users, navigation }) => {
     }, [data.data]);
 
     const user = users.data;
-
-    if (data.length === 0) {
+    if (events.length === 0) {
         return (
             <View style={styles.center}>
                 <Text style={styles.noEvents}>No hay eventos disponibles</Text>

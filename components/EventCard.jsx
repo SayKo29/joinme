@@ -84,7 +84,9 @@ const EventCard = ({ event, user, onEventPress }) => {
             <View style={styles.eventInfoContainer}>
                 {/* event category */}
                 <View style={styles.eventInfoRow}>
-                    <Text style={styles.text}>{eventCategory?.name}</Text>
+                    <Text style={styles.categoryText}>
+                        {eventCategory?.name}
+                    </Text>
                 </View>
                 {/* event startDate and endDate */}
                 <View style={styles.eventInfoRow}>
@@ -95,18 +97,14 @@ const EventCard = ({ event, user, onEventPress }) => {
                     </Text>
                 </View>
                 {/* event location */}
-                <View style={styles.eventInfoRow}>
-                    {/* link */}
+                <TouchableOpacity
+                    onPress={() => openGoogleMaps(event.location)}
+                    style={styles.linkMaps}
+                >
                     <Icon name="place" size={20} color={colors.text} />
-                    <TouchableOpacity
-                        onPress={() => openGoogleMaps(event.location)}
-                        style={styles.linkMaps}
-                    >
-                        <Text style={styles.linkGoogleMaps}>
-                            {event.location}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+
+                    <Text style={styles.linkGoogleMaps}>{event.location}</Text>
+                </TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
@@ -148,6 +146,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.text,
+        fontSize: 12,
     },
     eventImageContainer: {
         marginTop: 10,
@@ -185,13 +184,21 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     linkMaps: {
-        paddingLeft: 5,
+        flexDirection: "row",
         width: "100%",
+        height: 40,
     },
     linkGoogleMaps: {
+        paddingLeft: 5,
         color: colors.text,
         textDecorationLine: "underline",
         fontSize: 12,
+        fontWeight: "bold",
+    },
+    categoryText: {
+        color: colors.accent,
+        fontSize: 14,
+        fontWeight: "bold",
     },
 });
 export default EventCard;

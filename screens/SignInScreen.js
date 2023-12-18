@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-    ImageBackground,
+    SafeAreaView,
     ActivityIndicator,
     Text,
     View,
@@ -35,89 +35,84 @@ export const SignInScreen = ({ navigation }) => {
     const [accessToken, setAccessToken] = useState(null);
 
     return (
-        <ImageBackground
-            style={formAuth.backgroundImageLogo}
-            source={require("../assets/img/logo.gif")}
-        >
-            <View style={formAuth.container}>
-                {loading ? (
-                    <ActivityIndicator color="#000" animating size="small" />
-                ) : (
-                    <View style={formAuth.container}>
-                        {/* LOGO */}
-                        <View style={formAuth.logoContainer}>
+        <SafeAreaView style={formAuth.container}>
+            {loading ? (
+                <ActivityIndicator color="#000" animating size="small" />
+            ) : (
+                <View style={formAuth.container}>
+                    {/* LOGO */}
+                    <View style={formAuth.logoContainer}>
+                        <Image
+                            style={formAuth.logo}
+                            source={require("../assets/img/logo.png")}
+                        />
+                    </View>
+
+                    <View style={formAuth.formContainer}>
+                        <Text style={formAuth.title}>Login</Text>
+
+                        {error !== "" ? (
+                            <Text className="text-xl">{error}</Text>
+                        ) : (
+                            false
+                        )}
+
+                        <TextInput
+                            placeholder="Email"
+                            placeholderTextColor="white"
+                            style={formAuth.input}
+                            onChangeText={(text) => setEmail(text)}
+                            value={email}
+                        />
+                        <TextInput
+                            placeholder="Password"
+                            placeholderTextColor="white"
+                            style={formAuth.input}
+                            onChangeText={(text) => setPassword(text)}
+                            value={password}
+                            secureTextEntry
+                        />
+                        {/* /* disable if not email and password */}
+                        <TouchableOpacity
+                            disabled={email === "" || password === ""}
+                            style={formAuth.loginButton}
+                            onPress={signIn}
+                        >
+                            <Icon name="login" color="white" />
+                        </TouchableOpacity>
+
+                        {/* or signup with google */}
+                        <Text style={formAuth.textContent}>or</Text>
+
+                        <TouchableOpacity
+                            style={formAuth.googleButtonContainer}
+                            onPress={() => {
+                                promptAsync();
+                            }}
+                        >
                             <Image
-                                style={formAuth.logo}
-                                source={require("../assets/img/logo.png")}
+                                source={require("../assets/img/google.png")}
+                                style={formAuth.googleLogo}
                             />
-                        </View>
+                        </TouchableOpacity>
 
-                        <View style={formAuth.formContainer}>
-                            <Text style={formAuth.title}>Login</Text>
-
-                            {error !== "" ? (
-                                <Text className="text-xl">{error}</Text>
-                            ) : (
-                                false
-                            )}
-
-                            <TextInput
-                                placeholder="Email"
-                                placeholderTextColor="white"
-                                style={formAuth.input}
-                                onChangeText={(text) => setEmail(text)}
-                                value={email}
-                            />
-                            <TextInput
-                                placeholder="Password"
-                                placeholderTextColor="white"
-                                style={formAuth.input}
-                                onChangeText={(text) => setPassword(text)}
-                                value={password}
-                                secureTextEntry
-                            />
-                            {/* /* disable if not email and password */}
+                        <View className="pt-4">
+                            <Text style={formAuth.textNormal}>
+                                Dont have an account?{" "}
+                            </Text>
                             <TouchableOpacity
-                                disabled={email === "" || password === ""}
-                                style={formAuth.loginButton}
-                                onPress={signIn}
-                            >
-                                <Icon name="login" color="white" />
-                            </TouchableOpacity>
-
-                            {/* or signup with google */}
-                            <Text style={formAuth.textContent}>or</Text>
-
-                            <TouchableOpacity
-                                style={formAuth.googleButtonContainer}
                                 onPress={() => {
-                                    promptAsync();
+                                    navigation.navigate("SignUp");
                                 }}
                             >
-                                <Image
-                                    source={require("../assets/img/google.png")}
-                                    style={formAuth.googleLogo}
-                                />
-                            </TouchableOpacity>
-
-                            <View className="pt-4">
                                 <Text style={formAuth.textNormal}>
-                                    Dont have an account?{" "}
+                                    Sign up Here.
                                 </Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("SignUp");
-                                    }}
-                                >
-                                    <Text style={formAuth.textNormal}>
-                                        Sign up Here.
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                )}
-            </View>
-        </ImageBackground>
+                </View>
+            )}
+        </SafeAreaView>
     );
 };

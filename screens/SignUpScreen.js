@@ -14,10 +14,6 @@ import { useAuth } from "@/contexts/Auth";
 import { formAuth } from "@/styles/formAuthStyles";
 import { clientId, iosClientId, androidClientId } from "@env";
 
-// web : 670475111068-of7eu5va1ug1j2cgjuafb7l6nkm93clf.apps.googleusercontent.com
-// ios : 670475111068-a9pcgljjb8c88m2gj1gs5v4u97hph0bk.apps.googleusercontent.com
-// android : 670475111068-mj934qhgmn5418a7c2cf152ot6io4ont.apps.googleusercontent.com
-
 const SignUpScreen = ({ navigation }) => {
     const [accessToken, setAccessToken] = useState(null);
     // const [googleUser, setGoogleUser] = useState(null);
