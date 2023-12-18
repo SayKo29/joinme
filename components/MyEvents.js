@@ -1,9 +1,9 @@
 import React from "react";
-import { useAuth } from "contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 import { FlashList } from "@shopify/flash-list";
 import EventCard from "./EventCard";
 import { StyleSheet, Text, View } from "react-native";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 
 const ForYouEvent = ({ data, users, navigation }) => {
     const auth = useAuth();

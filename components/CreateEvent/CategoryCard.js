@@ -1,6 +1,6 @@
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 
 const CategoryCard = ({ category, categorySelected, activeCategory }) => {
     return (

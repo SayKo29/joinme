@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 import getEventsData from "@/api/EventsData";
 import LottieAnimation from "@/components/LottieAnimation";
 import getUsersData from "@/api/UsersData";
-import MyEvents from "components/MyEvents";
+import MyEvents from "@/components/MyEvents";
 
 const MemoizedEventScroll = React.memo(EventScroll);
 const MemoizedMyEvents = React.memo(MyEvents);

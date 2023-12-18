@@ -1,15 +1,23 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import React from "react";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
-import EventInfo from "components/CreateEvent/EventInfo";
+import EventInfo from "@/components/CreateEvent/EventInfo";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
-import CreateEventPost from "api/CreateEventPost";
-import { useAuth } from "contexts/Auth";
+import AdvancedEventInfo from "@/components/CreateEvent/AdvancedEventInfo";
+import CreateEventPost from "@/api/CreateEventPost";
+import { useAuth } from "@/contexts/Auth";
 import { useQuery } from "react-query";
-import getEventsData from "api/EventsData";
-import LottieAnimation from "components/LottieAnimation";
+import getEventsData from "@/api/EventsData";
+import LottieAnimation from "@/components/LottieAnimation";
+
 getEventsData;
 
 const CreateEvent = ({ navigation }) => {

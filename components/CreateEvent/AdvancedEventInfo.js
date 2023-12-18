@@ -7,11 +7,11 @@ import {
     TextInput,
 } from "react-native";
 import React from "react";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDateTime } from "lib/utils";
+import { formatDateTime } from "@/lib/utils";
 import { Icon } from "react-native-elements";
-import formStyles from "styles/formStyles";
+import formStyles from "@/styles/formStyles";
 formStyles;
 
 const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {

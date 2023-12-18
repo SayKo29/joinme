@@ -48,7 +48,7 @@
             "package": "com.joinme.app"
         },
         "web": {
-            "favicon": "./assets/favicon.png"
+            "favicon": "./assets/img/logo.png"
         },
         "extra": {
             "eas": {

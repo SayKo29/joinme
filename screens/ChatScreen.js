@@ -16,9 +16,9 @@ import {
     View,
 } from "react-native";
 import colors from "@/styles/colors";
-import LottieAnimation from "../components/LottieAnimation";
+import LottieAnimation from "@/components/LottieAnimation";
 import { FlashList } from "@shopify/flash-list";
-import getUserParticipants from "api/GetUserParticipants";
+import getUserParticipants from "@/api/GetUserParticipants";
 getUserParticipants;
 import { useQuery } from "react-query";
 

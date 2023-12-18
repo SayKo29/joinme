@@ -7,9 +7,9 @@ import {
     TouchableOpacity,
 } from "react-native";
 import React from "react";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 import * as ImagePicker from "expo-image-picker";
-import formStyles from "styles/formStyles";
+import formStyles from "@/styles/formStyles";
 formStyles;
 
 const EventInfo = ({ eventInfo, currentEvent }) => {
