@@ -12,7 +12,7 @@ const formAuth = StyleSheet.create({
         width: "100%",
         height: "100%",
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: colors.background,
         alignItems: "center",
         justifyContent: "flex-start",
         marginTop: Platform.OS === "ios" ? -30 : 0,
