@@ -4,11 +4,18 @@ const formStyles = {
         marginVertical: 10,
     },
     input: {
-        borderRadius: 10,
-        borderWidth: 2,
         padding: 10,
-        borderColor: colors.primary,
+        backgroundColor: "rgba(255,255,255,0.2)",
         color: colors.text,
+        borderRadius: 20,
+    },
+    inputTextArea: {
+        padding: 10,
+        backgroundColor: "rgba(255,255,255,0.2)",
+        color: colors.text,
+        borderRadius: 10,
+        height: 70,
+        textAlignVertical: "top",
     },
     label: {
         color: colors.white,

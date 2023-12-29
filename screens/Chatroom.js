@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuth } from "@/contexts/Auth";
 import {
-    FlatList,
     Image,
     Platform,
     SafeAreaView,
@@ -37,25 +36,28 @@ const ChatRooms = ({ navigation }) => {
         return new Date(b.endDate) - new Date(a.endDate);
     });
 
+    if (events.length === 0) {
+        return (
+            <View style={styles.emptyContainer}>
+                <TouchableOpacity
+                    style={styles.emptyContainer}
+                    onPress={() => navigation.navigate("Eventos")}
+                >
+                    <Text style={styles.text}>
+                        No hay chats disponibles, para unirte a alguno,
+                    </Text>
+                    <Text style={styles.btn}>únete a un evento</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <FlashList
                 data={events}
                 estimatedItemSize={20}
                 keyExtractor={(item) => item._id}
-                ListEmptyComponent={() => (
-                    <TouchableOpacity
-                        style={styles.emptyContainer}
-                        onPress={() => navigation.navigate("Eventos")}
-                    >
-                        <View style={styles.emptyContainer}>
-                            <Text style={styles.text}>
-                                No hay chats disponibles, para crear uno,
-                            </Text>
-                            <Text style={styles.btn}>únete a un evento</Text>
-                        </View>
-                    </TouchableOpacity>
-                )}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         disabled={new Date(item.endDate) < new Date()}
@@ -65,7 +67,7 @@ const ChatRooms = ({ navigation }) => {
                                 backgroundColor:
                                     new Date(item.endDate) < new Date()
                                         ? colors.gray
-                                        : colors.accent,
+                                        : colors.primary,
                             },
                         ]}
                         onPress={() => handleSelectChatroom(item)}
@@ -148,6 +150,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: colors.background,
     },
     title: {
         alignItems: "center",
@@ -160,6 +163,7 @@ const styles = StyleSheet.create({
         color: colors.accent,
         fontSize: 18,
         fontWeight: "bold",
+        paddingTop: 10,
     },
 });
 

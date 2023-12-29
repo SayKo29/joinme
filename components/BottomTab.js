@@ -26,12 +26,12 @@ export const BottomTab = () => {
     });
 
     const tabIconStyle = (focused, color) => {
-        return focused ? colors.accent : color;
+        return focused ? colors.white : color;
     };
 
     const tabLabelStyle = (focused) => {
         return {
-            color: focused ? colors.accent : colors.gray,
+            color: focused ? colors.white : colors.gray,
             fontSize: 12,
             fontWeight: "bold",
         };
@@ -43,8 +43,8 @@ export const BottomTab = () => {
             <Text style={tabLabelStyle(focused)}>{route.name}</Text>
         ),
         tabBarStyle: {
-            backgroundColor: colors.tabs,
-            borderTopColor: colors.tabs,
+            backgroundColor: colors.background,
+            borderTopColor: colors.background,
             color: colors.text,
         },
         tabBarIcon: ({ focused, color, size }) => {

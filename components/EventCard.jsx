@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
 import { formatDate, formatDateTime, openGoogleMaps } from "@/lib/utils";
-// import Swiper from "react-native-swiper";
+import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 import useEventStore from "@/store/EventStore";
 import { Icon } from "react-native-elements";
@@ -62,7 +62,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                 </View>
             </View>
             <View style={styles.eventImageContainer}>
-                {/* <Swiper
+                <Swiper
                     activeDotStyle={styles.activeDotStyle}
                     loadMinimalLoader={<LottieAnimation />}
                 >
@@ -79,7 +79,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                             />
                         </View>
                     ))}
-                </Swiper> */}
+                </Swiper>
             </View>
             <View style={styles.eventInfoContainer}>
                 {/* event category */}
@@ -89,7 +89,8 @@ const EventCard = ({ event, user, onEventPress }) => {
                     </Text>
                 </View>
                 {/* event startDate and endDate */}
-                <View style={styles.eventInfoRow}>
+                <View style={styles.date}>
+                    <Icon name="date-range" size={24} color={colors.text} />
                     <Text style={styles.text}>
                         {/* format string to date */}
                         Del {formatDateTime(new Date(event.startDate))} al{" "}
@@ -101,7 +102,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                     onPress={() => openGoogleMaps(event.location)}
                     style={styles.linkMaps}
                 >
-                    <Icon name="place" size={20} color={colors.text} />
+                    <Icon name="place" size={24} color={colors.text} />
 
                     <Text style={styles.linkGoogleMaps}>{event.location}</Text>
                 </TouchableOpacity>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.text,
-        fontSize: 12,
+        fontSize: 14,
     },
     eventImageContainer: {
         marginTop: 10,
@@ -186,19 +187,23 @@ const styles = StyleSheet.create({
     linkMaps: {
         flexDirection: "row",
         width: "100%",
-        height: 40,
+        alignItems: "center",
     },
     linkGoogleMaps: {
         paddingLeft: 5,
         color: colors.text,
-        textDecorationLine: "underline",
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
     },
     categoryText: {
         color: colors.accent,
         fontSize: 14,
         fontWeight: "bold",
+    },
+    date: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 5,
     },
 });
 export default EventCard;

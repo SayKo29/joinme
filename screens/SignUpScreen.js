@@ -80,7 +80,7 @@ const SignUpScreen = ({ navigation }) => {
                 />
             </View>
             <View style={formAuth.formContainer}>
-                <Text style={formAuth.title}>Register</Text>
+                <Text style={formAuth.title}>Registrarse</Text>
 
                 <TextInput
                     placeholder="Name"

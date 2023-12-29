@@ -79,7 +79,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             <View style={formStyles.inputContainer}>
                 <Text style={formStyles.label}>Descripción del evento</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={formStyles.inputTextArea}
                     placeholderTextColor={colors.gray}
                     placeholder="Partido de fútbol en el parque del ayuntamiento..."
                     multiline={true}

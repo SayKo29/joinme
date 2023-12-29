@@ -122,10 +122,10 @@ const CreateEvent = ({ navigation }) => {
                     completedCheckColor={colors.primary}
                     activeStepIconBorderColor={colors.primary}
                     activeStepIconColor={colors.primary}
-                    disabledStepIconColor={colors.disabled}
+                    disabledStepIconColor={colors.inputBackground}
                     disabledStepNumColor={colors.gray}
                     disabled
-                    progressBarColor={colors.disabled}
+                    progressBarColor={colors.inputBackground}
                 >
                     <ProgressStep
                         label="Categoría del evento"
@@ -204,12 +204,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     nextBtnStyle: {
-        backgroundColor: colors.accent,
+        backgroundColor: colors.primary,
         borderRadius: 4,
         paddingHorizontal: 10,
     },
     nextBtnTextStyle: {
-        color: colors.white,
+        color: colors.text,
+        fontWeight: "bold",
     },
     previousBtnStyle: {
         backgroundColor: colors.gray,
