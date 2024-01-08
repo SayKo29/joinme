@@ -1,15 +1,23 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import React from "react";
 import SelectCategory from "@/components/CreateEvent/SelectCategory";
 import colors from "@/styles/colors";
-import EventInfo from "components/CreateEvent/EventInfo";
+import EventInfo from "@/components/CreateEvent/EventInfo";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import AdvancedEventInfo from "components/CreateEvent/AdvancedEventInfo";
-import CreateEventPost from "api/CreateEventPost";
-import { useAuth } from "contexts/Auth";
+import AdvancedEventInfo from "@/components/CreateEvent/AdvancedEventInfo";
+import CreateEventPost from "@/api/CreateEventPost";
+import { useAuth } from "@/contexts/Auth";
 import { useQuery } from "react-query";
-import getEventsData from "api/EventsData";
-import LottieAnimation from "components/LottieAnimation";
+import getEventsData from "@/api/EventsData";
+import LottieAnimation from "@/components/LottieAnimation";
+
 getEventsData;
 
 const CreateEvent = ({ navigation }) => {
@@ -115,10 +123,10 @@ const CreateEvent = ({ navigation }) => {
                     completedCheckColor={colors.primary}
                     activeStepIconBorderColor={colors.primary}
                     activeStepIconColor={colors.primary}
-                    disabledStepIconColor={colors.disabled}
+                    disabledStepIconColor={colors.inputBackground}
                     disabledStepNumColor={colors.gray}
                     disabled
-                    progressBarColor={colors.disabled}
+                    progressBarColor={colors.inputBackground}
                 >
                     <ProgressStep
                         label="Categoría del evento"
@@ -197,12 +205,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     nextBtnStyle: {
-        backgroundColor: colors.accent,
+        backgroundColor: colors.primary,
         borderRadius: 4,
         paddingHorizontal: 10,
     },
     nextBtnTextStyle: {
-        color: colors.white,
+        color: colors.text,
+        fontWeight: "bold",
     },
     previousBtnStyle: {
         backgroundColor: colors.gray,

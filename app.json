@@ -48,12 +48,13 @@
             "package": "com.joinme.app"
         },
         "web": {
-            "favicon": "./assets/favicon.png"
+            "favicon": "./assets/img/logo.png"
         },
         "extra": {
             "eas": {
                 "projectId": "47e7b089-bf11-4b41-b0f4-6b088e0ead5a"
             }
-        }
+        },
+        "scheme": "joinme"
     }
 }

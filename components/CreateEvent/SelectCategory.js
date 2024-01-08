@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import CategoryCard from "./CategoryCard";
 import colors from "@/styles/colors";
-import LottieAnimation from "components/LottieAnimation";
+import LottieAnimation from "@/components/LottieAnimation";
 import useEventStore from "@/store/EventStore";
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {

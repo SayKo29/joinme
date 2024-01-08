@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
-import { formatDate, formatDateTime, openGoogleMaps } from "../lib/utils";
+import { formatDate, formatDateTime, openGoogleMaps } from "@/lib/utils";
 import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 import useEventStore from "@/store/EventStore";
@@ -89,7 +89,8 @@ const EventCard = ({ event, user, onEventPress }) => {
                     </Text>
                 </View>
                 {/* event startDate and endDate */}
-                <View style={styles.eventInfoRow}>
+                <View style={styles.date}>
+                    <Icon name="date-range" size={24} color={colors.text} />
                     <Text style={styles.text}>
                         {/* format string to date */}
                         Del {formatDateTime(new Date(event.startDate))} al{" "}
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.text,
-        fontSize: 12,
+        fontSize: 14,
     },
     eventImageContainer: {
         marginTop: 10,
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     linkMaps: {
         flexDirection: "row",
         width: "100%",
-        height: 40,
+        alignItems: "center",
     },
     remote: {
         paddingLeft: 5,
@@ -204,14 +205,18 @@ const styles = StyleSheet.create({
     linkGoogleMaps: {
         paddingLeft: 5,
         color: colors.text,
-        textDecorationLine: "underline",
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
     },
     categoryText: {
         color: colors.accent,
         fontSize: 14,
         fontWeight: "bold",
+    },
+    date: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 5,
     },
 });
 export default EventCard;

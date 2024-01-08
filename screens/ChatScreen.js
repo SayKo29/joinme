@@ -16,11 +16,12 @@ import {
     View,
 } from "react-native";
 import colors from "@/styles/colors";
-import LottieAnimation from "../components/LottieAnimation";
+import LottieAnimation from "@/components/LottieAnimation";
 import { FlashList } from "@shopify/flash-list";
-import getUserParticipants from "api/GetUserParticipants";
+import getUserParticipants from "@/api/GetUserParticipants";
 getUserParticipants;
 import { useQuery } from "react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatScreen = ({ route, navigation }) => {
     const event = route.params.event;
@@ -34,10 +35,12 @@ const ChatScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
     const userLogged = auth.authData.user;
     const [participants, setParticipants] = useState([]);
+    const [error, setError] = useState(null);
+    const [messageQueue, setMessageQueue] = useState([]);
 
     const participantsQuery = useQuery(
         ["PARTICIPANTS", event?.participants],
-        () => getUserParticipants(event?.participants),
+        () => getUserParticipants(event?._id),
         {
             enabled: !!event?.participants,
         }
@@ -47,7 +50,6 @@ const ChatScreen = ({ route, navigation }) => {
         if (participantsQuery?.data) {
             setLoading(false);
             setParticipants(participantsQuery?.data);
-            console.log("participants", participantsQuery?.data);
         }
 
         if (participantsQuery?.isLoading) {
@@ -55,54 +57,119 @@ const ChatScreen = ({ route, navigation }) => {
         }
     }, [participantsQuery?.data]);
 
-    const socket = useRef(io(URL, { query: { userId: userLogged.id } }));
+    const socket = useRef(
+        io(URL, { transports: ["websocket"], query: { userId: userLogged.id } })
+    );
 
     const finishChatRoom = () => {
         navigation.goBack();
     };
 
+    const handleConnect = () => {
+        console.log("connected");
+        // Pedir al socket todos los mensajes de la sala
+        socket.current.emit("getAllMessages", { chatroomId });
+
+        // Enviar mensajes en la cola al conectarse
+        sendQueuedMessages();
+    };
+
+    const handleDisconnect = () => {
+        console.log("disconnected");
+    };
+
+    const handleAllMessages = async (message) => {
+        console.log("recibo mensajes");
+        // Guardar mensajes en AsyncStorage
+        await AsyncStorage.setItem(
+            `CHATROOM_${chatroomId}`,
+            JSON.stringify(message)
+        );
+        setMessages(message);
+    };
+
+    const handleNewMessage = (message) => {
+        setMessages((prevMessages) => [message, ...prevMessages]);
+    };
+
+    const handleChatroomMessageError = (error) => {};
+
+    const sendQueuedMessages = () => {
+        // Enviar mensajes en la cola
+        messageQueue.forEach((queuedMessage) => {
+            socket.current.emit("chatroomMessage", {
+                chatroomId,
+                msg: queuedMessage,
+            });
+        });
+
+        // Limpiar la cola después de enviar los mensajes
+        setMessageQueue([]);
+    };
+
     useEffect(() => {
         const socketInstance = socket.current;
-
-        const handleConnect = () => {};
-
-        const handleDisconnect = () => {};
-
-        const handleAllMessages = (message) => {
-            setMessages(message);
-        };
-
-        const handleNewMessage = (message) => {
-            console.log("new message", message);
-            console.log("messages", messages);
-            setMessages((prevMessages) => [message, ...prevMessages]);
-        };
 
         socketInstance.on("connect", handleConnect);
         socketInstance.on("disconnect", handleDisconnect);
         socketInstance.on("allMessages", handleAllMessages);
         socketInstance.on("newMessage", handleNewMessage);
+        socketInstance.on("chatroomMessageError", handleChatroomMessageError);
+        socketInstance.on("connect_error", (error) => {
+            console.error("Error de conexión:", error);
+        });
+
+        socketInstance.on("connect_timeout", () => {
+            console.error("Tiempo de conexión agotado");
+        });
+
+        // Manejar reconexión
+        socketInstance.on("reconnect", () => {
+            console.log("reconnecting");
+            socketInstance.emit("joinRoom", { chatroomId });
+
+            // Enviar mensajes en la cola al reconectar
+            sendQueuedMessages();
+        });
 
         return () => {
-            // Cleanup on component unmount
+            // Limpiar al desmontar el componente
             socketInstance.off("connect", handleConnect);
             socketInstance.off("disconnect", handleDisconnect);
             socketInstance.off("allMessages", handleAllMessages);
             socketInstance.off("newMessage", handleNewMessage);
+            socketInstance.off(
+                "chatroomMessageError",
+                handleChatroomMessageError
+            );
+            socketInstance.off("reconnect");
+            socketInstance.off("connect_error");
+            socketInstance.off("connect_timeout");
         };
-    }, [socket]);
+    }, [socket, chatroomId]);
 
     useEffect(() => {
         socket.current.emit("joinRoom", { chatroomId });
 
         return () => {
-            // Cleanup on component unmount
+            // Limpiar al desmontar el componente
             socket.current.emit("leaveRoom", { chatroomId });
         };
     }, [chatroomId]);
 
     const sendMessage = () => {
-        socket.current.emit("chatroomMessage", { chatroomId, msg: newMessage });
+        // Enviar mensaje inmediatamente si hay conexión
+        if (socket.current.connected) {
+            socket.current.emit("chatroomMessage", {
+                chatroomId,
+                msg: newMessage,
+            });
+        } else {
+            // Agregar el mensaje a la cola si no hay conexión
+            setMessageQueue((prevQueue) => [...prevQueue, newMessage]);
+        }
+
+        // Limpiar el campo de nuevo mensaje
         setNewMessage("");
     };
 
@@ -132,15 +199,15 @@ const ChatScreen = ({ route, navigation }) => {
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.keyboard}
-                keyboardVerticalOffset={Platform.OS === "ios" ? 45 : 0}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 30 : 0}
             >
                 {loading ? (
                     <LottieAnimation />
                 ) : (
                     <FlashList
                         data={messages}
-                        inverted
                         estimatedItemSize={40}
+                        inverted
                         showsVerticalScrollIndicator={false}
                         ref={flatListRef}
                         keyExtractor={(item) => item?._id}
@@ -159,12 +226,6 @@ const ChatScreen = ({ route, navigation }) => {
                                 >
                                     {!isUserMessage && (
                                         <>
-                                            {/* <Image
-                                                style={styles.iconImage}
-                                                source={{
-                                                    uri: item?.user?.avatar[0],
-                                                }}
-                                            /> */}
                                             <Text style={styles.userName}>
                                                 {item?.user?.name}
                                             </Text>
@@ -198,6 +259,10 @@ const ChatScreen = ({ route, navigation }) => {
                     />
                 )}
 
+                <View style={styles.errorBox}>
+                    {error && <Text style={styles.errorText}>{error}</Text>}
+                </View>
+
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
@@ -222,6 +287,7 @@ const ChatScreen = ({ route, navigation }) => {
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         width: "100%",
@@ -233,7 +299,7 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === "android" ? 25 : 0,
         width: "100%",
         height: 80,
-        backgroundColor: colors.accent,
+        backgroundColor: colors.primary,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-start",
@@ -279,7 +345,7 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end",
     },
     messageLeft: {
-        backgroundColor: colors.persianGreen,
+        backgroundColor: colors.secondary,
         padding: 10,
         borderRadius: 5,
         borderTopLeftRadius: 0,
@@ -338,6 +404,19 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginRight: 10,
+    },
+    backButton: {
+        marginLeft: 10,
+    },
+    errorBox: {
+        width: "100%",
+        height: 20,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    errorText: {
+        color: colors.accent,
+        fontSize: 12,
     },
 });
 

@@ -12,7 +12,7 @@ const formAuth = StyleSheet.create({
         width: "100%",
         height: "100%",
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: colors.background,
         alignItems: "center",
         justifyContent: "flex-start",
         marginTop: Platform.OS === "ios" ? -30 : 0,
@@ -27,7 +27,7 @@ const formAuth = StyleSheet.create({
     },
     logoContainer: {
         paddingTop:
-            Platform.OS === "android" ? StatusBar.currentHeight + 10 : 100,
+            Platform.OS === "android" ? StatusBar.currentHeight + 10 : 10,
         alignItems: "center",
     },
 
@@ -57,6 +57,7 @@ const formAuth = StyleSheet.create({
         width: "100%",
         height: "100%",
         padding: 10,
+        paddingTop: 50,
         justifyContent: "flex-start",
     },
     input: {
@@ -64,7 +65,7 @@ const formAuth = StyleSheet.create({
         height: 40,
         marginTop: 20,
         padding: 10,
-        backgroundColor: "rgba(255,255,255,0.2)",
+        backgroundColor: colors.inputBackground,
         color: "#FFF",
         borderRadius: 20,
     },
@@ -74,7 +75,7 @@ const formAuth = StyleSheet.create({
         marginTop: 20,
         justifyContent: "center",
         alignSelf: "center",
-        backgroundColor: "rgba(255,255,255,0.2)",
+        backgroundColor: colors.inputBackground,
         color: "#FFF",
         borderRadius: 40,
     },
@@ -102,7 +103,7 @@ const formAuth = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center",
         //
-        backgroundColor: colors.primary,
+        backgroundColor: colors.accent,
         color: "#FFF",
         borderRadius: 40,
     },

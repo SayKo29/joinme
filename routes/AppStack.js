@@ -2,7 +2,7 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { BottomTab } from "@/components/BottomTab";
-import { screens } from "navigation/Screens";
+import { screens } from "@/navigation/Screens";
 
 const Stack = createStackNavigator();
 

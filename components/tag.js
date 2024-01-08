@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     tag: {
-        color: colors.white,
+        color: colors.black,
     },
 });
 

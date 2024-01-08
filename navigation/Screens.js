@@ -1,6 +1,6 @@
 // Screens.js
-import EventDetailScreen from "screens/EventDetailScreen";
-import ChatScreen from "screens/ChatScreen";
+import EventDetailScreen from "@/screens/EventDetailScreen";
+import ChatScreen from "@/screens/ChatScreen";
 // Importa otras pantallas según sea necesario
 
 export const screens = {

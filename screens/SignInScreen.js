@@ -12,13 +12,24 @@ import {
 // import * as Google from "expo-auth-session/providers/google";
 import { Icon } from "react-native-elements";
 import { formAuth } from "@/styles/formAuthStyles";
-import { clientId, iosClientId, androidClientId } from "@env";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { webClientId, iosClientId, androidClientId } from "@env";
 
 import { useAuth } from "@/contexts/Auth";
+import colors from "styles/colors";
 
 export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false);
     const auth = useAuth();
+    const [userInfo, setUserInfo] = useState(null);
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        androidClientId: androidClientId,
+        iosClientId: iosClientId,
+        webClientId: webClientId,
+        scopes: ["profile", "email"],
+    });
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     //   const [error, setError] = useState('')
@@ -32,10 +43,43 @@ export const SignInScreen = ({ navigation }) => {
         }
         isLoading(false);
     };
-    const [accessToken, setAccessToken] = useState(null);
+
+    const getUserInfo = async (token) => {
+        if (!token) return;
+        try {
+            const response = await fetch(
+                `https://www.googleapis.com/userinfo/v2/me`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            const user = await response.json();
+            await AsyncStorage.setItem("@user", JSON.stringify(user));
+            setUserInfo(user);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    async function handleSignInWithGoogle() {
+        const user = await AsyncStorage.getItem("@user");
+        if (!user) {
+            if (response?.type === "success") {
+                const { authentication } = response;
+                await getUserInfo(authentication.accessToken);
+            }
+        } else {
+            setUserInfo(JSON.parse(user));
+        }
+    }
+
+    useEffect(() => {
+        handleSignInWithGoogle();
+    }, [response]);
 
     return (
         <SafeAreaView style={formAuth.container}>
+            <Text>{JSON.stringify(userInfo, null, 2)}</Text>
             {loading ? (
                 <ActivityIndicator color="#000" animating size="small" />
             ) : (
@@ -49,7 +93,7 @@ export const SignInScreen = ({ navigation }) => {
                     </View>
 
                     <View style={formAuth.formContainer}>
-                        <Text style={formAuth.title}>Login</Text>
+                        <Text style={formAuth.title}>Iniciar sesión</Text>
 
                         {error !== "" ? (
                             <Text className="text-xl">{error}</Text>
@@ -58,15 +102,15 @@ export const SignInScreen = ({ navigation }) => {
                         )}
 
                         <TextInput
-                            placeholder="Email"
-                            placeholderTextColor="white"
+                            placeholder="Correo electrónico"
+                            placeholderTextColor={colors.gray}
                             style={formAuth.input}
                             onChangeText={(text) => setEmail(text)}
                             value={email}
                         />
                         <TextInput
-                            placeholder="Password"
-                            placeholderTextColor="white"
+                            placeholder="Contraseña"
+                            placeholderTextColor={colors.gray}
                             style={formAuth.input}
                             onChangeText={(text) => setPassword(text)}
                             value={password}
@@ -82,7 +126,7 @@ export const SignInScreen = ({ navigation }) => {
                         </TouchableOpacity>
 
                         {/* or signup with google */}
-                        <Text style={formAuth.textContent}>or</Text>
+                        <Text style={formAuth.textContent}>o</Text>
 
                         <TouchableOpacity
                             style={formAuth.googleButtonContainer}
@@ -98,7 +142,7 @@ export const SignInScreen = ({ navigation }) => {
 
                         <View className="pt-4">
                             <Text style={formAuth.textNormal}>
-                                Dont have an account?{" "}
+                                ¿No tienes cuenta?{" "}
                             </Text>
                             <TouchableOpacity
                                 onPress={() => {
@@ -106,7 +150,7 @@ export const SignInScreen = ({ navigation }) => {
                                 }}
                             >
                                 <Text style={formAuth.textNormal}>
-                                    Sign up Here.
+                                    Creala aquí
                                 </Text>
                             </TouchableOpacity>
                         </View>

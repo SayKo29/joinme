@@ -11,7 +11,7 @@ import {
     StatusBar,
 } from "react-native";
 import { useAuth } from "@/contexts/Auth";
-import useEventStore from "store/EventStore";
+import useEventStore from "@/store/EventStore";
 import Tag from "@/components/tag";
 
 const Profile = ({ navigation }) => {

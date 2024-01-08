@@ -3,7 +3,7 @@ import React from "react";
 import colors from "@/styles/colors";
 import EventCard from "./EventCard";
 import { FlashList } from "@shopify/flash-list";
-import { useAuth } from "contexts/Auth";
+import { useAuth } from "@/contexts/Auth";
 
 const EventScroll = ({ data, users, navigation }) => {
     const handleEventPress = (event, user) => {

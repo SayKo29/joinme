@@ -8,9 +8,9 @@ import {
     TouchableOpacity,
 } from "react-native";
 import React from "react";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 import * as ImagePicker from "expo-image-picker";
-import formStyles from "styles/formStyles";
+import formStyles from "@/styles/formStyles";
 formStyles;
 
 const EventInfo = ({ eventInfo, currentEvent }) => {
@@ -82,7 +82,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             <View style={formStyles.inputContainer}>
                 <Text style={formStyles.label}>Descripción del evento</Text>
                 <TextInput
-                    style={formStyles.input}
+                    style={formStyles.inputTextArea}
                     placeholderTextColor={colors.gray}
                     placeholder="Partido de fútbol en el parque del ayuntamiento..."
                     multiline={true}

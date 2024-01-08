@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { AuthData, authService } from '@/services/authService';
+import { AuthData, authService } from "@/services/authService";
 
 type AuthContextData = {
     authData?: AuthData;
@@ -31,7 +31,7 @@ const AuthProvider: React.FC = ({ children }) => {
     async function loadStorageData(): Promise<void> {
         try {
             //Try get the data from Async Storage
-            const authDataSerialized = await AsyncStorage.getItem('@AuthData');
+            const authDataSerialized = await AsyncStorage.getItem("@AuthData");
             if (!JSON.parse(authDataSerialized).token) {
                 return;
             }
@@ -50,9 +50,7 @@ const AuthProvider: React.FC = ({ children }) => {
     const signIn = async (formData: any) => {
         //call the service passing credential (email and password).
         //In a real App this data will be provided by the user from some InputText components.
-        const authData = await authService.signIn(
-            formData
-        );
+        const authData = await authService.signIn(formData);
 
         if (authData.error) {
             return authData;
@@ -64,26 +62,22 @@ const AuthProvider: React.FC = ({ children }) => {
 
         //Persist the data in the Async Storage
         //to be recovered in the next user session.
-        AsyncStorage.setItem('@AuthData', JSON.stringify(authData));
+        AsyncStorage.setItem("@AuthData", JSON.stringify(authData));
 
         return authData;
     };
 
     const register = async (formData: any) => {
-
-        const authData = await authService.register(
-            formData
-        );
+        const authData = await authService.register(formData);
 
         // handle false
         if (authData) {
             setAuthData(authData);
 
-            AsyncStorage.setItem('@AuthData', JSON.stringify(authData));
+            AsyncStorage.setItem("@AuthData", JSON.stringify(authData));
         } else {
-            console.log('error');
+            console.log("error");
         }
-
     };
 
     const signOut = async () => {
@@ -93,13 +87,15 @@ const AuthProvider: React.FC = ({ children }) => {
 
         //Remove the data from Async Storage
         //to NOT be recoverede in next session.
-        await AsyncStorage.removeItem('@AuthData');
+        await AsyncStorage.removeItem("@AuthData");
     };
 
     return (
         //This component will be used to encapsulate the whole App,
         //so all components will have access to the Context
-        <AuthContext.Provider value={{ authData, loading, signIn, register, signOut }}>
+        <AuthContext.Provider
+            value={{ authData, loading, signIn, register, signOut }}
+        >
             {children}
         </AuthContext.Provider>
     );
@@ -111,7 +107,7 @@ function useAuth(): AuthContextData {
     const context = useContext(AuthContext);
 
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error("useAuth must be used within an AuthProvider");
     }
 
     return context;
