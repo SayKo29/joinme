@@ -4,6 +4,7 @@ import {
     StyleSheet,
     TextInput,
     Image,
+    Switch,
     TouchableOpacity,
 } from "react-native";
 import React from "react";
@@ -15,6 +16,7 @@ formStyles;
 const EventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
     const [image, setImage] = React.useState({});
+    const [isRemote, setIsRemote] = React.useState(false);
 
     const updateEvent = (key, value) => {
         setEvent((oldEvent) => ({
@@ -28,6 +30,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
     React.useEffect(() => {
         if (currentEvent && currentEvent?.images) {
             setImage(currentEvent?.images);
+            setIsRemote(currentEvent?.isRemote);
         }
     }, []);
 
@@ -88,6 +91,23 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                         updateEvent("description", description)
                     }
                     value={event.description}
+                />
+            </View>
+            {/* make switch for isRemote */}
+            <View style={formStyles.inputContainer}>
+                <Text style={formStyles.label}>¿Es un evento remoto?</Text>
+                <Switch
+                    trackColor={{
+                        false: colors.disabled,
+                        true: colors.primary,
+                    }}
+                    thumbColor={isRemote ? colors.gray : colors.gray}
+                    ios_backgroundColor={colors.disabled}
+                    onValueChange={() => {
+                        setIsRemote(!isRemote);
+                        updateEvent("isRemote", !isRemote);
+                    }}
+                    value={isRemote}
                 />
             </View>
             <View style={styles.inputContainer}>

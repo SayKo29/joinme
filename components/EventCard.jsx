@@ -97,14 +97,21 @@ const EventCard = ({ event, user, onEventPress }) => {
                     </Text>
                 </View>
                 {/* event location */}
+                {event.isRemote ? (
+                    <View style={styles.linkMaps}>
+                        <Icon name="place" size={20} color={colors.text} />
+                        <Text style={styles.remote}>Es un evento remoto</Text>
+                    </View>
+                ) : (
+
                 <TouchableOpacity
                     onPress={() => openGoogleMaps(event.location)}
                     style={styles.linkMaps}
                 >
                     <Icon name="place" size={20} color={colors.text} />
-
                     <Text style={styles.linkGoogleMaps}>{event.location}</Text>
                 </TouchableOpacity>
+                )}
             </View>
         </TouchableOpacity>
     );
@@ -187,6 +194,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         height: 40,
+    },
+    remote: {
+        paddingLeft: 5,
+        paddingTop: 2,
+        color: colors.text,
+        fontSize: 13,
     },
     linkGoogleMaps: {
         paddingLeft: 5,

@@ -28,6 +28,7 @@ const CreateEvent = ({ navigation }) => {
         category: "",
         location: "",
         images: {},
+        isRemote: false,
         user: "",
         startDate: "",
         endDate: "",
@@ -161,7 +162,7 @@ const CreateEvent = ({ navigation }) => {
                         finishBtnText="Crear evento"
                         onSubmit={handleEventCreation}
                         nextBtnDisabled={
-                            event.location === "" ||
+                            (event.location === "" && !event.isRemote) ||
                             event.startDate === "" ||
                             event.endDate === ""
                         }
