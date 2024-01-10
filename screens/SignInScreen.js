@@ -18,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { webClientId, iosClientId, androidClientId } from "@env";
 
 import { useAuth } from "@/contexts/Auth";
-import colors from "styles/colors";
+import colors from "@/styles/colors";
 
 export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false);
@@ -117,10 +117,12 @@ export const SignInScreen = ({ navigation }) => {
                             secureTextEntry
                         />
                         {/* /* disable if not email and password */}
+                        {/* pass a parameter to get with cypress to touchable opacity */}
                         <TouchableOpacity
                             disabled={email === "" || password === ""}
                             style={formAuth.loginButton}
                             onPress={signIn}
+                            testID="login-button"
                         >
                             <Icon name="login" color="white" />
                         </TouchableOpacity>

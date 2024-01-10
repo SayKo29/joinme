@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
 import { formatDate, formatDateTime, openGoogleMaps } from "@/lib/utils";
-import Swiper from "react-native-swiper";
+// import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 import useEventStore from "@/store/EventStore";
 import { Icon } from "react-native-elements";
@@ -62,7 +62,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                 </View>
             </View>
             <View style={styles.eventImageContainer}>
-                <Swiper
+                {/* <Swiper
                     activeDotStyle={styles.activeDotStyle}
                     loadMinimalLoader={<LottieAnimation />}
                 >
@@ -79,7 +79,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                             />
                         </View>
                     ))}
-                </Swiper>
+                </Swiper> */}
             </View>
             <View style={styles.eventInfoContainer}>
                 {/* event category */}
