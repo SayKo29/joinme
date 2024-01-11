@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
-import { formatDate, formatDateTime, openGoogleMaps } from "@/lib/utils";
+import { formatDateRelative, formatDateTime, openGoogleMaps } from "@/lib/utils";
 // import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 import useEventStore from "@/store/EventStore";
@@ -57,7 +57,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                 </View>
                 <View style={styles.userTextContainer}>
                     <Text style={styles.text}>
-                        {formatDate(event.createdAt)}
+                        {formatDateRelative(event.createdAt)}
                     </Text>
                 </View>
             </View>
