@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useAuth } from "@/contexts/Auth";
 import JoinEvent from "@/api/EventJoinParticipant";
-// import Swiper from "react-native-swiper";
+import Swiper from "react-native-swiper";
 
 export default function EventDetailScreen({ route, navigation }) {
     const { event, user } = route.params;
@@ -38,7 +38,7 @@ export default function EventDetailScreen({ route, navigation }) {
                 {/* /* show gallery images if have it* */}
                 {event.images.length > 0 && (
                     <View style={styles.galleryContainer}>
-                        {/* <Swiper
+                        <Swiper
                             style={styles.wrapper}
                             activeDotStyle={styles.activeDotStyle}
                         >
@@ -52,7 +52,7 @@ export default function EventDetailScreen({ route, navigation }) {
                                     </View>
                                 );
                             })}
-                        </Swiper> */}
+                        </Swiper>
                     </View>
                 )}
 

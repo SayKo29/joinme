@@ -13,7 +13,7 @@ const Tag = ({ name }) => {
 const styles = StyleSheet.create({
     container: {
         width: "auto",
-        backgroundColor: colors.accent,
+        backgroundColor: colors.primary,
         borderRadius: 3,
         justifyContent: "center",
         paddingHorizontal: 10,
