@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/contexts/Auth";
 import useEventStore from "@/store/EventStore";
 import Tag from "@/components/tag";
+import { Icon } from "react-native-elements";
 
 const Profile = ({ navigation }) => {
     const auth = useAuth();
@@ -64,6 +65,15 @@ const Profile = ({ navigation }) => {
                                         : require("@/assets/avatar.png")
                                 }
                             />
+                            <View style={profile.iconImageView}>
+                                <Icon
+                                    name="pencil"
+                                    type="font-awesome"
+                                    color={colors.white}
+                                    size={18}
+                                    style={profile.iconImage}
+                                />
+                            </View>
                         </View>
                     </View>
                     <View style={profile.info}>
@@ -163,7 +173,7 @@ const profile = StyleSheet.create({
     },
     profileBackgroundContent: {
         width: "100%",
-        height: 140,
+        height: "25%",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -189,7 +199,7 @@ const profile = StyleSheet.create({
         backgroundColor: colors.gray,
         zIndex: 3,
         position: "absolute",
-        top: 70,
+        bottom: -30,
         alignItems: "center",
     },
     info: {
@@ -203,6 +213,22 @@ const profile = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 100,
+        zIndex: -3,
+    },
+    iconImageView: {
+        width: 33,
+        height: 33,
+        borderRadius: 100,
+        backgroundColor: colors.secondary,
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        top: 0,
+        right: 0,
+    },
+    iconImage: {
+        color: colors.accent,
+        fontSize: 20,
     },
     name: {
         fontSize: 20,
