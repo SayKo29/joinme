@@ -7,22 +7,15 @@ import { useAuth } from "@/contexts/Auth";
 
 const EventScroll = ({ data, users, navigation }) => {
     const handleEventPress = (event, user) => {
-        // Navegar a la pantalla de detalles del evento
         navigation.navigate("EventDetailScreen", { event, user });
     };
 
-    const [events, setEvents] = React.useState([]);
     const auth = useAuth();
     const userLogged = auth?.authData?.user;
 
-    React.useEffect(() => {
-        if (data.data) {
-            const events = data.data.filter(
-                (event) => event.user !== userLogged.id
-            );
-            setEvents(events);
-        }
-    }, [data.data]);
+    const events = data.data
+        ? data.data.filter((event) => event.user !== userLogged.id)
+        : [];
 
     const user = users.data;
     if (events.length === 0) {

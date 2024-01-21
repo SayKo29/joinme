@@ -54,6 +54,9 @@ const ChatRooms = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.title}>
+                <Text style={styles.titleText}>Chats de eventos</Text>
+            </View>
             <FlashList
                 data={events}
                 estimatedItemSize={20}
@@ -66,7 +69,7 @@ const ChatRooms = ({ navigation }) => {
                             {
                                 backgroundColor:
                                     new Date(item.endDate) < new Date()
-                                        ? colors.gray
+                                        ? colors.disabled
                                         : colors.primary,
                             },
                         ]}
@@ -154,6 +157,12 @@ const styles = StyleSheet.create({
     },
     title: {
         alignItems: "center",
+        paddingBottom: 10,
+    },
+    titleText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: colors.white,
     },
     text: {
         color: colors.white,

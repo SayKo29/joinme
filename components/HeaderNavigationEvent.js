@@ -27,6 +27,7 @@ const HeaderNavigationEvent = ({ selected, setSelected }) => {
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => handleSelect("myevents")}
+                testID="myevents-button"
                 style={[
                     selected === "myevents"
                         ? styles.selected
