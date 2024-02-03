@@ -5,6 +5,7 @@ import {
     TextInput,
     Image,
     Switch,
+    ScrollView,
     TouchableOpacity,
 } from "react-native";
 import React from "react";
@@ -57,6 +58,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             updateEvent("images", image);
 
             setImage(image);
+            scrollToImage();
         }
 
         if (result.canceled) {
@@ -65,7 +67,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Información del evento</Text>
             </View>
@@ -107,6 +109,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                         setIsRemote(!isRemote);
                         updateEvent("isRemote", !isRemote);
                     }}
+                    style={{ marginTop: 8 }}
                     value={isRemote}
                 />
             </View>
@@ -116,7 +119,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                     // show Seleccionar imagen button if there is no image
                     image && !image?.uri && (
                         <TouchableOpacity
-                            style={formStyles.input}
+                            style={formStyles.pickImage}
                             onPress={pickImage}
                         >
                             <Text style={formStyles.text}>
@@ -148,15 +151,12 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                     />
                 )}
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: "100%",
-    },
+    container: { flex: 1 },
     titleContainer: {
         alignItems: "center",
         paddingVertical: 20,

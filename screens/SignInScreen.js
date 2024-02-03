@@ -19,6 +19,7 @@ import { webClientId, iosClientId, androidClientId } from "@env";
 
 import { useAuth } from "@/contexts/Auth";
 import colors from "@/styles/colors";
+import formStyles from "styles/formStyles";
 
 export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false);
@@ -79,7 +80,6 @@ export const SignInScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={formAuth.container}>
-            <Text>{JSON.stringify(userInfo, null, 2)}</Text>
             {loading ? (
                 <ActivityIndicator color="#000" animating size="small" />
             ) : (
@@ -104,14 +104,14 @@ export const SignInScreen = ({ navigation }) => {
                         <TextInput
                             placeholder="Correo electrónico"
                             placeholderTextColor={colors.gray}
-                            style={formAuth.input}
+                            style={formStyles.input}
                             onChangeText={(text) => setEmail(text)}
                             value={email}
                         />
                         <TextInput
                             placeholder="Contraseña"
                             placeholderTextColor={colors.gray}
-                            style={formAuth.input}
+                            style={formStyles.input}
                             onChangeText={(text) => setPassword(text)}
                             value={password}
                             secureTextEntry

@@ -31,29 +31,28 @@ const LottieAnimation = () => {
     }, 3000);
 
     return (
-        <SafeAreaView>
-            <View style={lottieStyle.fullLottie}>
-                <LottieView
-                    style={lottieStyle.lottie}
-                    progress={progress}
-                    source={require("../assets/animations/loader.json")}
-                />
-            </View>
-        </SafeAreaView>
+        <View style={lottieStyle.fullLottie}>
+            <LottieView
+                style={lottieStyle.lottie}
+                progress={progress}
+                source={require("../assets/animations/loader.json")}
+            />
+        </View>
     );
 };
 
 const lottieStyle = StyleSheet.create({
     fullLottie: {
-        Width: "100%",
-        height: "100%",
-        padding: 20,
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
         backgroundColor: colors.background,
     },
     lottie: {
         // SMALL LOTTIE
-        ...StyleSheet.absoluteFillObject,
         backgroundColor: colors.background,
+        width: 200,
+        height: 200,
     },
 });
 
