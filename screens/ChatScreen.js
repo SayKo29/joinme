@@ -21,7 +21,6 @@ import { FlashList } from "@shopify/flash-list";
 import getUserParticipants from "@/api/GetUserParticipants";
 getUserParticipants;
 import { useQuery } from "react-query";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatScreen = ({ route, navigation }) => {
     const event = route.params.event;
@@ -62,33 +61,34 @@ const ChatScreen = ({ route, navigation }) => {
     );
 
     const finishChatRoom = () => {
+        handleDisconnect();
         navigation.goBack();
     };
 
     const handleConnect = () => {
-        console.log("connected");
+        // primera conexión
+        console.log("primera conexión");
         // Pedir al socket todos los mensajes de la sala
-        socket.current.emit("getAllMessages", { chatroomId });
-
+        socket.current.emit("getAllMessages", chatroomId);
+        // Unirse a la sala
+        socket.current.emit("joinRoom", chatroomId);
         // Enviar mensajes en la cola al conectarse
         sendQueuedMessages();
     };
 
     const handleDisconnect = () => {
         console.log("disconnected");
+        socket.current.emit("leaveRoom", chatroomId);
+        socket.current.disconnect();
     };
 
     const handleAllMessages = async (message) => {
         console.log("recibo mensajes");
-        // Guardar mensajes en AsyncStorage
-        await AsyncStorage.setItem(
-            `CHATROOM_${chatroomId}`,
-            JSON.stringify(message)
-        );
         setMessages(message);
     };
 
     const handleNewMessage = (message) => {
+        console.log("recibo nuevo mensaje", userLogged);
         setMessages((prevMessages) => [message, ...prevMessages]);
     };
 
@@ -98,8 +98,9 @@ const ChatScreen = ({ route, navigation }) => {
         // Enviar mensajes en la cola
         messageQueue.forEach((queuedMessage) => {
             socket.current.emit("chatroomMessage", {
-                chatroomId,
-                msg: queuedMessage,
+                chatroom: chatroomId,
+                message: queuedMessage,
+                user: userLogged,
             });
         });
 
@@ -116,7 +117,8 @@ const ChatScreen = ({ route, navigation }) => {
         socketInstance.on("newMessage", handleNewMessage);
         socketInstance.on("chatroomMessageError", handleChatroomMessageError);
         socketInstance.on("connect_error", (error) => {
-            console.error("Error de conexión:", error);
+            // Volvemos a intentar conectarnosq
+            console.error("Error de conexión", error);
         });
 
         socketInstance.on("connect_timeout", () => {
@@ -125,9 +127,7 @@ const ChatScreen = ({ route, navigation }) => {
 
         // Manejar reconexión
         socketInstance.on("reconnect", () => {
-            console.log("reconnecting");
-            socketInstance.emit("joinRoom", { chatroomId });
-
+            socketInstance.emit("reconnect", chatroomId);
             // Enviar mensajes en la cola al reconectar
             sendQueuedMessages();
         });
@@ -148,25 +148,39 @@ const ChatScreen = ({ route, navigation }) => {
         };
     }, [socket, chatroomId]);
 
-    useEffect(() => {
-        socket.current.emit("joinRoom", { chatroomId });
-
-        return () => {
-            // Limpiar al desmontar el componente
-            socket.current.emit("leaveRoom", { chatroomId });
-        };
-    }, [chatroomId]);
-
     const sendMessage = () => {
         // Enviar mensaje inmediatamente si hay conexión
         if (socket.current.connected) {
+            console.log("enviando mensaje");
             socket.current.emit("chatroomMessage", {
-                chatroomId,
-                msg: newMessage,
+                chatroom: chatroomId,
+                message: newMessage,
+                user: userLogged,
             });
+
+            // Mostrar mensaje en el chat como enviado
+            setMessages((prevMessages) => [
+                {
+                    _id: new Date().getTime().toString(),
+                    message: newMessage,
+                    user: userLogged,
+                    createdAt: new Date().toISOString(),
+                },
+                ...prevMessages,
+            ]);
         } else {
             // Agregar el mensaje a la cola si no hay conexión
             setMessageQueue((prevQueue) => [...prevQueue, newMessage]);
+            // Mostrar mensaje en el chat como enviado
+            setMessages((prevMessages) => [
+                {
+                    _id: new Date().getTime().toString(),
+                    message: newMessage,
+                    user: userLogged,
+                    createdAt: new Date().toISOString(),
+                },
+                ...prevMessages,
+            ]);
         }
 
         // Limpiar el campo de nuevo mensaje
@@ -213,7 +227,8 @@ const ChatScreen = ({ route, navigation }) => {
                         keyExtractor={(item) => item?._id}
                         renderItem={({ item }) => {
                             const isUserMessage =
-                                item?.user?._id === userLogged.id;
+                                item?.user?._id === userLogged.id ||
+                                item?.user?.id === userLogged.id;
 
                             return (
                                 <View

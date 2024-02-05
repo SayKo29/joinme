@@ -6,7 +6,7 @@ export default async function JoinEvent(event) {
         "https://calm-lime-armadillo.cyclic.app/api/events/" +
             event._id +
             "/participant",
-        // "http://192.168.1.199:3000/api/events/" + event._id + "/participant",
+        // "http://192.168.1.146:3000/api/events/" + event._id + "/participant",
         {
             method: "PUT",
             headers: {

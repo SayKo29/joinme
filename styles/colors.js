@@ -1,8 +1,8 @@
 const colors = {
-    primary: "#0a3d19",
+    primary: "#40916c",
     secondary: "#0a3d19",
-    background: "#161F2A",
-    accent: "#de6835",
+    background: "#081c15",
+    accent: "#c9a227",
     tabs: "#161F2A",
     purple: "#513B68",
     black: "#000",

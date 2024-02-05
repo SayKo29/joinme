@@ -8,6 +8,7 @@ const formStyles = {
         backgroundColor: "rgba(255,255,255,0.2)",
         color: colors.text,
         borderRadius: 20,
+        marginVertical: 8,
     },
     inputTextArea: {
         padding: 10,
@@ -16,11 +17,11 @@ const formStyles = {
         borderRadius: 10,
         height: 70,
         textAlignVertical: "top",
+        marginVertical: 8,
     },
     label: {
         color: colors.white,
         fontWeight: "bold",
-        paddingBottom: 8,
     },
     text: {
         color: colors.white,
@@ -34,6 +35,13 @@ const formStyles = {
         color: colors.text,
         borderColor: colors.primary,
         borderWidth: 2,
+    },
+    pickImage: {
+        backgroundColor: colors.primary,
+        padding: 10,
+        borderRadius: 20,
+        marginVertical: 8,
+        width: "100%",
     },
 };
 

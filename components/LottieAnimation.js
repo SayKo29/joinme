@@ -1,58 +1,59 @@
-import React, { useEffect, useRef } from 'react'
-import { SafeAreaView, Text, View, Animated, StyleSheet } from 'react-native'
-import LottieView from 'lottie-react-native'
+import React, { useEffect, useRef } from "react";
+import { SafeAreaView, Text, View, Animated, StyleSheet } from "react-native";
+import LottieView from "lottie-react-native";
+import colors from "styles/colors";
 
 const LottieAnimation = () => {
-  const progress = useRef(new Animated.Value(0)).current
+    const progress = useRef(new Animated.Value(0)).current;
 
-  const handleLikeAnimation = () => {
-    Animated.timing(progress, {
-      toValue: 1,
-      duration: 3000,
-      useNativeDriver: true
-    }).start()
-  }
-  useEffect(() => {
-    handleLikeAnimation()
-    return () => {
-      // componentwillunmount in functional component.
-      // Anything in here is fired on component unmount.
-      clearInterval(interval)
-    }
-  }, [])
+    const handleLikeAnimation = () => {
+        Animated.timing(progress, {
+            toValue: 1,
+            duration: 3000,
+            useNativeDriver: true,
+        }).start();
+    };
+    useEffect(() => {
+        handleLikeAnimation();
+        return () => {
+            // componentwillunmount in functional component.
+            // Anything in here is fired on component unmount.
+            clearInterval(interval);
+        };
+    }, []);
 
-  const interval = setInterval(function () {
-    // reset progress
-    progress.setValue(0)
+    const interval = setInterval(function () {
+        // reset progress
+        progress.setValue(0);
 
-    // method to be executed;
-    handleLikeAnimation()
-  }, 3000)
+        // method to be executed;
+        handleLikeAnimation();
+    }, 3000);
 
-  return (
-    <SafeAreaView>
-      <View style={lottieStyle.fullLottie}>
-        <LottieView
-          style={lottieStyle.lottie}
-          progress={progress}
-          source={require('../assets/animations/loader.json')}
-        />
-      </View>
-    </SafeAreaView>
-  )
-}
+    return (
+        <View style={lottieStyle.fullLottie}>
+            <LottieView
+                style={lottieStyle.lottie}
+                progress={progress}
+                source={require("../assets/animations/loader.json")}
+            />
+        </View>
+    );
+};
 
 const lottieStyle = StyleSheet.create({
-  fullLottie: {
-    Width: '100%',
-    height: '100%',
-    padding: 20
-  },
-  lottie: {
-    // SMALL LOTTIE
-    ...StyleSheet.absoluteFillObject
+    fullLottie: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: colors.background,
+    },
+    lottie: {
+        // SMALL LOTTIE
+        backgroundColor: colors.background,
+        width: 200,
+        height: 200,
+    },
+});
 
-  }
-})
-
-export default LottieAnimation
+export default LottieAnimation;

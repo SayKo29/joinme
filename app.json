@@ -9,7 +9,7 @@
         "splash": {
             "image": "./assets/img/logo.png",
             "resizeMode": "contain",
-            "backgroundColor": "#161F2A"
+            "backgroundColor": "#081c15"
         },
         "experiments": {
             "tsconfigPaths": true

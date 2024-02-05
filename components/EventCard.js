@@ -1,7 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "@/styles/colors";
-import { formatDate, formatDateTime, openGoogleMaps } from "@/lib/utils";
+import {
+    formatDateRelative,
+    formatDateTime,
+    openGoogleMaps,
+} from "@/lib/utils";
 import Swiper from "react-native-swiper";
 import LottieAnimation from "./LottieAnimation";
 import useEventStore from "@/store/EventStore";
@@ -57,7 +61,7 @@ const EventCard = ({ event, user, onEventPress }) => {
                 </View>
                 <View style={styles.userTextContainer}>
                     <Text style={styles.text}>
-                        {formatDate(event.createdAt)}
+                        {formatDateRelative(event.createdAt)}
                     </Text>
                 </View>
             </View>
@@ -91,21 +95,29 @@ const EventCard = ({ event, user, onEventPress }) => {
                 {/* event startDate and endDate */}
                 <View style={styles.date}>
                     <Icon name="date-range" size={24} color={colors.text} />
-                    <Text style={styles.text}>
+                    <Text style={styles.linkGoogleMaps}>
                         {/* format string to date */}
                         Del {formatDateTime(new Date(event.startDate))} al{" "}
                         {formatDateTime(new Date(event.endDate))}
                     </Text>
                 </View>
                 {/* event location */}
-                <TouchableOpacity
-                    onPress={() => openGoogleMaps(event.location)}
-                    style={styles.linkMaps}
-                >
-                    <Icon name="place" size={24} color={colors.text} />
-
-                    <Text style={styles.linkGoogleMaps}>{event.location}</Text>
-                </TouchableOpacity>
+                {event.isRemote ? (
+                    <View style={styles.linkMaps}>
+                        <Icon name="place" size={20} color={colors.text} />
+                        <Text style={styles.remote}>Es un evento remoto</Text>
+                    </View>
+                ) : (
+                    <TouchableOpacity
+                        onPress={() => openGoogleMaps(event.location)}
+                        style={styles.linkMaps}
+                    >
+                        <Icon name="place" size={20} color={colors.text} />
+                        <Text style={styles.linkGoogleMaps}>
+                            {event.location}
+                        </Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </TouchableOpacity>
     );
@@ -143,7 +155,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: "bold",
-        color: colors.accent,
+        color: colors.white,
     },
     text: {
         color: colors.text,
@@ -188,6 +200,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         alignItems: "center",
+    },
+    remote: {
+        paddingLeft: 5,
+        paddingTop: 2,
+        color: colors.text,
+        fontSize: 13,
     },
     linkGoogleMaps: {
         paddingLeft: 5,

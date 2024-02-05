@@ -9,10 +9,12 @@ import {
     Image,
     Platform,
     StatusBar,
+    ImageBackground,
 } from "react-native";
 import { useAuth } from "@/contexts/Auth";
 import useEventStore from "@/store/EventStore";
 import Tag from "@/components/tag";
+import { Icon } from "react-native-elements";
 
 const Profile = ({ navigation }) => {
     const auth = useAuth();
@@ -43,7 +45,17 @@ const Profile = ({ navigation }) => {
         return (
             <SafeAreaView style={profile.container}>
                 <View style={profile.content}>
-                    <View style={profile.userBox}>
+                    <View style={profile.profileBackgroundContent}>
+                        <Image
+                            style={profile.imageBackground}
+                            source={
+                                user.avatar
+                                    ? { uri: user.avatar }
+                                    : require("@/assets/avatar.png")
+                            }
+                            resizeMode="cover"
+                        ></Image>
+                        <View style={profile.filterBackgroundColor}></View>
                         <View style={profile.profileContainer}>
                             <Image
                                 style={profile.profileImage}
@@ -53,10 +65,18 @@ const Profile = ({ navigation }) => {
                                         : require("@/assets/avatar.png")
                                 }
                             />
+                            <View style={profile.iconImageView}>
+                                <Icon
+                                    name="pencil"
+                                    type="font-awesome"
+                                    color={colors.white}
+                                    size={18}
+                                    style={profile.iconImage}
+                                />
+                            </View>
                         </View>
-                        <Text style={profile.name}>
-                            {user.username ? user.username : "SayKo29"}
-                        </Text>
+                    </View>
+                    <View style={profile.info}>
                         <Text style={profile.fullName}>{user.name}</Text>
                         <Text style={profile.location}>
                             {user.location
@@ -125,7 +145,6 @@ const profile = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
         width: "100%",
-        paddingHorizontal: 10,
         backgroundColor: colors.background,
     },
     userBox: {
@@ -143,8 +162,7 @@ const profile = StyleSheet.create({
         marginTop: 20,
         paddingBottom: 30,
         marginBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.gray,
+        paddingHorizontal: 10,
     },
     tagsContainer: {
         flexDirection: "row",
@@ -153,16 +171,64 @@ const profile = StyleSheet.create({
         paddingTop: 10,
         gap: 10,
     },
+    profileBackgroundContent: {
+        width: "100%",
+        height: "25%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    imageBackground: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    filterBackgroundColor: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: colors.primary,
+        opacity: 0.7,
+        position: "absolute",
+        zIndex: 2,
+    },
     profileContainer: {
         width: 100,
         height: 100,
         borderRadius: 100,
         backgroundColor: colors.gray,
+        zIndex: 3,
+        position: "absolute",
+        bottom: -30,
+        alignItems: "center",
     },
+    info: {
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 40,
+    },
+
     profileImage: {
         width: 100,
         height: 100,
         borderRadius: 100,
+        zIndex: -3,
+    },
+    iconImageView: {
+        width: 33,
+        height: 33,
+        borderRadius: 100,
+        backgroundColor: colors.secondary,
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        top: 0,
+        right: 0,
+    },
+    iconImage: {
+        color: colors.accent,
+        fontSize: 20,
     },
     name: {
         fontSize: 20,
@@ -171,9 +237,9 @@ const profile = StyleSheet.create({
         paddingTop: 30,
     },
     fullName: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "bold",
-        color: colors.gray,
+        color: colors.white,
         paddingTop: 5,
     },
     location: {
@@ -190,12 +256,12 @@ const profile = StyleSheet.create({
         paddingTop: 5,
     },
     signoutButton: {
-        backgroundColor: colors.primary,
-        width: "100%",
+        backgroundColor: colors.accent,
+        width: "80%",
         height: 40,
         padding: 10,
         borderWidth: 1,
-        borderColor: colors.primary,
+        borderColor: colors.accent,
         borderRadius: 5,
         marginBottom: 10,
         shadowColor: "#000",

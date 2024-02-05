@@ -4,6 +4,8 @@ import {
     StyleSheet,
     TextInput,
     Image,
+    Switch,
+    ScrollView,
     TouchableOpacity,
 } from "react-native";
 import React from "react";
@@ -15,6 +17,7 @@ formStyles;
 const EventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent);
     const [image, setImage] = React.useState({});
+    const [isRemote, setIsRemote] = React.useState(false);
 
     const updateEvent = (key, value) => {
         setEvent((oldEvent) => ({
@@ -28,6 +31,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
     React.useEffect(() => {
         if (currentEvent && currentEvent?.images) {
             setImage(currentEvent?.images);
+            setIsRemote(currentEvent?.isRemote);
         }
     }, []);
 
@@ -54,6 +58,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             updateEvent("images", image);
 
             setImage(image);
+            scrollToImage();
         }
 
         if (result.canceled) {
@@ -62,7 +67,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Información del evento</Text>
             </View>
@@ -90,13 +95,31 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                     value={event.description}
                 />
             </View>
+            {/* make switch for isRemote */}
+            <View style={formStyles.inputContainer}>
+                <Text style={formStyles.label}>¿Es un evento remoto?</Text>
+                <Switch
+                    trackColor={{
+                        false: colors.disabled,
+                        true: colors.primary,
+                    }}
+                    thumbColor={isRemote ? colors.gray : colors.gray}
+                    ios_backgroundColor={colors.disabled}
+                    onValueChange={() => {
+                        setIsRemote(!isRemote);
+                        updateEvent("isRemote", !isRemote);
+                    }}
+                    style={{ marginTop: 8 }}
+                    value={isRemote}
+                />
+            </View>
             <View style={styles.inputContainer}>
                 <Text style={formStyles.label}>Imagen del evento</Text>
                 {
                     // show Seleccionar imagen button if there is no image
                     image && !image?.uri && (
                         <TouchableOpacity
-                            style={formStyles.input}
+                            style={formStyles.pickImage}
                             onPress={pickImage}
                         >
                             <Text style={formStyles.text}>
@@ -128,15 +151,12 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                     />
                 )}
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: "100%",
-    },
+    container: { flex: 1 },
     titleContainer: {
         alignItems: "center",
         paddingVertical: 20,

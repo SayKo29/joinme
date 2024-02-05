@@ -119,52 +119,54 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.placesAutocomplete}>
-                <Text style={styles.label}>Lugar del evento</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        placeholder="Buscar lugar"
-                        value={inputValue}
-                        onChangeText={handleInputChange}
-                        placeholderTextColor={colors.gray}
-                        style={[
-                            inputValue.length > 0
-                                ? formStyles.inputAutocomplete
-                                : {
-                                      ...formStyles.inputAutocomplete,
-                                      width: "100%",
-                                  },
-                        ]}
-                    />
-                    {inputValue.length > 0 ? (
-                        <Icon
-                            name="close"
-                            size={30}
-                            onPress={() => setInputValue("")}
-                            color={colors.text}
+            {!event?.isRemote ? (
+                <View style={styles.placesAutocomplete}>
+                    <Text style={styles.label}>Lugar del evento</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            placeholder="Buscar lugar"
+                            value={inputValue}
+                            onChangeText={handleInputChange}
+                            placeholderTextColor={colors.gray}
+                            style={[
+                                inputValue.length > 0
+                                    ? formStyles.inputAutocomplete
+                                    : {
+                                          ...formStyles.inputAutocomplete,
+                                          width: "100%",
+                                      },
+                            ]}
                         />
-                    ) : null}
+                        {inputValue.length > 0 ? (
+                            <Icon
+                                name="close"
+                                size={30}
+                                onPress={() => setInputValue("")}
+                                color={colors.text}
+                            />
+                        ) : null}
+                    </View>
+                    <View>
+                        {results.length > 0 && !hasSelectedLocation
+                            ? results.map((result) => (
+                                  // make selectable results to put it in the text input
+                                  <TouchableOpacity
+                                      key={result.place_id}
+                                      onPress={handlePressLocation.bind(
+                                          this,
+                                          result
+                                      )}
+                                      style={styles.resultAutocomplete}
+                                  >
+                                      <Text style={styles.label}>
+                                          {result.display_name}
+                                      </Text>
+                                  </TouchableOpacity>
+                              ))
+                            : null}
+                    </View>
                 </View>
-                <View>
-                    {results.length > 0 && !hasSelectedLocation
-                        ? results.map((result) => (
-                              // make selectable results to put it in the text input
-                              <TouchableOpacity
-                                  key={result.place_id}
-                                  onPress={handlePressLocation.bind(
-                                      this,
-                                      result
-                                  )}
-                                  style={styles.resultAutocomplete}
-                              >
-                                  <Text style={styles.label}>
-                                      {result.display_name}
-                                  </Text>
-                              </TouchableOpacity>
-                          ))
-                        : null}
-                </View>
-            </View>
+            ) : null}
             <View style={styles.datePicker}>
                 <Text style={formStyles.label}>
                     Fecha y hora de inicio del evento

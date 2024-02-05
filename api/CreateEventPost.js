@@ -1,6 +1,5 @@
 export default async function CreateEventPost(event) {
     const formData = new FormData();
-
     // Agrega los datos del evento al formulario
     formData.append("name", event.name);
     formData.append("description", event.description);
@@ -11,11 +10,13 @@ export default async function CreateEventPost(event) {
     formData.append("user", event.user);
     formData.append("participants", event.participants);
     formData.append("chatroom", event.chatroom);
+    formData.append("isRemote", event.isRemote ? true : false);
+    // poner todo encima de images que peta
     formData.append("images", event.images);
 
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",
-    // const response = await fetch("http://192.168.1.199:3000/api/events", {
+    // const response = await fetch("http://192.168.1.146:3000/api/events", {
     const response = await fetch(
         "https://calm-lime-armadillo.cyclic.app/api/events",
         {
