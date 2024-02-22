@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import React from "react";
 
 const ListMessages = () => {
     return (
         <View>
-            <Text>ListMessages</Text>
+            <TextInput placeholder="Type a message" />
         </View>
     );
 };

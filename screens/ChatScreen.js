@@ -56,9 +56,8 @@ const ChatScreen = ({ route, navigation }) => {
         }
     }, [participantsQuery?.data]);
 
-    const socket = useRef(
-        io(URL, { transports: ["websocket"], query: { userId: userLogged.id } })
-    );
+
+    const socket = useRef(null);
 
     const finishChatRoom = () => {
         handleDisconnect();
@@ -109,7 +108,9 @@ const ChatScreen = ({ route, navigation }) => {
     };
 
     useEffect(() => {
-        const socketInstance = socket.current;
+        socket.current = io(URL, { transports: ["websocket"], query: { userId: userLogged.id } });
+
+        let socketInstance = socket.current;
 
         socketInstance.on("connect", handleConnect);
         socketInstance.on("disconnect", handleDisconnect);
