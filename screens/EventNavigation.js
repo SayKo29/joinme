@@ -15,71 +15,68 @@ const MemoizedEventScroll = React.memo(EventScroll);
 const MemoizedMyEvents = React.memo(MyEvents);
 
 export default function EventNavigation({ navigation }) {
-    //   refetch every 5 minutes
+  //   refetch every 5 minutes
 
-    const eventsQuery = useQuery({
-        queryKey: ["EVENTS"],
-        queryFn: getEventsData,
-        refetchInterval: 300000,
-    });
+  const eventsQuery = useQuery({
+    queryKey: ["EVENTS"],
+    queryFn: getEventsData,
+    refetchInterval: 300000,
+  });
 
-    const usersQuery = useQuery({
-        queryKey: ["USERS"],
-        queryFn: getUsersData,
-        refetchInterval: 300000,
-    });
+  const usersQuery = useQuery({
+    queryKey: ["USERS"],
+    queryFn: getUsersData,
+    refetchInterval: 300000,
+  });
 
-    const [selected, setSelected] = useState("new");
+  const [selected, setSelected] = useState("new");
 
-    const handleSelect = (value) => {
-        setSelected(value);
-        // navigation.navigate(value === "new" ? "EventScroll" : "EventMap");
-    };
+  const handleSelect = (value) => {
+    setSelected(value);
+    // navigation.navigate(value === "new" ? "EventScroll" : "EventMap");
+  };
 
-    if (eventsQuery.isLoading) {
-        return <LottieAnimation />;
-    }
-    if (eventsQuery.isError) {
-        return <Text>Error events...</Text>;
-    }
+  if (eventsQuery.isLoading) {
+    return <LottieAnimation />;
+  }
+  if (eventsQuery.isError) {
+    return <Text>Error events...</Text>;
+  }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <HeaderNavigationEvent
-                    selected={selected}
-                    setSelected={handleSelect}
-                />
-            </View>
-            <View style={styles.container}>
-                {selected === "new" ? (
-                    <MemoizedEventScroll
-                        navigation={navigation}
-                        data={eventsQuery}
-                        users={usersQuery}
-                    />
-                ) : (
-                    <MemoizedMyEvents
-                        navigation={navigation}
-                        data={eventsQuery}
-                        users={usersQuery}
-                    />
-                )}
-            </View>
-        </SafeAreaView>
-    );
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <HeaderNavigationEvent selected={selected} setSelected={handleSelect} />
+      </View>
+      <View style={styles.container}>
+        {selected === "new" ? (
+          <MemoizedEventScroll
+            navigation={navigation}
+            data={eventsQuery}
+            users={usersQuery}
+          />
+        ) : (
+          <MemoizedMyEvents
+            navigation={navigation}
+            data={eventsQuery}
+            users={usersQuery}
+          />
+        )}
+      </View>
+    </SafeAreaView>
+  );
 }
 
 // create our styling code:
 const styles = StyleSheet.create({
-    headerContainer: {
-        backgroundColor: colors.background,
-        height: Platform.OS === "android" ? 70 : 50,
-        paddingTop: Platform.OS === "android" ? 25 : 0,
-    },
-    container: {
-        backgroundColor: colors.background,
-        height: "100%",
-        flex: 1,
-    },
+  headerContainer: {
+    backgroundColor: colors.background,
+    height: Platform.OS === "android" ? 70 : 50,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
+  container: {
+    backgroundColor: colors.background,
+    height: "100%",
+    flex: 1,
+  },
 });

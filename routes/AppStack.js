@@ -7,25 +7,25 @@ import { screens } from "@/navigation/Screens";
 const Stack = createStackNavigator();
 
 export const AppStack = () => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="BottomTab"
-                component={BottomTab}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="EventDetailScreen"
-                component={screens.EventDetailScreen.component}
-                // pass navigation prop to screen
-                initialParams={{ navigation: null }}
-            />
-            <Stack.Screen
-                options={{ headerShown: false }}
-                name="ChatScreen"
-                component={screens.ChatScreen.component}
-            />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="BottomTab"
+        component={BottomTab}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="EventDetailScreen"
+        component={screens.EventDetailScreen.component}
+        // pass navigation prop to screen
+        initialParams={{ navigation: null }}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ChatScreen"
+        component={screens.ChatScreen.component}
+      />
+    </Stack.Navigator>
+  );
 };
