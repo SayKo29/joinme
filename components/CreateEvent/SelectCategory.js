@@ -1,27 +1,27 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
-import CategoryCard from "./CategoryCard";
-import colors from "@/styles/colors";
-import LottieAnimation from "@/components/LottieAnimation";
-import useEventStore from "@/store/EventStore";
+import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
+import CategoryCard from './CategoryCard'
+import colors from '@/styles/colors'
+import LottieAnimation from '@/components/LottieAnimation'
+import useEventStore from '@/store/EventStore'
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
-  const { categories, isInitialized, fetchCategories } = useEventStore();
+  const { categories, isInitialized, fetchCategories } = useEventStore()
 
   React.useEffect(() => {
     // Llamar a fetchCategories solo si no está inicializado
     if (!isInitialized) {
-      fetchCategories();
+      fetchCategories()
     }
-  }, [isInitialized]);
+  }, [isInitialized])
 
   if (categories.isLoading) {
-    return <LottieAnimation />;
+    return <LottieAnimation />
   }
 
   const handleCategoryPressed = (category) => {
-    categorySelected(category._id);
-  };
+    categorySelected(category._id)
+  }
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -36,23 +36,23 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
         />
       ))}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    width: '100%'
   },
   titleContainer: {
-    alignItems: "center",
-    paddingVertical: 20,
+    alignItems: 'center',
+    paddingVertical: 20
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: colors.text,
-  },
-});
+    fontWeight: 'bold',
+    color: colors.text
+  }
+})
 
-export default SelectCategory;
+export default SelectCategory

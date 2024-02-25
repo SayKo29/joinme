@@ -4,106 +4,104 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
-} from "react-native";
-import React from "react";
-import SelectCategory from "@/components/CreateEvent/SelectCategory";
-import colors from "@/styles/colors";
-import EventInfo from "@/components/CreateEvent/EventInfo";
-import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import AdvancedEventInfo from "@/components/CreateEvent/AdvancedEventInfo";
-import CreateEventPost from "@/api/CreateEventPost";
-import { useAuth } from "@/contexts/Auth";
-import { useQuery } from "react-query";
-import getEventsData from "@/api/EventsData";
-import LottieAnimation from "@/components/LottieAnimation";
-
-getEventsData;
+  View
+} from 'react-native'
+import React from 'react'
+import SelectCategory from '@/components/CreateEvent/SelectCategory'
+import colors from '@/styles/colors'
+import EventInfo from '@/components/CreateEvent/EventInfo'
+import { ProgressSteps, ProgressStep } from 'react-native-progress-steps'
+import AdvancedEventInfo from '@/components/CreateEvent/AdvancedEventInfo'
+import CreateEventPost from '@/api/CreateEventPost'
+import { useAuth } from '@/contexts/Auth'
+import { useQuery } from 'react-query'
+import getEventsData from '@/api/EventsData'
+import LottieAnimation from '@/components/LottieAnimation'
 
 const CreateEvent = ({ navigation }) => {
   const eventsQuery = useQuery({
-    queryKey: ["EVENTS"],
+    queryKey: ['EVENTS'],
     queryFn: getEventsData,
-    refetchInterval: 300000,
-  });
+    refetchInterval: 300000
+  })
 
-  const [category, setCategory] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState(Boolean);
+  const [category, setCategory] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [errors, setErrors] = React.useState(Boolean)
   const [event, setEvent] = React.useState({
-    name: "",
-    description: "",
-    category: "",
-    location: "",
+    name: '',
+    description: '',
+    category: '',
+    location: '',
     images: {},
     isRemote: false,
-    user: "",
-    startDate: "",
-    endDate: "",
+    user: '',
+    startDate: '',
+    endDate: '',
     participants: [],
-    chatroom: "",
-  });
+    chatroom: ''
+  })
 
-  const auth = useAuth();
-  const user = auth?.authData?.user;
+  const auth = useAuth()
+  const user = auth?.authData?.user
 
   // updateEvent changes the event state with the key and value passed
   const updateEvent = (key, value) => {
     setEvent((oldEvent) => ({
       ...oldEvent,
-      [key]: value,
-    }));
-  };
+      [key]: value
+    }))
+  }
 
   const handleEventCreation = async () => {
-    setLoading(true);
-    let eventToSend = {
+    setLoading(true)
+    const eventToSend = {
       ...event,
-      category: category,
+      category,
       startDate: new Date(event.startDate).toISOString(),
       endDate: new Date(event.endDate).toISOString(),
-      user: user.id,
-    };
+      user: user.id
+    }
     try {
-      const response = await CreateEventPost(eventToSend);
+      const response = await CreateEventPost(eventToSend)
       if (response) {
         try {
           // invalidate EVENTS query to refetch data
-          await eventsQuery.refetch();
+          await eventsQuery.refetch()
           // clear event state
           setEvent({
-            name: "",
-            description: "",
-            category: "",
-            location: "",
+            name: '',
+            description: '',
+            category: '',
+            location: '',
             images: {},
-            user: "",
-            startDate: "",
-            endDate: "",
+            user: '',
+            startDate: '',
+            endDate: '',
             participants: [],
-            chatroom: "",
-          });
+            chatroom: ''
+          })
           // navigate to Events screen
-          navigation.navigate("Eventos");
-          setLoading(false);
+          navigation.navigate('Eventos')
+          setLoading(false)
         } catch (error) {
-          console.error("Error al recargar los datos de los eventos:", error);
-          setLoading(false);
-          setErrors(true);
+          console.error('Error al recargar los datos de los eventos:', error)
+          setLoading(false)
+          setErrors(true)
         }
       } else {
-        setLoading(false);
-        setErrors(true);
+        setLoading(false)
+        setErrors(true)
       }
     } catch (error) {
-      console.error("Error al crear el evento:", error);
-      setLoading(false);
-      setErrors(true);
+      console.error('Error al crear el evento:', error)
+      setLoading(false)
+      setErrors(true)
     }
-  };
+  }
 
   if (loading) {
-    return <LottieAnimation />;
+    return <LottieAnimation />
   }
 
   return (
@@ -125,13 +123,13 @@ const CreateEvent = ({ navigation }) => {
           progressBarColor={colors.disabled}
         >
           <ProgressStep
-            label="Categoría del evento"
+            label='Categoría del evento'
             nextBtnStyle={styles.nextBtnStyle}
             nextBtnTextStyle={styles.nextBtnTextStyle}
-            nextBtnText="Siguiente"
-            nextBtnDisabled={category === ""}
+            nextBtnText='Siguiente'
+            nextBtnDisabled={category === ''}
             scrollViewProps={{
-              showsVerticalScrollIndicator: false,
+              showsVerticalScrollIndicator: false
             }}
           >
             <SelectCategory
@@ -140,30 +138,30 @@ const CreateEvent = ({ navigation }) => {
             />
           </ProgressStep>
           <ProgressStep
-            label="Información básica"
+            label='Información básica'
             nextBtnStyle={styles.nextBtnStyle}
             nextBtnTextStyle={styles.nextBtnTextStyle}
-            nextBtnText="Siguiente"
+            nextBtnText='Siguiente'
             previousBtnStyle={styles.previousBtnStyle}
             previousBtnTextStyle={styles.previousBtnTextStyle}
-            previousBtnText="Atrás"
-            nextBtnDisabled={event.name === "" || event.description === ""}
+            previousBtnText='Atrás'
+            nextBtnDisabled={event.name === '' || event.description === ''}
           >
             <EventInfo eventInfo={updateEvent} currentEvent={event} />
           </ProgressStep>
           <ProgressStep
-            label="Información avanzada"
+            label='Información avanzada'
             nextBtnStyle={styles.nextBtnStyle}
             nextBtnTextStyle={styles.nextBtnTextStyle}
             previousBtnStyle={styles.previousBtnStyle}
             previousBtnTextStyle={styles.previousBtnTextStyle}
-            previousBtnText="Atrás"
-            finishBtnText="Crear evento"
+            previousBtnText='Atrás'
+            finishBtnText='Crear evento'
             onSubmit={handleEventCreation}
             nextBtnDisabled={
-              (event.location === "" && !event.isRemote) ||
-              event.startDate === "" ||
-              event.endDate === ""
+              (event.location === '' && !event.isRemote) ||
+              event.startDate === '' ||
+              event.endDate === ''
             }
           >
             <AdvancedEventInfo eventInfo={updateEvent} currentEvent={event} />
@@ -171,44 +169,44 @@ const CreateEvent = ({ navigation }) => {
         </ProgressSteps>
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
   },
   titleContainer: {
-    alignItems: "center",
+    alignItems: 'center'
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: colors.white,
+    fontWeight: 'bold',
+    color: colors.white
   },
   stepWrapper: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   nextBtnStyle: {
     backgroundColor: colors.accent,
     borderRadius: 4,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   nextBtnTextStyle: {
     color: colors.text,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   previousBtnStyle: {
     backgroundColor: colors.gray,
     borderRadius: 4,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   previousBtnTextStyle: {
-    color: colors.white,
-  },
-});
+    color: colors.white
+  }
+})
 
-export default CreateEvent;
+export default CreateEvent

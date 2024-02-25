@@ -1,29 +1,29 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
-import colors from "@/styles/colors";
+import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
+import colors from '@/styles/colors'
 
 const Tag = ({ name }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.tag}>{name}</Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    width: "auto",
+    width: 'auto',
     backgroundColor: colors.primary,
     borderRadius: 3,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 5
   },
   tag: {
     color: colors.text,
     fontSize: 13,
-    fontWeight: "bold",
-  },
-});
+    fontWeight: 'bold'
+  }
+})
 
-export default Tag;
+export default Tag

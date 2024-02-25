@@ -1,41 +1,40 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon } from "react-native-elements";
-import { Text } from "react-native";
-import EventNavigation from "@/screens/EventNavigation";
-import Profile from "@/screens/Profile";
-import Create from "@/screens/CreateEvent";
-import ChatScreen from "@/screens/Chatroom";
-import colors from "@/styles/colors";
-import { useFocusEffect } from "@react-navigation/native";
-import Animated, {
+import React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Icon } from 'react-native-elements'
+import { Text } from 'react-native'
+import EventNavigation from '@/screens/EventNavigation'
+import Profile from '@/screens/Profile'
+import Create from '@/screens/CreateEvent'
+import ChatScreen from '@/screens/Chatroom'
+import colors from '@/styles/colors'
+import { useFocusEffect } from '@react-navigation/native'
+import {
   useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+  withTiming
+} from 'react-native-reanimated'
 
 export const BottomTab = () => {
-  const Tab = createBottomTabNavigator();
-  const transitionValue = useSharedValue(0);
+  const Tab = createBottomTabNavigator()
+  const transitionValue = useSharedValue(0)
 
   useFocusEffect(() => {
-    transitionValue.value = withTiming(1, { duration: 500 });
+    transitionValue.value = withTiming(1, { duration: 500 })
     return () => {
-      transitionValue.value = withTiming(0, { duration: 250 });
-    };
-  });
+      transitionValue.value = withTiming(0, { duration: 250 })
+    }
+  })
 
   const tabIconStyle = (focused, color) => {
-    return focused ? colors.white : color;
-  };
+    return focused ? colors.white : color
+  }
 
   const tabLabelStyle = (focused) => {
     return {
       color: focused ? colors.white : colors.gray,
       fontSize: 12,
-      fontWeight: "bold",
-    };
-  };
+      fontWeight: 'bold'
+    }
+  }
 
   const tabScreenOptions = ({ route }) => ({
     unmountOnBlur: false,
@@ -45,55 +44,55 @@ export const BottomTab = () => {
     tabBarStyle: {
       backgroundColor: colors.background,
       borderTopColor: colors.background,
-      color: colors.text,
+      color: colors.text
     },
     tabBarIcon: ({ focused, color, size }) => {
-      let iconName;
+      let iconName
 
       switch (route.name) {
-        case "Eventos":
-          iconName = focused ? "map" : "ios-map-outline";
-          break;
-        case "Chats":
-          iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline";
-          break;
-        case "Crear":
-          iconName = focused ? "ios-add-circle" : "ios-add-circle-outline";
-          break;
-        case "Perfil":
-          iconName = "person";
-          break;
+        case 'Eventos':
+          iconName = focused ? 'map' : 'ios-map-outline'
+          break
+        case 'Chats':
+          iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline'
+          break
+        case 'Crear':
+          iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline'
+          break
+        case 'Perfil':
+          iconName = 'person'
+          break
       }
 
       return (
         <Icon
           name={iconName}
-          type="ionicon"
+          type='ionicon'
           size={size}
           color={tabIconStyle(focused, color)}
         />
-      );
-    },
-  });
+      )
+    }
+  })
 
   const tabScreenComponents = [
     {
-      name: "Eventos",
-      component: EventNavigation,
+      name: 'Eventos',
+      component: EventNavigation
     },
     {
-      name: "Chats",
-      component: ChatScreen,
+      name: 'Chats',
+      component: ChatScreen
     },
     {
-      name: "Crear",
-      component: Create,
+      name: 'Crear',
+      component: Create
     },
     {
-      name: "Perfil",
-      component: Profile,
-    },
-  ];
+      name: 'Perfil',
+      component: Profile
+    }
+  ]
 
   return (
     <Tab.Navigator screenOptions={tabScreenOptions}>
@@ -107,11 +106,11 @@ export const BottomTab = () => {
             headerShown: false,
             headerTintColor: colors.text,
             headerTitleStyle: {
-              fontWeight: "bold",
-            },
+              fontWeight: 'bold'
+            }
           }}
         />
       ))}
     </Tab.Navigator>
-  );
-};
+  )
+}

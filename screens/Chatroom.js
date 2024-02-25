@@ -1,5 +1,5 @@
-import React from "react";
-import { useAuth } from "@/contexts/Auth";
+import React from 'react'
+import { useAuth } from '@/contexts/Auth'
 import {
   Image,
   Platform,
@@ -7,41 +7,41 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-} from "react-native";
-import getEventsByParticipant from "@/api/GetParticipantEvents";
-import { useQuery } from "react-query";
-import LottieAnimation from "@/components/LottieAnimation";
-import colors from "@/styles/colors";
-import { FlashList } from "@shopify/flash-list";
+  View
+} from 'react-native'
+import getEventsByParticipant from '@/api/GetParticipantEvents'
+import { useQuery } from 'react-query'
+import LottieAnimation from '@/components/LottieAnimation'
+import colors from '@/styles/colors'
+import { FlashList } from '@shopify/flash-list'
 
 const ChatRooms = ({ navigation }) => {
-  const auth = useAuth();
-  const { isLoading, isError, data } = useQuery("CHATROOMS", () =>
+  const auth = useAuth()
+  const { isLoading, isError, data } = useQuery('CHATROOMS', () =>
     getEventsByParticipant(auth.authData.user.id)
-  );
+  )
 
   const handleSelectChatroom = (event) => {
-    navigation.navigate("ChatScreen", { event: event });
-  };
-
-  if (isLoading || isError) {
-    return isLoading ? <LottieAnimation /> : <Text>Error</Text>;
+    navigation.navigate('ChatScreen', { event })
   }
 
-  const events = data ?? [];
+  if (isLoading || isError) {
+    return isLoading ? <LottieAnimation /> : <Text>Error</Text>
+  }
+
+  const events = data ?? []
 
   // sort events by date
   events.sort((a, b) => {
-    return new Date(b.endDate) - new Date(a.endDate);
-  });
+    return new Date(b.endDate) - new Date(a.endDate)
+  })
 
   if (events.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <TouchableOpacity
           style={styles.emptyContainer}
-          onPress={() => navigation.navigate("Eventos")}
+          onPress={() => navigation.navigate('Eventos')}
         >
           <Text style={styles.text}>
             No hay chats disponibles, para unirte a alguno,
@@ -49,7 +49,7 @@ const ChatRooms = ({ navigation }) => {
           <Text style={styles.btn}>únete a un evento</Text>
         </TouchableOpacity>
       </View>
-    );
+    )
   }
 
   return (
@@ -70,26 +70,28 @@ const ChatRooms = ({ navigation }) => {
                 backgroundColor:
                   new Date(item.endDate) < new Date()
                     ? colors.disabled
-                    : colors.primary,
-              },
+                    : colors.primary
+              }
             ]}
             onPress={() => handleSelectChatroom(item)}
           >
-            {item.images.length > 0 ? (
-              <Image style={styles.image} source={{ uri: item.images[0] }} />
-            ) : (
-              <Image
-                style={styles.image}
-                source={require("../assets/img/logo.png")}
-              />
-            )}
+            {item.images.length > 0
+              ? (
+                <Image style={styles.image} source={{ uri: item.images[0] }} />
+                )
+              : (
+                <Image
+                  style={styles.image}
+                  source={require('../assets/img/logo.png')}
+                />
+                )}
             <View style={styles.cardContent}>
               <Text style={styles.chatroom}>{item.name}</Text>
               <Text style={styles.participants}>
-                {item.participants.length}{" "}
+                {item.participants.length}{' '}
                 {item.participants.length === 1
-                  ? "participante"
-                  : "participantes"}
+                  ? 'participante'
+                  : 'participantes'}
               </Text>
               {new Date(item.endDate) < new Date() && (
                 <Text style={styles.participants}>Evento finalizado</Text>
@@ -99,14 +101,14 @@ const ChatRooms = ({ navigation }) => {
         )}
       />
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 25 : 0,
-    backgroundColor: colors.background,
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
+    backgroundColor: colors.background
   },
   card: {
     backgroundColor: colors.primary,
@@ -114,61 +116,61 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#000",
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   image: {
     width: 50,
     height: 50,
     borderRadius: 50,
-    marginRight: 10,
+    marginRight: 10
   },
   cardContent: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   chatroom: {
     fontSize: 18,
-    color: colors.white,
+    color: colors.white
   },
   participants: {
     fontSize: 14,
-    color: colors.white,
+    color: colors.white
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.background
   },
   title: {
-    alignItems: "center",
-    paddingBottom: 10,
+    alignItems: 'center',
+    paddingBottom: 10
   },
   titleText: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: colors.white,
+    fontWeight: 'bold',
+    color: colors.white
   },
   text: {
     color: colors.white,
-    fontSize: 18,
+    fontSize: 18
   },
   btn: {
     color: colors.accent,
     fontSize: 18,
-    fontWeight: "bold",
-    paddingTop: 10,
-  },
-});
+    fontWeight: 'bold',
+    paddingTop: 10
+  }
+})
 
-export default ChatRooms;
+export default ChatRooms

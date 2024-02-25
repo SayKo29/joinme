@@ -1,23 +1,23 @@
-export default async function JoinEvent(event) {
+export default async function JoinEvent (event) {
   // make a put request to join event
   //   console.log(event)
-  console.log("event", event);
+  console.log('event', event)
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/events/" +
+    'https://calm-lime-armadillo.cyclic.app/api/events/' +
       event._id +
-      "/participant",
+      '/participant',
     // "http://192.168.1.146:3000/api/events/" + event._id + "/participant",
     {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(event),
+      body: JSON.stringify(event)
     }
-  );
+  )
   if (!response.status) {
-    throw new Error("NO va");
+    throw new Error('NO va')
   }
-  return response.json();
+  return response.json()
 }

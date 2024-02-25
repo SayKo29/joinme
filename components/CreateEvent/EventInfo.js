@@ -6,65 +6,63 @@ import {
   Image,
   Switch,
   ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
-import colors from "@/styles/colors";
-import * as ImagePicker from "expo-image-picker";
-import formStyles from "@/styles/formStyles";
-formStyles;
+  TouchableOpacity
+} from 'react-native'
+import React from 'react'
+import colors from '@/styles/colors'
+import * as ImagePicker from 'expo-image-picker'
+import formStyles from '@/styles/formStyles'
 
 const EventInfo = ({ eventInfo, currentEvent }) => {
-  const [event, setEvent] = React.useState(currentEvent);
-  const [image, setImage] = React.useState({});
-  const [isRemote, setIsRemote] = React.useState(false);
+  const [event, setEvent] = React.useState(currentEvent)
+  const [image, setImage] = React.useState({})
+  const [isRemote, setIsRemote] = React.useState(false)
 
   const updateEvent = (key, value) => {
     setEvent((oldEvent) => ({
       ...oldEvent,
-      [key]: value,
-    }));
-    eventInfo(key, value);
-  };
+      [key]: value
+    }))
+    eventInfo(key, value)
+  }
 
   // useeffect to set the image if previous image exists
   React.useEffect(() => {
     if (currentEvent && currentEvent?.images) {
-      setImage(currentEvent?.images);
-      setIsRemote(currentEvent?.isRemote);
+      setImage(currentEvent?.images)
+      setIsRemote(currentEvent?.isRemote)
     }
-  }, []);
+  }, [])
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [16, 9], // [4, 3], [1, 1], [16, 9
-      quality: 1,
-    });
+      quality: 1
+    })
 
     if (!result.canceled) {
-      const localUri = result.assets[0].uri;
-      const filename = localUri.split("/").pop();
+      const localUri = result.assets[0].uri
+      const filename = localUri.split('/').pop()
 
       // Añade la imagen al formulario
-      let image = {
+      const image = {
         uri: localUri,
         name: filename,
-        type: "image/jpeg", // Ajusta según el tipo de archivo de tu imagen
-      };
+        type: 'image/jpeg' // Ajusta según el tipo de archivo de tu imagen
+      }
       // set the image if the user selects one
-      updateEvent("images", image);
+      updateEvent('images', image)
 
-      setImage(image);
-      scrollToImage();
+      setImage(image)
     }
 
     if (result.canceled) {
-      setImage({});
+      setImage({})
     }
-  };
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -76,8 +74,8 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
         <TextInput
           style={formStyles.input}
           placeholderTextColor={colors.gray}
-          placeholder="Partido de fútbol"
-          onChangeText={(text) => updateEvent("name", text)}
+          placeholder='Partido de fútbol'
+          onChangeText={(text) => updateEvent('name', text)}
           value={event.name}
         />
       </View>
@@ -86,12 +84,11 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
         <TextInput
           style={formStyles.inputTextArea}
           placeholderTextColor={colors.gray}
-          placeholder="Partido de fútbol en el parque del ayuntamiento..."
-          multiline={true}
+          placeholder='Partido de fútbol en el parque del ayuntamiento...'
+          multiline
           maxLength={200}
           onChangeText={(description) =>
-            updateEvent("description", description)
-          }
+            updateEvent('description', description)}
           value={event.description}
         />
       </View>
@@ -101,13 +98,13 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
         <Switch
           trackColor={{
             false: colors.disabled,
-            true: colors.primary,
+            true: colors.primary
           }}
           thumbColor={isRemote ? colors.gray : colors.gray}
           ios_backgroundColor={colors.disabled}
           onValueChange={() => {
-            setIsRemote(!isRemote);
-            updateEvent("isRemote", !isRemote);
+            setIsRemote(!isRemote)
+            updateEvent('isRemote', !isRemote)
           }}
           style={{ marginTop: 8 }}
           value={isRemote}
@@ -137,27 +134,27 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
             style={{
               width: 200,
               height: 200,
-              alignSelf: "center",
-              marginVertical: 15,
+              alignSelf: 'center',
+              marginVertical: 15
             }}
           />
         )}
       </View>
     </ScrollView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
   titleContainer: {
-    alignItems: "center",
-    paddingVertical: 20,
+    alignItems: 'center',
+    paddingVertical: 20
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-  },
-});
+    fontWeight: 'bold',
+    color: 'white'
+  }
+})
 
-export default EventInfo;
+export default EventInfo

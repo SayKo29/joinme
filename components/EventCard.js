@@ -1,45 +1,45 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import colors from "@/styles/colors";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React from 'react'
+import colors from '@/styles/colors'
 import {
   formatDateRelative,
   formatDateTime,
-  openGoogleMaps,
-} from "@/lib/utils";
-import Swiper from "react-native-swiper";
-import LottieAnimation from "./LottieAnimation";
-import useEventStore from "@/store/EventStore";
-import { Icon } from "react-native-elements";
+  openGoogleMaps
+} from '@/lib/utils'
+import Swiper from 'react-native-swiper'
+import LottieAnimation from './LottieAnimation'
+import useEventStore from '@/store/EventStore'
+import { Icon } from 'react-native-elements'
 
 const EventCard = ({ event, user, onEventPress }) => {
   if (!event || !user) {
-    return null;
+    return null
   }
   const handlePress = () => {
     // Llama a la función de navegación pasada como prop
-    onEventPress(event, user);
-  };
+    onEventPress(event, user)
+  }
 
   const shortDescription =
     event.description.length > 23
       ? `${event.description.substring(0, 23)}...`
-      : event.description;
+      : event.description
 
-  const { categories, isInitialized, fetchCategories } = useEventStore();
+  const { categories, isInitialized, fetchCategories } = useEventStore()
 
-  let eventCategory = categories.find(
+  const eventCategory = categories.find(
     (category) => category._id === event.category
-  );
+  )
 
   // validate if image exist
 
   React.useEffect(() => {
     if (!isInitialized) {
-      fetchCategories();
+      fetchCategories()
     }
-  }, [isInitialized]);
+  }, [isInitialized])
 
-  const eventOwner = user[event.user];
+  const eventOwner = user[event.user]
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
       <View style={styles.userRowContainer}>
@@ -49,7 +49,7 @@ const EventCard = ({ event, user, onEventPress }) => {
             source={
               eventCategory?.icon
                 ? { uri: eventCategory.icon }
-                : require("../assets/img/google.png")
+                : require('../assets/img/google.png')
             }
           />
           <View style={styles.userTextContent}>
@@ -70,11 +70,11 @@ const EventCard = ({ event, user, onEventPress }) => {
             <View key={index} style={styles.slide}>
               <Image
                 style={styles.eventImage}
-                resizeMode="cover"
+                resizeMode='cover'
                 source={{
                   uri:
                     image ||
-                    "https://s3joinme.s3.eu-north-1.amazonaws.com/eventImages/image-placeholder.jpg",
+                    'https://s3joinme.s3.eu-north-1.amazonaws.com/eventImages/image-placeholder.jpg'
                 }}
               />
             </View>
@@ -88,132 +88,134 @@ const EventCard = ({ event, user, onEventPress }) => {
         </View>
         {/* event startDate and endDate */}
         <View style={styles.date}>
-          <Icon name="date-range" size={24} color={colors.text} />
+          <Icon name='date-range' size={24} color={colors.text} />
           <Text style={styles.linkGoogleMaps}>
             {/* format string to date */}
-            Del {formatDateTime(new Date(event.startDate))} al{" "}
+            Del {formatDateTime(new Date(event.startDate))} al{' '}
             {formatDateTime(new Date(event.endDate))}
           </Text>
         </View>
         {/* event location */}
-        {event.isRemote ? (
-          <View style={styles.linkMaps}>
-            <Icon name="place" size={20} color={colors.text} />
-            <Text style={styles.remote}>Es un evento remoto</Text>
-          </View>
-        ) : (
-          <TouchableOpacity
-            onPress={() => openGoogleMaps(event.location)}
-            style={styles.linkMaps}
-          >
-            <Icon name="place" size={20} color={colors.text} />
-            <Text style={styles.linkGoogleMaps}>{event.location}</Text>
-          </TouchableOpacity>
-        )}
+        {event.isRemote
+          ? (
+            <View style={styles.linkMaps}>
+              <Icon name='place' size={20} color={colors.text} />
+              <Text style={styles.remote}>Es un evento remoto</Text>
+            </View>
+            )
+          : (
+            <TouchableOpacity
+              onPress={() => openGoogleMaps(event.location)}
+              style={styles.linkMaps}
+            >
+              <Icon name='place' size={20} color={colors.text} />
+              <Text style={styles.linkGoogleMaps}>{event.location}</Text>
+            </TouchableOpacity>
+            )}
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
-    padding: 10,
+    padding: 10
   },
   userRowContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   userImage: {
     height: 50,
     width: 50,
-    borderRadius: 25,
+    borderRadius: 25
   },
   userTextContainer: {
-    justifyContent: "center",
-    width: "auto",
+    justifyContent: 'center',
+    width: 'auto'
   },
   userLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    maxWidth: "70%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    maxWidth: '70%'
   },
   userTextContent: {
-    flexDirection: "column",
-    justifyContent: "center",
-    marginHorizontal: 10,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginHorizontal: 10
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: colors.white,
+    fontWeight: 'bold',
+    color: colors.white
   },
   text: {
     color: colors.text,
-    fontSize: 14,
+    fontSize: 14
   },
   eventImageContainer: {
     marginTop: 10,
     height: 200,
-    width: "100%",
+    width: '100%'
   },
   eventImage: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    borderRadius: 10,
+    width: '100%',
+    height: '100%',
+    borderRadius: 10
   },
   slide: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.white,
-    borderRadius: 10,
+    borderRadius: 10
   },
   activeDotStyle: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.accent
   },
   eventDescription: {
-    width: "100%",
+    width: '100%',
     fontSize: 16,
-    color: colors.gray,
+    color: colors.gray
   },
   eventInfoContainer: {
-    marginTop: 10,
+    marginTop: 10
   },
   eventInfoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 5
   },
   linkMaps: {
-    flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center'
   },
   remote: {
     paddingLeft: 5,
     paddingTop: 2,
     color: colors.text,
-    fontSize: 13,
+    fontSize: 13
   },
   linkGoogleMaps: {
     paddingLeft: 5,
     color: colors.text,
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   categoryText: {
     color: colors.accent,
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   date: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 5,
-  },
-});
-export default EventCard;
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 5
+  }
+})
+export default EventCard
