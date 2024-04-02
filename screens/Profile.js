@@ -18,14 +18,14 @@ import { Icon } from 'react-native-elements'
 const Profile = ({ navigation }) => {
     const auth = useAuth()
     const { categories, isInitialized, fetchCategories } = useEventStore()
-    const user = JSON.parse(auth.authData)
+    let user = JSON.parse(JSON.stringify(auth?.authData.user))
+
     const signOut = () => {
         auth.signOut()
     }
     const allCategories = []
     if (categories.length > 0) {
         // format data for autocomplete
-        // eslint-disable-next-line array-callback-return
         categories.map((category) => {
             allCategories.push({
                 id: category._id,

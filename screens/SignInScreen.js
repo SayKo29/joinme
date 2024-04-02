@@ -55,6 +55,7 @@ export const SignInScreen = ({ navigation }) => {
                 }
             )
             const user = await response.json()
+            console.log(user, " jusesfrsefrsfgnsdklg")
             user.token = token
             await AsyncStorage.setItem('@user', JSON.stringify(user))
             const googleResponse = await auth.signInWithGoogle(user)
@@ -68,6 +69,7 @@ export const SignInScreen = ({ navigation }) => {
     async function handleSignInWithGoogle () {
         const user = await AsyncStorage.getItem('@user')
         if (!user) {
+            console.log("no hay userrrrr")
             if (response?.type === 'success') {
                 const { authentication } = response
                 await getUserInfo(authentication.accessToken)

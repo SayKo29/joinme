@@ -27,6 +27,27 @@ const signIn = async (formData: any) => {
     return json;
   }
 };
+const signInWithGoogle = async (formData: any) => {
+  if(typeof formData === 'string') {
+    formData = JSON.parse(formData)
+  }
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: encodeFormData(formData),
+  };
+  const response = await fetch(
+    // "https://calm-lime-armadillo.cyclic.app/api/signInGoogle",
+    "http://192.168.1.160:3000/api/signInGoogle",
+    requestOptions
+  );
+  const json = await response.json();
+  if (json.error) {
+    return json;
+  } else {
+    return json;
+  }
+};
 
 
 const register = async (formData: any) => {
@@ -53,4 +74,5 @@ const register = async (formData: any) => {
 export const authService = {
   signIn,
   register,
+  signInWithGoogle
 };
