@@ -9,10 +9,6 @@ const encodeFormData = (data: any) => {
     .join("&");
 };
 const signIn = async (formData: any) => {
-  // this is a mock of an API call, in a real app
-  // will be need connect with some real API,
-  // send email and password, and if credential is corret
-  //the API will resolve with some token and another datas as the below
   console.log(formData);
   const requestOptions = {
     method: "POST",
@@ -20,8 +16,8 @@ const signIn = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/login",
-    // "http://192.168.1.146:3000/api/login",
+    // "https://calm-lime-armadillo.cyclic.app/api/login",
+    "http://192.168.1.160:3000/api/login",
     requestOptions
   );
   const json = await response.json();
@@ -31,11 +27,9 @@ const signIn = async (formData: any) => {
     return json;
   }
 };
+
+
 const register = async (formData: any) => {
-  // this is a mock of an API call, in a real app
-  // will be need connect with some real API,
-  // send email and password, and if credential is corret
-  //the API will resolve with some token and another datas as the below
   console.log(formData);
   const requestOptions = {
     method: "POST",
@@ -43,8 +37,8 @@ const register = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/register",
-    // "http://192.168.1.199:5000/api/register",
+    // "https://calm-lime-armadillo.cyclic.app/api/register",
+    "http://192.168.1.160:3000/api/register",
     requestOptions
   );
   const json = await response.json();

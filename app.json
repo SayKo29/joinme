@@ -48,6 +48,7 @@
             "package": "com.joinme.app"
         },
         "web": {
+            "bundler" :"metro",
             "favicon": "./assets/img/logo.png"
         },
         "extra": {

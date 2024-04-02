@@ -6,20 +6,20 @@ import { StatusBar } from 'expo-status-bar'
 // import * as ScreenOrientation from "expo-screen-orientation";
 
 export default () => {
-  // Lock screen orientation to portrait
-  // React.useEffect(() => {
-  //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-  // }, []);
+    // Lock screen orientation to portrait
+    // React.useEffect(() => {
+    //     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    // }, []);
 
-  // Create a client
-  const queryClient = new QueryClient()
+    // Create a client
+    const queryClient = new QueryClient()
 
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <StatusBar style='auto' hidden={false} />
-        <Router />
-      </QueryClientProvider>
-    </AuthProvider>
-  )
+    return (
+        <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+                <StatusBar style='auto' hidden={false} />
+                <Router />
+            </QueryClientProvider>
+        </AuthProvider>
+    )
 }

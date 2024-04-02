@@ -37,7 +37,9 @@ const SignUpScreen = ({ navigation }) => {
     if (!user) {
       if (response?.type === 'success') {
         const { authentication } = response
-        await getUserInfo(authentication.accessToken)
+        const userInfo = await getUserInfo(authentication.accessToken)
+        // log in the system
+        console.log(userInfo, 'userGoogle')
       }
     } else {
       setUserInfo(JSON.parse(user))

@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AuthData, authService } from "@/services/authService";
 
+
 type AuthContextData = {
     authData?: AuthData;
     loading: boolean;
@@ -15,7 +16,7 @@ type AuthContextData = {
 //and a empty object
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-const AuthProvider: React.FC = ({ children }) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [authData, setAuthData] = useState<AuthData>();
 
     //the AuthContext start with loading equals true
@@ -32,7 +33,7 @@ const AuthProvider: React.FC = ({ children }) => {
         try {
             //Try get the data from Async Storage
             const authDataSerialized = await AsyncStorage.getItem("@AuthData");
-            if (!JSON.parse(authDataSerialized).token) {
+            if (authDataSerialized && !JSON.parse(authDataSerialized).token) {
                 return;
             }
             if (authDataSerialized) {
@@ -67,6 +68,13 @@ const AuthProvider: React.FC = ({ children }) => {
         return authData;
     };
 
+    const signInWithGoogle = async (googleUser: any) => {
+        console.log(googleUser, 'signigGoogle')
+        // make googleUserObject the same as normal user
+        setAuthData(googleUser)
+        return googleUser
+    }
+
     const register = async (formData: any) => {
         const authData = await authService.register(formData);
 
@@ -81,20 +89,16 @@ const AuthProvider: React.FC = ({ children }) => {
     };
 
     const signOut = async () => {
-        //Remove data from context, so the App can be notified
-        //and send the user to the AuthStack
-        setAuthData(undefined);
-
-        //Remove the data from Async Storage
-        //to NOT be recoverede in next session.
         await AsyncStorage.removeItem("@AuthData");
+        await AsyncStorage.removeItem("@user");
+        setAuthData(undefined);
     };
 
     return (
         //This component will be used to encapsulate the whole App,
         //so all components will have access to the Context
         <AuthContext.Provider
-            value={{ authData, loading, signIn, register, signOut }}
+            value={{ authData, loading, signIn, register, signOut, signInWithGoogle }}
         >
             {children}
         </AuthContext.Provider>

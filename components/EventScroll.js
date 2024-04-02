@@ -11,7 +11,8 @@ const EventScroll = ({ data, users, navigation }) => {
   }
 
   const auth = useAuth()
-  const userLogged = auth?.authData?.user
+  console.log(auth?.authData, "hola")
+  const userLogged = auth?.authData
 
   const events = data.data
     ? data.data.filter((event) => event.user !== userLogged.id)
