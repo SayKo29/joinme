@@ -18,7 +18,7 @@ export default function EventDetailScreen ({ route, navigation }) {
     const handleJoinEvent = () => {
         setLoading(true)
         // add participant to event
-        event.participants.push(auth.authData.id)
+        event.participants.push(auth.authData.user._id)
         mutate(event, {
             onSuccess: () => {
                 // uncached query

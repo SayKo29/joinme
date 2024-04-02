@@ -56,7 +56,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     const signInWithGoogle = async (googleUser: any): Promise<any> => {
         try {
-            console.log("entra signinwithgoogle")
+            // console.log("entra signinwithgoogle")
             const authData = await authService.signInWithGoogle(JSON.parse(JSON.stringify(googleUser)));
             if (authData) {
                 setAuthData(authData);

@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Router } from './routes/Router'
 import { AuthProvider } from '@/contexts/Auth'
 import { StatusBar } from 'expo-status-bar'
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import * as ScreenOrientation from "expo-screen-orientation";
 
 export default () => {
@@ -21,5 +22,6 @@ export default () => {
                 <Router />
             </QueryClientProvider>
         </AuthProvider>
+
     )
 }
