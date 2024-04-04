@@ -67,6 +67,7 @@ const ChatScreen = ({ route, navigation }) => {
 
     const handleConnect = () => {
         // primera conexión
+        setLoading(true)
         console.log('primera conexión')
         // Pedir al socket todos los mensajes de la sala
         socket.current.emit('getAllMessages', chatroomId)
@@ -85,6 +86,7 @@ const ChatScreen = ({ route, navigation }) => {
     const handleAllMessages = async (message) => {
         console.log('recibo mensajes')
         setMessages(message)
+        setLoading(false)
     }
 
     const handleNewMessage = (message) => {

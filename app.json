@@ -4,10 +4,10 @@
         "slug": "joinme",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/img/logoResized.png",
+        "icon": "./assets/img/logo.webp",
         "userInterfaceStyle": "automatic",
         "splash": {
-            "image": "./assets/img/logo.png",
+            "image": "./assets/img/logo.webp",
             "resizeMode": "contain",
             "backgroundColor": "#081c15"
         },
@@ -31,7 +31,9 @@
         "updates": {
             "fallbackToCacheTimeout": 0
         },
-        "assetBundlePatterns": ["**/*"],
+        "assetBundlePatterns": [
+            "**/*"
+        ],
         "ios": {
             "requireFullScreen": true,
             "userInterfaceStyle": "automatic",
@@ -41,15 +43,15 @@
         "android": {
             "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
-                "foregroundImage": "./assets/img/logoResized.png",
+                "foregroundImage": "./assets/img/logo.webp",
                 "backgroundColor": "#161F2A"
             },
             "softwareKeyboardLayoutMode": "pan",
             "package": "com.joinme.app"
         },
         "web": {
-            "bundler" :"metro",
-            "favicon": "./assets/img/logo.png"
+            "bundler": "metro",
+            "favicon": "./assets/img/logo.webp"
         },
         "extra": {
             "eas": {

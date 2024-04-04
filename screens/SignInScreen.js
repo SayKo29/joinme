@@ -97,7 +97,7 @@ export const SignInScreen = ({ navigation }) => {
                         <View style={formAuth.logoContainer}>
                             <Image
                                 style={formAuth.logo}
-                                source={require('../assets/img/logo.png')}
+                                source={require('../assets/img/logo.webp')}
                             />
                         </View>
 
