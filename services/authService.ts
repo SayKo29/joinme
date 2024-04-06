@@ -16,8 +16,8 @@ const signIn = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    // "https://calm-lime-armadillo.cyclic.app/api/login",
-    "http://192.168.1.160:3000/api/login",
+    "https://calm-lime-armadillo.cyclic.app/api/login",
+    // "http://192.168.1.160:3000/api/login",
     requestOptions
   );
   const json = await response.json();
@@ -37,8 +37,8 @@ const signInWithGoogle = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    // "https://calm-lime-armadillo.cyclic.app/api/signInGoogle",
-    "http://192.168.1.160:3000/api/signInGoogle",
+    "https://calm-lime-armadillo.cyclic.app/api/signInGoogle",
+    // "http://192.168.1.160:3000/api/signInGoogle",
     requestOptions
   );
   const json = await response.json();
@@ -58,8 +58,8 @@ const register = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    // "https://calm-lime-armadillo.cyclic.app/api/register",
-    "http://192.168.1.160:3000/api/register",
+    "https://calm-lime-armadillo.cyclic.app/api/register",
+    // "http://192.168.1.160:3000/api/register",
     requestOptions
   );
   const json = await response.json();

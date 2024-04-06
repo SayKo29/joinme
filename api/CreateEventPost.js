@@ -16,13 +16,13 @@ export default async function CreateEventPost (event) {
 
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",
-    const response = await fetch("http://192.168.1.160:3000/api/events", {
-        //   const response = await fetch(
-        // 'https://calm-lime-armadillo.cyclic.app/api/events',
-        // {
-        method: 'POST',
-        body: formData
-    }
+    // const response = await fetch("http://192.168.1.160:3000/api/events", {
+    const response = await fetch(
+        'https://calm-lime-armadillo.cyclic.app/api/events',
+        {
+            method: 'POST',
+            body: formData
+        }
     )
 
     if (!response.ok) {

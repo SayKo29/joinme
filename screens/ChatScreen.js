@@ -9,7 +9,6 @@ import {
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
-    StatusBar,
     StyleSheet,
     Text,
     TextInput,
@@ -111,9 +110,10 @@ const ChatScreen = ({ route, navigation }) => {
     }
 
     useEffect(() => {
+        console.log(userLogged)
         socket.current = io(URL, {
             transports: ['websocket'],
-            query: { userId: userLogged.id }
+            query: { userId: userLogged._id }
         })
 
         const socketInstance = socket.current
@@ -229,8 +229,8 @@ const ChatScreen = ({ route, navigation }) => {
                             keyExtractor={(item) => item?._id}
                             renderItem={({ item }) => {
                                 const isUserMessage =
-                                    item?.user?._id === userLogged.id ||
-                                    item?.user?.id === userLogged.id
+                                    item?.user?._id === userLogged._id ||
+                                    item?.user?._id === userLogged._id
 
                                 return (
                                     <View
