@@ -85,9 +85,9 @@ const Profile = ({ navigation }) => {
                     <View style={profile.interests}>
                         <Text style={profile.title}>Intereses</Text>
                         <View style={profile.tagsContainer}>
-                            {allCategories.map((category) => {
+                            {/* {allCategories.map((category) => {
                                 return <Tag name={category.name} key={category.id} />
-                            })}
+                            })} */}
                         </View>
                     </View>
 
