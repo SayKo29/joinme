@@ -207,7 +207,7 @@ const ChatScreen = ({ route, navigation }) => {
                             source={require('../assets/img/image-placeholder.jpg')}
                         />
                     )}
-                <Text style={styles.headerText}>{event?.name}</Text>
+                <Text style={styles.headerText} ellipsizeMode='tail' numberOfLines={1}>{event?.name}</Text>
             </View>
 
             <KeyboardAvoidingView
@@ -318,6 +318,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: colors.white,
         fontSize: 20,
+        width: '70%',
         fontWeight: 'bold'
     },
 

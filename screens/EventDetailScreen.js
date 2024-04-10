@@ -1,14 +1,14 @@
-import { View, StyleSheet, Text, Image, SafeAreaView } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import getUsersData from '@/api/UsersData'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useAuth } from '@/contexts/Auth'
 import JoinEvent from '@/api/EventJoinParticipant'
 import Swiper from 'react-native-swiper'
+import Animated from 'react-native-reanimated'
 
-export default function EventDetailScreen ({ route, navigation }) {
+export default function EventDetailScreen ({ navigation, route }) {
     const { event, user } = route.params
     const queryClient = useQueryClient()
     const auth = useAuth()
@@ -28,6 +28,9 @@ export default function EventDetailScreen ({ route, navigation }) {
             }
         })
     }
+    const handleBack = () => {
+        navigation.goBack()
+    }
 
     const users = useQuery('USERS', getUsersData)
 
@@ -45,7 +48,8 @@ export default function EventDetailScreen ({ route, navigation }) {
                             {event.images.map((image, index) => {
                                 return (
                                     <View style={styles.slide1} key={index}>
-                                        <Image source={{ uri: image }} style={styles.image} />
+                                        <Animated.Image
+                                            sharedTransitionTag='image' source={{ uri: image }} style={styles.image} />
                                     </View>
                                 )
                             })}
@@ -63,8 +67,8 @@ export default function EventDetailScreen ({ route, navigation }) {
                 )}
 
                 {/* button to join chat event if u are not creator of the event && you are not a participant of the event */}
-                {auth.authData.id !== event &&
-                    !event.participants?.includes(auth.authData.id) && (
+                {auth.authData._id !== event &&
+                    !event.participants?.includes(auth.authData._id) && (
                         <TouchableOpacity
                             style={styles.button}
                             disabled={loading}
@@ -73,6 +77,14 @@ export default function EventDetailScreen ({ route, navigation }) {
                             <Text style={styles.buttonText}>Unirse al chat del evento</Text>
                         </TouchableOpacity>
                     )}
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleBack}
+                >
+                    <Text style={styles.buttonText}>
+                        Volver
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )

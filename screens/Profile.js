@@ -8,7 +8,8 @@ import {
     StyleSheet,
     Image,
     Platform,
-    StatusBar
+    StatusBar,
+    TextInput
 } from 'react-native'
 import { useAuth } from '@/contexts/Auth'
 import useEventStore from '@/store/EventStore'
@@ -19,6 +20,8 @@ const Profile = ({ navigation }) => {
     const auth = useAuth()
     const { categories, isInitialized, fetchCategories } = useEventStore()
     let user = JSON.parse(JSON.stringify(auth?.authData.user))
+
+    const [search, setSearch] = React.useState('')
 
     const signOut = () => {
         auth.signOut()
@@ -79,7 +82,7 @@ const Profile = ({ navigation }) => {
                     <View style={profile.info}>
                         <Text style={profile.fullName}>{user.name}</Text>
                         <Text style={profile.location}>
-                            {user.location ? user.location : 'Vilassar de Mar, Spain'}
+                            {/* {user.location ? user.location : 'Vilassar de Mar, Spain'} */}
                         </Text>
                     </View>
                     <View style={profile.interests}>
@@ -88,9 +91,10 @@ const Profile = ({ navigation }) => {
                             {/* {allCategories.map((category) => {
                                 return <Tag name={category.name} key={category.id} />
                             })} */}
+
+
                         </View>
                     </View>
-
                     <TouchableOpacity style={profile.signoutButton} onPress={signOut}>
                         <Text style={profile.signoutText}>Cerrar Sesión</Text>
                     </TouchableOpacity>

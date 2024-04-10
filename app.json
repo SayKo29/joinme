@@ -2,6 +2,7 @@
     "expo": {
         "name": "joinme",
         "slug": "joinme",
+        "package": "com.joinme.app",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/img/logo.webp",
@@ -38,13 +39,21 @@
             "requireFullScreen": true,
             "userInterfaceStyle": "automatic",
             "supportsTablet": true,
-            "bundleIdentifier": "com.joinme.app"
+            "bundleIdentifier": "com.joinme.app",
+            "config": {
+                "googleMapsApiKey": "AIzaSyDbss3iJXZwYmnAjFYSoXuiZaCoI9385ko"
+            }
         },
         "android": {
             "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/img/logo.webp",
                 "backgroundColor": "#161F2A"
+            },
+            "config": {
+                "googleMaps": {
+                    "apiKey": "AIzaSyBEYOLhMzFh-Dy0zRDnhrk2WT1zfWKb9wI"
+                }
             },
             "softwareKeyboardLayoutMode": "pan",
             "package": "com.joinme.app"
