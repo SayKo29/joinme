@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native'
 import React from 'react'
 import colors from '@/styles/colors'
 import {
@@ -10,8 +10,10 @@ import Swiper from 'react-native-swiper'
 import LottieAnimation from './LottieAnimation'
 import useEventStore from '@/store/EventStore'
 import { Icon } from 'react-native-elements'
+import Animated, { FadeInDown } from 'react-native-reanimated'
+import useCategoryStore from 'store/CategoryStore'
 
-const EventCard = ({ event, user, onEventPress }) => {
+const EventCard = ({ event, user, onEventPress, index }) => {
     if (!event || !user) {
         return null
     }
@@ -25,7 +27,7 @@ const EventCard = ({ event, user, onEventPress }) => {
             ? `${event.description.substring(0, 23)}...`
             : event.description
 
-    const { categories, isInitialized, fetchCategories } = useEventStore()
+    const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
     const eventCategory = categories.find(
         (category) => category._id === event.category
@@ -41,79 +43,72 @@ const EventCard = ({ event, user, onEventPress }) => {
 
     const eventOwner = user[event.user]
     return (
-        <TouchableOpacity style={styles.container} onPress={handlePress}>
-            <View style={styles.userRowContainer}>
-                <View style={styles.userLeft}>
-                    <Image
-                        style={styles.userImage}
-                        source={
-                            eventCategory?.icon
-                                ? { uri: eventCategory.icon }
-                                : require('../assets/img/google.png')
-                        }
-                    />
-                    <View style={styles.userTextContent}>
-                        <Text style={styles.title}>{event.name}</Text>
-                        <Text style={styles.eventDescription}>{shortDescription}</Text>
+        <Animated.View entering={FadeInDown.delay(200 * index)}>
+            <Pressable style={styles.container} onPress={handlePress}>
+                <View style={styles.userRowContainer}>
+                    <View style={styles.userLeft}>
+                        <Image
+                            style={styles.userImage}
+                            source={
+                                eventCategory?.icon
+                                    ? { uri: eventCategory.icon }
+                                    : require('../assets/img/google.png')
+                            }
+                        />
+                        <View style={styles.userTextContent}>
+                            <Text style={styles.title}>{event.name}</Text>
+                            <Text style={styles.eventDescription}>{shortDescription}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.userTextContainer}>
+                        <Text style={styles.text}>{formatDateRelative(event.createdAt)}</Text>
                     </View>
                 </View>
-                <View style={styles.userTextContainer}>
-                    <Text style={styles.text}>{formatDateRelative(event.createdAt)}</Text>
+                <View style={styles.eventImageContainer}>
+                    <Animated.Image
+                        sharedTransitionTag={event.images[0]}
+                        style={styles.eventImage}
+                        resizeMode='cover'
+                        source={{
+                            uri:
+                                event.images[0]
+                        }}
+                    />
                 </View>
-            </View>
-            <View style={styles.eventImageContainer}>
-                <Swiper
-                    activeDotStyle={styles.activeDotStyle}
-                    loadMinimalLoader={<LottieAnimation />}
-                >
-                    {event.images.map((image, index) => (
-                        <View key={index} style={styles.slide}>
-                            <Image
-                                style={styles.eventImage}
-                                resizeMode='cover'
-                                source={{
-                                    uri:
-                                        image ||
-                                        'https://s3joinme.s3.eu-north-1.amazonaws.com/eventImages/image-placeholder.jpg'
-                                }}
-                            />
-                        </View>
-                    ))}
-                </Swiper>
-            </View>
-            <View style={styles.eventInfoContainer}>
-                {/* event category */}
-                <View style={styles.eventInfoRow}>
-                    <Text style={styles.categoryText}>{eventCategory?.name}</Text>
+                <View style={styles.eventInfoContainer}>
+                    {/* event category */}
+                    <View style={styles.eventInfoRow}>
+                        <Text style={styles.categoryText}>{eventCategory?.name}</Text>
+                    </View>
+                    {/* event startDate and endDate */}
+                    <View style={styles.date}>
+                        <Icon name='date-range' size={24} color={colors.text} />
+                        <Text style={styles.linkGoogleMaps}>
+                            {/* format string to date */}
+                            Del {formatDateTime(new Date(event.startDate))} al{' '}
+                            {formatDateTime(new Date(event.endDate))}
+                        </Text>
+                    </View>
+                    {/* event location */}
+                    {event.isRemote
+                        ? (
+                            <View style={styles.linkMaps}>
+                                <Icon name='place' size={20} color={colors.text} />
+                                <Text style={styles.remote}>Es un evento remoto</Text>
+                            </View>
+                        )
+                        : (
+                            <TouchableOpacity
+                                onPress={() => openGoogleMaps(event.location)}
+                                style={styles.linkMaps}
+                            >
+                                <Icon name='place' size={20} color={colors.text} />
+                                <Text style={styles.linkGoogleMaps}>{event.location}</Text>
+                            </TouchableOpacity>
+                        )}
                 </View>
-                {/* event startDate and endDate */}
-                <View style={styles.date}>
-                    <Icon name='date-range' size={24} color={colors.text} />
-                    <Text style={styles.linkGoogleMaps}>
-                        {/* format string to date */}
-                        Del {formatDateTime(new Date(event.startDate))} al{' '}
-                        {formatDateTime(new Date(event.endDate))}
-                    </Text>
-                </View>
-                {/* event location */}
-                {event.isRemote
-                    ? (
-                        <View style={styles.linkMaps}>
-                            <Icon name='place' size={20} color={colors.text} />
-                            <Text style={styles.remote}>Es un evento remoto</Text>
-                        </View>
-                    )
-                    : (
-                        <TouchableOpacity
-                            onPress={() => openGoogleMaps(event.location)}
-                            style={styles.linkMaps}
-                        >
-                            <Icon name='place' size={20} color={colors.text} />
-                            <Text style={styles.linkGoogleMaps}>{event.location}</Text>
-                        </TouchableOpacity>
-                    )}
-            </View>
-        </TouchableOpacity>
+            </Pressable>
+        </Animated.View>
     )
 }
 

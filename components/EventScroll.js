@@ -4,21 +4,27 @@ import colors from '@/styles/colors'
 import EventCard from './EventCard'
 import { FlashList } from '@shopify/flash-list'
 import { useAuth } from '@/contexts/Auth'
+import { useNavigation } from '@react-navigation/native'
+import useEventStore from 'store/EventStore'
+import useUsersStore from 'store/UsersStore'
 
-const EventScroll = ({ data, users, navigation }) => {
+const EventScroll = () => {
+    const navigation = useNavigation();
+
     const handleEventPress = (event, user) => {
         navigation.navigate('EventDetailScreen', { event, user })
     }
-
+    const data = useEventStore((state) => state.events)
+    const users = useUsersStore((state) => state.users)
     const auth = useAuth()
     //   console.log(auth?.authData, "hola")
     const userLogged = auth?.authData.user
 
-    const events = data.data
-        ? data.data.filter((event) => event.user !== userLogged._id)
+    const events = data
+        ? data.filter((event) => event.user !== userLogged._id)
         : []
 
-    const user = users.data
+    const user = users
     if (events.length === 0) {
         return (
             <View style={styles.center}>
@@ -30,8 +36,8 @@ const EventScroll = ({ data, users, navigation }) => {
     return (
         <FlashList
             data={events}
-            renderItem={({ item }) => (
-                <EventCard event={item} user={user} onEventPress={handleEventPress} />
+            renderItem={({ item, index }) => (
+                <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
             )}
             estimatedItemSize={20}
         />

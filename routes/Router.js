@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/Auth'
 import { Loading } from '@/components/Loading'
 import { useColorScheme } from 'react-native'
 import colors from '@/styles/colors'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export const Router = () => {
     const { authData, loading } = useAuth()
@@ -33,8 +34,10 @@ export const Router = () => {
         return <Loading />
     }
     return (
-        <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
-            {authData ? <AppStack /> : <AuthStack />}
-        </NavigationContainer>
+        <SafeAreaProvider>
+            <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
+                {authData ? <AppStack /> : <AuthStack />}
+            </NavigationContainer>
+        </SafeAreaProvider>
     )
 }

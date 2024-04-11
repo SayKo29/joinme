@@ -20,6 +20,7 @@ import LottieAnimation from '@/components/LottieAnimation'
 import { FlashList } from '@shopify/flash-list'
 import getUserParticipants from '@/api/GetUserParticipants'
 import { useQuery } from 'react-query'
+import Animated from 'react-native-reanimated'
 getUserParticipants
 
 
@@ -197,16 +198,7 @@ const ChatScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={styles.backButton} onPress={finishChatRoom}>
                     <Icon name='chevron-left' size={40} color={colors.white} />
                 </TouchableOpacity>
-                {event?.images
-                    ? (
-                        <Image style={styles.iconImage} source={{ uri: event.images[0] }} />
-                    )
-                    : (
-                        <Image
-                            style={styles.iconImage}
-                            source={require('../assets/img/image-placeholder.jpg')}
-                        />
-                    )}
+                <Animated.Image style={styles.iconImage} sharedTransitionTag={event.images[0]} source={{ uri: event.images[0] }} />
                 <Text style={styles.headerText} ellipsizeMode='tail' numberOfLines={1}>{event?.name}</Text>
             </View>
 

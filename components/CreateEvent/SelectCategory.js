@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import CategoryCard from './CategoryCard'
 import colors from '@/styles/colors'
 import LottieAnimation from '@/components/LottieAnimation'
-import useEventStore from '@/store/EventStore'
 import formStyles from 'styles/formStyles'
+import useCategoryStore from 'store/CategoryStore'
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
-    const { categories, isInitialized, fetchCategories } = useEventStore()
+    const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
     const [filteredCategories, setFilteredCategories] = useState([])
 

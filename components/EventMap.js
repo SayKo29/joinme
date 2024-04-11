@@ -11,8 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getGeolocation } from 'services/geolocation'
 import colors from '@/styles/colors'
 import mapStyle from '@/styles/mapStyle'
+import EventCard from './EventCard'
 
-const EventMap = ({ data }) => {
+const EventMap = ({ data, navigation }) => {
     const [location, setLocation] = useState(null)
     const [markerPressed, setMarkerPressed] = useState(false)
     const sheetRef = useRef(null)
@@ -27,12 +28,13 @@ const EventMap = ({ data }) => {
         return data.data.map((event, index) => (
             <Marker
                 key={index}
-                title={event?.title}
+                title={event?.name}
                 description={event.description}
                 coordinate={{
                     latitude: parseFloat(event?.coords?.lat),
                     longitude: parseFloat(event?.coords?.lng)
                 }}
+                pinColor={colors.primary}
                 onPress={() => handleMarkerPressed(event)}
             />
         ))
@@ -48,8 +50,8 @@ const EventMap = ({ data }) => {
             >
                 <Image
                     source={
-                        userLoggedIn?.avatar
-                            ? { uri: userLoggedIn?.avatar }
+                        userLoggedIn?.picture
+                            ? { uri: userLoggedIn?.picture }
                             : require('../assets/avatar.png')
                     }
                     style={styles.avatar}
@@ -62,6 +64,10 @@ const EventMap = ({ data }) => {
             userLoggedIn?.avatar
         ]
     )
+
+    const goToEventDetail = (event, user) => {
+        navigation.navigate('EventDetailScreen', { event, user })
+    }
 
     useEffect(() => {
         const loadInitialRegion = async () => {
@@ -125,11 +131,11 @@ const EventMap = ({ data }) => {
                 {mapLoaded && (
                     <MapView
                         ref={mapRef}
+                        provider='google'
                         clusterColor={colors.primary}
                         customMapStyle={
-                            Appearance.getColorScheme() === 'dark' ? mapStyle : null
+                            mapStyle
                         }
-                        onPress={() => (markerPressed ? setMarkerPressed(false) : null)}
                         style={styles.map}
                         mapType='standard'
                         initialRegion={initialRegion}
@@ -150,7 +156,7 @@ const EventMap = ({ data }) => {
                         enablePanDownToClose
                     >
                         <BottomSheetView style={styles.slider}>
-                            {/* <EventDetail markerPressed={markerPressed} /> */}
+                            <EventCard event={markerPressed} user={userLoggedIn} onEventPress={goToEventDetail} />
                         </BottomSheetView>
                     </BottomSheet>
                 )}

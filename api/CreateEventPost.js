@@ -16,7 +16,9 @@ export default async function CreateEventPost (event) {
     formData.append('chatroom', event.chatroom)
     formData.append('isRemote', !!event.isRemote)
     // poner todo encima de images que peta
-    formData.append('images', event.images ? event.images : null)
+    if (event.images && event.images.length > 0) {
+        formData.append('images', event.images);
+    }
 
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",

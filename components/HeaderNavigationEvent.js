@@ -1,42 +1,46 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import colors from '@/styles/colors'
+import { useNavigation } from '@react-navigation/native'
 
-const HeaderNavigationEvent = ({ selected, setSelected }) => {
+const HeaderNavigationEvent = () => {
+    const navigation = useNavigation()
+    const [selected, setSelected] = useState('EventMap')
     const handleSelect = (value) => {
+        navigation.navigate(value)
         setSelected(value)
     }
 
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                onPress={() => handleSelect('map')}
-                style={[selected === 'map' ? styles.selected : styles.unselected]}
+                onPress={() => handleSelect('EventMap')}
+                style={[selected === 'EventMap' ? styles.selected : styles.unselected]}
             >
                 <Text
-                    style={[selected === 'map' ? styles.selected : styles.unselected]}
+                    style={[selected === 'EventMap' ? styles.selected : styles.unselected]}
                 >
                     Mapa
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => handleSelect('new')}
-                style={[selected === 'new' ? styles.selected : styles.unselected]}
+                onPress={() => handleSelect('EventScroll')}
+                style={[selected === 'EventScroll' ? styles.selected : styles.unselected]}
             >
                 <Text
-                    style={[selected === 'new' ? styles.selected : styles.unselected]}
+                    style={[selected === 'EventScroll' ? styles.selected : styles.unselected]}
                 >
                     Descubrir Nuevos
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => handleSelect('myevents')}
-                testID='myevents-button'
-                style={[selected === 'myevents' ? styles.selected : styles.unselected]}
+                onPress={() => handleSelect('MyEvents')}
+                testID='MyEvents-button'
+                style={[selected === 'MyEvents' ? styles.selected : styles.unselected]}
             >
                 <Text
                     style={[
-                        selected === 'myevents' ? styles.selected : styles.unselected
+                        selected === 'MyEvents' ? styles.selected : styles.unselected
                     ]}
                 >
                     Mis eventos
@@ -51,7 +55,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
-        padding: 10
+        padding: 10,
+        backgroundColor: colors.background
     },
     selected: {
         fontWeight: 'bold',

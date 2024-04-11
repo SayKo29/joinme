@@ -1,13 +1,16 @@
-import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView, Image } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native'
 import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import getUsersData from '@/api/UsersData'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useAuth } from '@/contexts/Auth'
 import JoinEvent from '@/api/EventJoinParticipant'
-import Swiper from 'react-native-swiper'
+import Animated from 'react-native-reanimated'
+import Headerback from 'components/HeaderBack'
+import { useNavigation } from '@react-navigation/native'
 
-export default function EventDetailScreen ({ navigation, route }) {
+export default function EventDetailScreen ({ route }) {
+    const navigation = useNavigation();
     const { event, user } = route.params
     const queryClient = useQueryClient()
     const auth = useAuth()
@@ -16,82 +19,62 @@ export default function EventDetailScreen ({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const handleJoinEvent = () => {
         setLoading(true)
-        // add participant to event
-        event.participants.push(auth.authData.user._id)
-        mutate(event, {
+        mutate({ event: event, participant: userLogged.user }, {
             onSuccess: () => {
-                // uncached query
+                // uncached query 
                 setLoading(false)
                 queryClient.invalidateQueries('CHATROOMS')
+                queryClient.invalidateQueries('EVENTS')
                 navigation.navigate('Chats')
             }
         })
     }
-    const handleBack = () => {
-        navigation.goBack()
-    }
-
+    let userHasJoinedEvent = event.participants?.includes(userLogged.user._id)
     const users = useQuery('USERS', getUsersData)
+    const { width } = useWindowDimensions()
 
     const eventCreator = users?.data[event?.user]
     return (
-        <SafeAreaView style={styles.cardContainer}>
-            <View style={styles.container}>
-                {/* /* show gallery images if have it* */}
-                {event.images.length > 0 && (
-                    <View style={styles.galleryContainer}>
-                        <Swiper
-                            style={styles.wrapper}
-                            activeDotStyle={styles.activeDotStyle}
-                        >
-                            {event.images.map((image, index) => {
-                                return (
-                                    <View style={styles.slide1} key={index}>
-                                        <Image
-                                            source={{ uri: image }} style={styles.image} />
-                                    </View>
-                                )
-                            })}
-                        </Swiper>
-                    </View>
-                )}
+        <View style={styles.container}>
+            <Headerback />
+            <Animated.Image
+                sharedTransitionTag={event.images[0]}
+                source={{ uri: event.images[0] }} style={{ width: width, height: width }} />
 
-                <Text style={styles.title}>{event.name}</Text>
-                <Text style={styles.description}>{event.description}</Text>
-                {/* if eventCreator has name */}
-                {eventCreator && (
-                    <Text style={styles.description}>
-                        Evento creado por {eventCreator?.name}
-                    </Text>
-                )}
+            <Text style={styles.title}>{event.name}</Text>
+            <Text style={styles.description}>{event.description}</Text>
+            {/* if eventCreator has name */}
+            {eventCreator && (
+                <Text style={styles.description}>
+                    Evento creado por {eventCreator?.name}
+                </Text>
+            )}
 
-                {/* button to join chat event if u are not creator of the event && you are not a participant of the event */}
-                {auth.authData._id !== event &&
-                    !event.participants?.includes(auth.authData._id) && (
-                        <TouchableOpacity
-                            style={styles.button}
-                            disabled={loading}
-                            onPress={handleJoinEvent}
-                        >
-                            <Text style={styles.buttonText}>Unirse al chat del evento</Text>
-                        </TouchableOpacity>
-                    )}
-            </View>
-        </SafeAreaView>
+            {/* button to join chat event if u are not creator of the event && you are not a participant of the event */}
+            {userLogged.user._id !== event.user &&
+                !userHasJoinedEvent && (
+                    <TouchableOpacity
+                        style={styles.button}
+                        disabled={loading}
+                        onPress={handleJoinEvent}
+                    >
+                        <Text style={styles.buttonText}>Unirse al chat del evento</Text>
+                    </TouchableOpacity>
+                )}
+            {
+                userHasJoinedEvent && (
+                    <Text>Ya te has unido al evento</Text>
+                )
+            }
+        </View>
     )
 }
 
 // create our styling code:
 const styles = StyleSheet.create({
-    cardContainer: {
-        backgroundColor: colors.background,
-        width: '100%',
-        height: '100%'
-    },
     container: {
-        backgroundColor: colors.background,
-        width: '100%',
-        height: '100%',
+        backgroundColor: 'white',
+        flex: 1,
         padding: 10
     },
     galleryContainer: {

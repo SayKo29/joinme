@@ -4,11 +4,12 @@ import { FlashList } from '@shopify/flash-list'
 import EventCard from './EventCard'
 import { StyleSheet, Text, View } from 'react-native'
 import colors from '@/styles/colors'
+import useEventStore from 'store/EventStore'
 
-const ForYouEvent = ({ data, users, navigation }) => {
+const MyEvents = ({ navigation }) => {
     const auth = useAuth()
     const user = auth?.authData?.user
-    console.log(user)
+    const data = useEventStore((state) => state.events)
     const [myEvents, setMyEvents] = React.useState([])
 
     const handleEventPress = (event, user) => {
@@ -17,13 +18,13 @@ const ForYouEvent = ({ data, users, navigation }) => {
     }
 
     React.useEffect(() => {
-        if (data.data) {
-            const myEvents = data.data.filter((event) =>
+        if (data) {
+            const myEvents = data.filter((event) =>
                 event.user.includes(user._id)
             )
             setMyEvents(myEvents)
         }
-    }, [data.data])
+    }, [data])
 
     if (myEvents.length === 0) {
         return (
@@ -36,8 +37,8 @@ const ForYouEvent = ({ data, users, navigation }) => {
     return (
         <FlashList
             data={myEvents}
-            renderItem={({ item }) => (
-                <EventCard event={item} user={user} onEventPress={handleEventPress} />
+            renderItem={({ item, index }) => (
+                <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
             )}
             estimatedItemSize={20}
         />
@@ -63,4 +64,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ForYouEvent
+export default MyEvents

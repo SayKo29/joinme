@@ -17,6 +17,7 @@ import { useAuth } from '@/contexts/Auth'
 import { useQuery } from 'react-query'
 import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
+import CustomBottomTab from 'components/ui/CustomBottomTab'
 
 const CreateEvent = ({ navigation }) => {
     const eventsQuery = useQuery({
@@ -105,7 +106,7 @@ const CreateEvent = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Crear evento</Text>
             </View>
@@ -168,7 +169,8 @@ const CreateEvent = ({ navigation }) => {
                     </ProgressStep>
                 </ProgressSteps>
             </View>
-        </SafeAreaView>
+            <CustomBottomTab />
+        </View>
     )
 }
 

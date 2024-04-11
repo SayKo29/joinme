@@ -12,13 +12,14 @@ import {
     TextInput
 } from 'react-native'
 import { useAuth } from '@/contexts/Auth'
-import useEventStore from '@/store/EventStore'
-import Tag from '@/components/tag'
+import Tag from '@/components/ui/tag'
 import { Icon } from 'react-native-elements'
+import useCategoryStore from 'store/CategoryStore'
+import CustomBottomTab from 'components/ui/CustomBottomTab'
 
 const Profile = ({ navigation }) => {
     const auth = useAuth()
-    const { categories, isInitialized, fetchCategories } = useEventStore()
+    const { categories, isInitialized, fetchCategories } = useCategoryStore()
     let user = JSON.parse(JSON.stringify(auth?.authData.user))
 
     const [search, setSearch] = React.useState('')
@@ -44,76 +45,62 @@ const Profile = ({ navigation }) => {
         }
     }, [isInitialized])
 
-    if (user) {
-        return (
-            <SafeAreaView style={profile.container}>
-                <View style={profile.content}>
-                    <View style={profile.profileBackgroundContent}>
+    return (
+        <View style={profile.container}>
+            <View style={profile.content}>
+                <View style={profile.profileBackgroundContent}>
+                    <Image
+                        style={profile.imageBackground}
+                        source={
+                            user.avatar
+                                ? { uri: user.avatar } : user.picture ? { uri: user.picture }
+                                    : require('@/assets/avatar.png')
+                        }
+                        resizeMode='cover'
+                    />
+                    <View style={profile.filterBackgroundColor} />
+                    <View style={profile.profileContainer}>
                         <Image
-                            style={profile.imageBackground}
+                            style={profile.profileImage}
                             source={
                                 user.avatar
                                     ? { uri: user.avatar } : user.picture ? { uri: user.picture }
                                         : require('@/assets/avatar.png')
                             }
-                            resizeMode='cover'
                         />
-                        <View style={profile.filterBackgroundColor} />
-                        <View style={profile.profileContainer}>
-                            <Image
-                                style={profile.profileImage}
-                                source={
-                                    user.avatar
-                                        ? { uri: user.avatar } : user.picture ? { uri: user.picture }
-                                            : require('@/assets/avatar.png')
-                                }
+                        <View style={profile.iconImageView}>
+                            <Icon
+                                name='pencil'
+                                type='font-awesome'
+                                color={colors.white}
+                                size={18}
+                                style={profile.iconImage}
                             />
-                            <View style={profile.iconImageView}>
-                                <Icon
-                                    name='pencil'
-                                    type='font-awesome'
-                                    color={colors.white}
-                                    size={18}
-                                    style={profile.iconImage}
-                                />
-                            </View>
                         </View>
                     </View>
-                    <View style={profile.info}>
-                        <Text style={profile.fullName}>{user.name}</Text>
-                        <Text style={profile.location}>
-                            {/* {user.location ? user.location : 'Vilassar de Mar, Spain'} */}
-                        </Text>
-                    </View>
-                    <View style={profile.interests}>
-                        <Text style={profile.title}>Intereses</Text>
-                        <View style={profile.tagsContainer}>
-                            {/* {allCategories.map((category) => {
+                </View>
+                <View style={profile.info}>
+                    <Text style={profile.fullName}>{user.name}</Text>
+                    <Text style={profile.location}>
+                        {/* {user.location ? user.location : 'Vilassar de Mar, Spain'} */}
+                    </Text>
+                </View>
+                <View style={profile.interests}>
+                    <Text style={profile.title}>Intereses</Text>
+                    <View style={profile.tagsContainer}>
+                        {/* {allCategories.map((category) => {
                                 return <Tag name={category.name} key={category.id} />
                             })} */}
 
 
-                        </View>
                     </View>
-                    <TouchableOpacity style={profile.signoutButton} onPress={signOut}>
-                        <Text style={profile.signoutText}>Cerrar Sesión</Text>
-                    </TouchableOpacity>
                 </View>
-            </SafeAreaView>
-        )
-    }
-    return (
-        // if no state, show signin
-        <SafeAreaView className='h-full w-full'>
-            <View className='w-full'>
-                <TouchableOpacity
-                    className='self-end my-2 mx-2 bg-secondary rounded-lg px-6 py-2'
-                    onPress={signOut}
-                >
-                    <Text className='text-xl w-auto text-white '>Iniciar Sesión</Text>
+                <TouchableOpacity style={profile.signoutButton} onPress={signOut}>
+                    <Text style={profile.signoutText}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+            <CustomBottomTab />
+        </View>
     )
 }
 

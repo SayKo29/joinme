@@ -14,8 +14,12 @@ import { useQuery } from 'react-query'
 import LottieAnimation from '@/components/LottieAnimation'
 import colors from '@/styles/colors'
 import { FlashList } from '@shopify/flash-list'
+import Animated from 'react-native-reanimated'
+import { useNavigation } from '@react-navigation/native'
+import CustomBottomTab from 'components/ui/CustomBottomTab'
 
-const ChatRooms = ({ navigation }) => {
+const ChatRooms = () => {
+    const navigation = useNavigation()
     const auth = useAuth()
     // console.log(auth.authData.user._id)
     const { isLoading, isError, data } = useQuery('CHATROOMS', () =>
@@ -53,7 +57,7 @@ const ChatRooms = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.title}>
                 <Text style={styles.titleText}>Chats de eventos</Text>
             </View>
@@ -75,21 +79,13 @@ const ChatRooms = ({ navigation }) => {
                         ]}
                         onPress={() => handleSelectChatroom(item)}
                     >
-                        {item.images.length > 0
-                            ? (
-                                <Image style={styles.image} source={{ uri: item.images[0] }} />
-                            )
-                            : (
-                                <Image
-                                    style={styles.image}
-                                    source={require('../assets/img/logo.png')}
-                                />
-                            )}
+
+                        <Animated.Image sharedTransitionTag={item.images[0]} style={styles.image} source={{ uri: item.images[0] }} />
                         <View style={styles.cardContent}>
                             <Text style={styles.chatroom}>{item.name}</Text>
                             <Text style={styles.participants}>
-                                {item.participants.length}{' '}
-                                {item.participants.length === 1
+                                {item.participants.length + 1}{' '}
+                                {item.participants.length + 1 === 1
                                     ? 'participante'
                                     : 'participantes'}
                             </Text>
@@ -100,7 +96,8 @@ const ChatRooms = ({ navigation }) => {
                     </TouchableOpacity>
                 )}
             />
-        </SafeAreaView>
+            <CustomBottomTab />
+        </View>
     )
 }
 

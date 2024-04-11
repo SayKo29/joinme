@@ -7,22 +7,11 @@ import Profile from '@/screens/Profile'
 import Create from '@/screens/CreateEvent'
 import ChatScreen from '@/screens/Chatroom'
 import colors from '@/styles/colors'
-import { useFocusEffect } from '@react-navigation/native'
-import {
-    useSharedValue,
-    withTiming
-} from 'react-native-reanimated'
+
 
 export const BottomTab = () => {
     const Tab = createBottomTabNavigator()
-    const transitionValue = useSharedValue(0)
 
-    useFocusEffect(() => {
-        transitionValue.value = withTiming(1, { duration: 500 })
-        return () => {
-            transitionValue.value = withTiming(0, { duration: 250 })
-        }
-    })
 
     const tabIconStyle = (focused, color) => {
         return focused ? colors.white : color
