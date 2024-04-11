@@ -4,7 +4,11 @@ export default async function CreateEventPost (event) {
     formData.append('name', event.name)
     formData.append('description', event.description)
     formData.append('category', event.category)
-    formData.append('location', event.location)
+    formData.append('location', event.location?.address)
+    if (event.location?.position) {
+        formData.append('coords[lat]', event.location.position.lat.toString());
+        formData.append('coords[lng]', event.location.position.lng.toString());
+    }
     formData.append('startDate', event.startDate)
     formData.append('endDate', event.endDate)
     formData.append('user', event.user)
@@ -17,6 +21,7 @@ export default async function CreateEventPost (event) {
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",
     // const response = await fetch("http://192.168.1.160:3000/api/events", {
+    console.log(formData, "formdata")
     const response = await fetch(
         'https://calm-lime-armadillo.cyclic.app/api/events',
         {
