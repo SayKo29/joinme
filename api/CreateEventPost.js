@@ -16,12 +16,11 @@ export default async function CreateEventPost (event) {
     formData.append('chatroom', event.chatroom)
     formData.append('isRemote', !!event.isRemote)
     // poner todo encima de images que peta
-    formData.append('images', event.images)
+    formData.append('images', event.images ? event.images : null)
 
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",
     // const response = await fetch("http://192.168.1.160:3000/api/events", {
-    console.log(formData, "formdata")
     const response = await fetch(
         'https://calm-lime-armadillo.cyclic.app/api/events',
         {

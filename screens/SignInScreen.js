@@ -55,7 +55,6 @@ export const SignInScreen = ({ navigation }) => {
                 }
             )
             const user = await response.json()
-            console.log(user, " jusesfrsefrsfgnsdklg")
             user.token = token
             await AsyncStorage.setItem('@user', JSON.stringify(user))
             const googleResponse = await auth.signInWithGoogle(user)

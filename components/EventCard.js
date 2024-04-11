@@ -10,7 +10,6 @@ import Swiper from 'react-native-swiper'
 import LottieAnimation from './LottieAnimation'
 import useEventStore from '@/store/EventStore'
 import { Icon } from 'react-native-elements'
-import Animated from 'react-native-reanimated'
 
 const EventCard = ({ event, user, onEventPress }) => {
     if (!event || !user) {
@@ -45,9 +44,8 @@ const EventCard = ({ event, user, onEventPress }) => {
         <TouchableOpacity style={styles.container} onPress={handlePress}>
             <View style={styles.userRowContainer}>
                 <View style={styles.userLeft}>
-                    <Animated.Image
+                    <Image
                         style={styles.userImage}
-                        sharedTransitionTag='image'
                         source={
                             eventCategory?.icon
                                 ? { uri: eventCategory.icon }

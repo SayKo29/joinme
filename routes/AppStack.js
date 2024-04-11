@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { BottomTab } from '@/components/BottomTab'
 import { screens } from '@/navigation/Screens'
-import { NavigationContext } from '@react-navigation/native';
 
-const Stack = createNativeStackNavigator()
+const Stack = createStackNavigator()
 
 export const AppStack = () => {
     return (

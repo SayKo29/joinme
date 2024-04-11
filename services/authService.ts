@@ -51,7 +51,6 @@ const signInWithGoogle = async (formData: any) => {
 
 
 const register = async (formData: any) => {
-  console.log(formData);
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

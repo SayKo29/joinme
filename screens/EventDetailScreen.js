@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView, Image } from 'react-native'
 import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import getUsersData from '@/api/UsersData'
@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useAuth } from '@/contexts/Auth'
 import JoinEvent from '@/api/EventJoinParticipant'
 import Swiper from 'react-native-swiper'
-import Animated from 'react-native-reanimated'
 
 export default function EventDetailScreen ({ navigation, route }) {
     const { event, user } = route.params
@@ -48,8 +47,8 @@ export default function EventDetailScreen ({ navigation, route }) {
                             {event.images.map((image, index) => {
                                 return (
                                     <View style={styles.slide1} key={index}>
-                                        <Animated.Image
-                                            sharedTransitionTag='image' source={{ uri: image }} style={styles.image} />
+                                        <Image
+                                            source={{ uri: image }} style={styles.image} />
                                     </View>
                                 )
                             })}
@@ -77,14 +76,6 @@ export default function EventDetailScreen ({ navigation, route }) {
                             <Text style={styles.buttonText}>Unirse al chat del evento</Text>
                         </TouchableOpacity>
                     )}
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleBack}
-                >
-                    <Text style={styles.buttonText}>
-                        Volver
-                    </Text>
-                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
