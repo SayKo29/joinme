@@ -73,7 +73,7 @@ export default function EventDetailScreen ({ route }) {
 // create our styling code:
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
+        backgroundColor: colors.background,
         flex: 1,
         padding: 10
     },
