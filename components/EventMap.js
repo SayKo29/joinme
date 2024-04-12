@@ -167,8 +167,7 @@ const EventMap = ({ data, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'transparent'
+        flex: 1,
     },
     mapContainer: {
         backgroundColor: 'transparent',

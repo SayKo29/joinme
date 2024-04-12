@@ -2,11 +2,15 @@ import React from 'react'
 import { useAuth } from '@/contexts/Auth'
 import { FlashList } from '@shopify/flash-list'
 import EventCard from './EventCard'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Platform } from 'react-native'
 import colors from '@/styles/colors'
 import useEventStore from 'store/EventStore'
+import CustomBottomTab from './ui/CustomBottomTab'
+import HeaderNavigationEvent from './HeaderNavigationEvent'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const MyEvents = ({ navigation }) => {
+    const inset = useSafeAreaInsets()
     const auth = useAuth()
     const user = auth?.authData?.user
     const data = useEventStore((state) => state.events)
@@ -35,22 +39,27 @@ const MyEvents = ({ navigation }) => {
     }
 
     return (
-        <FlashList
-            data={myEvents}
-            renderItem={({ item, index }) => (
-                <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
-            )}
-            estimatedItemSize={20}
-        />
+        <View style={[styles.container]}>
+            <HeaderNavigationEvent />
+            <FlashList
+                data={myEvents}
+                renderItem={({ item, index }) => (
+                    <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
+                )}
+                estimatedItemSize={20}
+            />
+            <View style={styles.bottomTab}>
+                <CustomBottomTab />
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
-        width: '100%',
-        height: '100%',
-        flex: 1
+        flex: 1,
+        paddingTop: 55
     },
     center: {
         flex: 1,
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.text
-    }
+    },
 })
 
 export default MyEvents

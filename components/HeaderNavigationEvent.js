@@ -2,33 +2,36 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import { useNavigation } from '@react-navigation/native'
+import useHeaderEventStore from 'store/HeaderEventStore'
+useHeaderEventStore
+
 
 const HeaderNavigationEvent = () => {
     const navigation = useNavigation()
-    const [selected, setSelected] = useState('EventMap')
+    const tab = useHeaderEventStore((state) => state.tab)
     const handleSelect = (value) => {
         navigation.navigate(value)
-        setSelected(value)
+        useHeaderEventStore.setState({ tab: value })
     }
 
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 onPress={() => handleSelect('EventMap')}
-                style={[selected === 'EventMap' ? styles.selected : styles.unselected]}
+                style={[tab === 'EventMap' ? styles.tab : styles.unselected]}
             >
                 <Text
-                    style={[selected === 'EventMap' ? styles.selected : styles.unselected]}
+                    style={[tab === 'EventMap' ? styles.tab : styles.unselected]}
                 >
                     Mapa
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => handleSelect('EventScroll')}
-                style={[selected === 'EventScroll' ? styles.selected : styles.unselected]}
+                style={[tab === 'EventScroll' ? styles.tab : styles.unselected]}
             >
                 <Text
-                    style={[selected === 'EventScroll' ? styles.selected : styles.unselected]}
+                    style={[tab === 'EventScroll' ? styles.tab : styles.unselected]}
                 >
                     Descubrir Nuevos
                 </Text>
@@ -36,11 +39,11 @@ const HeaderNavigationEvent = () => {
             <TouchableOpacity
                 onPress={() => handleSelect('MyEvents')}
                 testID='MyEvents-button'
-                style={[selected === 'MyEvents' ? styles.selected : styles.unselected]}
+                style={[tab === 'MyEvents' ? styles.tab : styles.unselected]}
             >
                 <Text
                     style={[
-                        selected === 'MyEvents' ? styles.selected : styles.unselected
+                        tab === 'MyEvents' ? styles.tab : styles.unselected
                     ]}
                 >
                     Mis eventos
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: colors.background
     },
-    selected: {
+    tab: {
         fontWeight: 'bold',
         color: colors.text,
         borderBottomWidth: 1,

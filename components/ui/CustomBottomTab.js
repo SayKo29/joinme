@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import colors from '@/styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import useTabStore from 'store/TabStore';
+import useHeaderEventStore from 'store/HeaderEventStore';
 
 const CustomBottomTab = () => {
     const navigation = useNavigation()
@@ -13,7 +14,7 @@ const CustomBottomTab = () => {
             name: 'Eventos',
             iconName: 'map',
             iconInactiveName: 'map-outline',
-            navigation: 'Events'
+            navigation: 'EventMap'
         },
         {
             name: 'Chats',
@@ -37,6 +38,9 @@ const CustomBottomTab = () => {
 
     const handleTabChange = (tab, ind) => {
         useTabStore.setState({ tab: ind });
+        if (tab === 'EventMap') {
+            useHeaderEventStore.setState({ tab: tab })
+        }
         navigation.navigate(tab);
     }
     return (
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.background,
         paddingBottom: 20,
-        paddingTop: 10
+        paddingTop: 10,
     },
     tabItem: {
         flex: 1,

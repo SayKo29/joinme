@@ -9,6 +9,7 @@ import getEventsData from 'api/EventsData'
 import HeaderNavigationEvent from 'components/HeaderNavigationEvent'
 import useEventStore from 'store/EventStore'
 import useUsersStore from 'store/UsersStore'
+import colors from 'styles/colors'
 useEventStore
 
 const MainEvents = () => {
@@ -35,35 +36,29 @@ const MainEvents = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <HeaderNavigationEvent />
             </View>
             <View style={styles.mapContainer}>
                 <EventMap data={eventsQuery} users={usersQuery} />
             </View>
-            <View style={styles.bottomTab}>
-                <CustomBottomTab />
-            </View>
-        </SafeAreaView>
+            <CustomBottomTab />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 55,
+        backgroundColor: colors.background
     },
     headerContainer: {
-
+        height: 40
     },
     mapContainer: {
-        height: '80%'
-    },
-    bottomTab: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        flex: 1
     },
 })
 

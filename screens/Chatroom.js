@@ -1,9 +1,7 @@
 import React from 'react'
 import { useAuth } from '@/contexts/Auth'
 import {
-    Image,
     Platform,
-    SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -17,10 +15,12 @@ import { FlashList } from '@shopify/flash-list'
 import Animated from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const ChatRooms = () => {
     const navigation = useNavigation()
     const auth = useAuth()
+    const inset = useSafeAreaInsets()
     // console.log(auth.authData.user._id)
     const { isLoading, isError, data } = useQuery('CHATROOMS', () =>
         getEventsByParticipant(auth.authData.user._id)
@@ -57,7 +57,7 @@ const ChatRooms = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container]}>
             <View style={styles.title}>
                 <Text style={styles.titleText}>Chats de eventos</Text>
             </View>
@@ -104,7 +104,7 @@ const ChatRooms = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Platform.OS === 'android' ? 25 : 0,
+        paddingTop: Platform.OS === 'android' ? 25 : 60,
         backgroundColor: colors.background
     },
     card: {
@@ -167,7 +167,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         paddingTop: 10
-    }
+    },
+
 })
 
 export default ChatRooms

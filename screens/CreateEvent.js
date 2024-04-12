@@ -1,6 +1,5 @@
 import {
     Platform,
-    SafeAreaView,
     StatusBar,
     StyleSheet,
     Text,
@@ -18,8 +17,10 @@ import { useQuery } from 'react-query'
 import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const CreateEvent = ({ navigation }) => {
+    const inset = useSafeAreaInsets()
     const eventsQuery = useQuery({
         queryKey: ['EVENTS'],
         queryFn: getEventsData,
@@ -106,7 +107,8 @@ const CreateEvent = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container]}>
+            <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Crear evento</Text>
             </View>
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.background,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+        paddingTop: 55
     },
     titleContainer: {
         alignItems: 'center'
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     },
     previousBtnTextStyle: {
         color: colors.white
-    }
+    },
 })
 
 export default CreateEvent

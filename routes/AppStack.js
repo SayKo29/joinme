@@ -24,7 +24,7 @@ export const AppStack = () => {
             <Stack.Group>
                 <Stack.Screen
                     options={{ headerShown: false, animation: 'fade' }}
-                    name='Events'
+                    name='EventMap'
                     component={MainEvents}
                 />
                 <Stack.Screen

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import colors from '@/styles/colors'
 import EventCard from './EventCard'
@@ -7,9 +7,13 @@ import { useAuth } from '@/contexts/Auth'
 import { useNavigation } from '@react-navigation/native'
 import useEventStore from 'store/EventStore'
 import useUsersStore from 'store/UsersStore'
+import CustomBottomTab from './ui/CustomBottomTab'
+import HeaderNavigationEvent from './HeaderNavigationEvent'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const EventScroll = () => {
     const navigation = useNavigation();
+    const inset = useSafeAreaInsets()
 
     const handleEventPress = (event, user) => {
         navigation.navigate('EventDetailScreen', { event, user })
@@ -34,22 +38,34 @@ const EventScroll = () => {
     }
 
     return (
-        <FlashList
-            data={events}
-            renderItem={({ item, index }) => (
-                <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
-            )}
-            estimatedItemSize={20}
-        />
+        <View style={[styles.container]}>
+            <View style={styles.headerContainer}>
+                <HeaderNavigationEvent />
+            </View>
+            <FlashList
+                data={events}
+                renderItem={({ item, index }) => (
+                    <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
+                )}
+                estimatedItemSize={20}
+            />
+            <View style={styles.bottomTab}>
+                <CustomBottomTab />
+            </View>
+        </View >
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
+        paddingTop: 55,
         width: '100%',
         height: '100%',
         flex: 1
+    },
+    headerContainer: {
+        height: 40
     },
     center: {
         flex: 1,
@@ -61,7 +77,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center'
-    }
+    },
+
 })
 
 export default EventScroll
