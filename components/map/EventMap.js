@@ -4,16 +4,17 @@ import { Marker } from 'react-native-maps'
 import MapView from 'react-native-map-clustering'
 import * as Location from 'expo-location'
 import { useAuth } from '@/contexts/Auth'
-import LottieAnimation from './LottieAnimation'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-// import EventDetail from './EventDetail'
+import LottieAnimation from '../LottieAnimation'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getGeolocation } from 'services/geolocation'
 import colors from '@/styles/colors'
 import mapStyle from '@/styles/mapStyle'
-import EventCard from './EventCard'
+import EventCard from '../EventCard'
+import BottomSheet from './BottomSheet'
+import { useNavigation } from '@react-navigation/native'
 
-const EventMap = ({ data, navigation }) => {
+const EventMap = ({ data }) => {
+    const navigation = useNavigation();
     const [location, setLocation] = useState(null)
     const [markerPressed, setMarkerPressed] = useState(false)
     const sheetRef = useRef(null)
@@ -52,7 +53,7 @@ const EventMap = ({ data, navigation }) => {
                     source={
                         userLoggedIn?.picture
                             ? { uri: userLoggedIn?.picture }
-                            : require('../assets/avatar.png')
+                            : require('../../assets/avatar.png')
                     }
                     style={styles.avatar}
                 />
@@ -115,6 +116,7 @@ const EventMap = ({ data, navigation }) => {
 
     const handleMarkerPressed = (marker) => {
         setMarkerPressed(marker)
+        sheetRef.current?.expand()
     }
 
     if (location != null && !data) {
@@ -146,18 +148,11 @@ const EventMap = ({ data, navigation }) => {
                 )}
                 {markerPressed && (
                     <BottomSheet
-                        onClose={() => setMarkerPressed(false)}
-                        backgroundStyle={{ backgroundColor: colors.background }}
-                        handleIndicatorStyle={{
-                            backgroundColor: colors.accent
-                        }}
                         ref={sheetRef}
-                        snapPoints={snapPoints}
-                        enablePanDownToClose
-                    >
-                        <BottomSheetView style={styles.slider}>
-                            <EventCard event={markerPressed} user={userLoggedIn} onEventPress={goToEventDetail} />
-                        </BottomSheetView>
+                        snapTo={'70%'}
+                        backgroundColor={colors.background}
+                        backDropColor={'black'}>
+                        <EventCard event={markerPressed} user={userLoggedIn} onEventPress={goToEventDetail} />
                     </BottomSheet>
                 )}
             </View>

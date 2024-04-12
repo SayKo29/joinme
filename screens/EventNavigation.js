@@ -9,7 +9,7 @@ import getUsersData from '@/api/UsersData';
 import LottieAnimation from '@/components/LottieAnimation';
 import HeaderNavigationEvent from '@/components/HeaderNavigationEvent';
 import EventScroll from '@/components/EventScroll';
-import EventMap from 'components/EventMap';
+import EventMap from 'components/map/EventMap';
 import MyEvents from '@/components/MyEvents';
 
 const Stack = createNativeStackNavigator();

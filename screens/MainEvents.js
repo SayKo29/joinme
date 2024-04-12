@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
-import EventMap from 'components/EventMap'
+import EventMap from 'components/map/EventMap'
 import { useQuery } from 'react-query'
 import LottieAnimation from 'components/LottieAnimation'
 import getUsersData from 'api/UsersData'

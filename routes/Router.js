@@ -12,6 +12,7 @@ import { Loading } from '@/components/Loading'
 import { useColorScheme } from 'react-native'
 import colors from '@/styles/colors'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export const Router = () => {
     const { authData, loading } = useAuth()
@@ -35,9 +36,11 @@ export const Router = () => {
     }
     return (
         <SafeAreaProvider style={{ backgroundColor: colors.background }}>
-            <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
-                {authData ? <AppStack /> : <AuthStack />}
-            </NavigationContainer>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
+                    {authData ? <AppStack /> : <AuthStack />}
+                </NavigationContainer>
+            </GestureHandlerRootView>
         </SafeAreaProvider>
     )
 }

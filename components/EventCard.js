@@ -6,9 +6,6 @@ import {
     formatDateTime,
     openGoogleMaps
 } from '@/lib/utils'
-import Swiper from 'react-native-swiper'
-import LottieAnimation from './LottieAnimation'
-import useEventStore from '@/store/EventStore'
 import { Icon } from 'react-native-elements'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import useCategoryStore from 'store/CategoryStore'
@@ -43,7 +40,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
 
     const eventOwner = user[event.user]
     return (
-        <Animated.View entering={FadeInDown.delay(200 * index)}>
+        <Animated.View entering={FadeInDown.delay(200 * index)} style={{ backgroundColor: colors.background }}>
             <Pressable style={styles.container} onPress={handlePress}>
                 <View style={styles.userRowContainer}>
                     <View style={styles.userLeft}>
@@ -115,12 +112,13 @@ const EventCard = ({ event, user, onEventPress, index }) => {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        backgroundColor: colors.background
     },
     userRowContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     userImage: {
         height: 50,
