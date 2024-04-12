@@ -66,12 +66,14 @@ const styles = StyleSheet.create({
         color: colors.text,
         borderBottomWidth: 1,
         borderBottomColor: colors.gray,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'SignikaBold'
     },
     unselected: {
         fontWeight: 'bold',
         color: colors.gray,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'SignikaBold'
     }
 })
 

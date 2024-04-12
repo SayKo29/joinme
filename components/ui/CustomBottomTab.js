@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: colors.gray,
+        fontFamily: 'SignikaRegular',
     },
     activeTab: {
     },

@@ -142,11 +142,14 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'SignikaBold',
         color: colors.white
     },
     text: {
         color: colors.text,
-        fontSize: 14
+        fontSize: 14,
+        fontWeight: 'bold',
+        fontFamily: 'SignikaRegular'
     },
     eventImageContainer: {
         marginTop: 10,
@@ -172,7 +175,8 @@ const styles = StyleSheet.create({
     eventDescription: {
         width: '100%',
         fontSize: 16,
-        color: colors.gray
+        color: colors.gray,
+        fontFamily: 'SignikaRegular'
     },
     eventInfoContainer: {
         marginTop: 10
@@ -192,18 +196,22 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         paddingTop: 2,
         color: colors.text,
-        fontSize: 13
+        fontSize: 13,
+        fontWeight: 'bold',
+        fontFamily: 'SignikaRegular'
     },
     linkGoogleMaps: {
         paddingLeft: 5,
         color: colors.text,
         fontSize: 14,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SignikaRegular'
     },
     categoryText: {
         color: colors.primary,
         fontSize: 16,
-        fontWeight: '900'
+        fontWeight: '900',
+        fontFamily: 'SignikaBold'
     },
     date: {
         flexDirection: 'row',

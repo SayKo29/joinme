@@ -60,8 +60,8 @@ export default function EventDetailScreen ({ route }) {
                 </View>
                 {/* Si el evento tiene un creador */}
                 {eventCreator && (
-                    <Text style={styles.description}>
-                        Evento creado por {eventCreator?.name}
+                    <Text style={styles.textCreatedBy}>
+                        Evento creado por <Text style={styles.bolderText}>{eventCreator?.name}</Text>
                     </Text>
                 )}
 
@@ -120,9 +120,22 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 32,
         fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     textDescription: {
         color: 'white',
         fontSize: 16,
+        fontFamily: 'SignikaRegular'
     },
+    textCreatedBy: {
+        color: 'white',
+        fontSize: 16,
+        margin: 10,
+        fontFamily: 'SignikaRegular'
+    },
+    bolderText: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: 'SignikaBold'
+    }
 });
