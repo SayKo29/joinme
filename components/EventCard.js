@@ -63,7 +63,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                 </View>
                 <View style={styles.eventImageContainer}>
                     <Animated.Image
-                        sharedTransitionTag={event.images[0]}
+                        sharedTransitionTag={event._id}
                         style={styles.eventImage}
                         resizeMode='cover'
                         source={{
