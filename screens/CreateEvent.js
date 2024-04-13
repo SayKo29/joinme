@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     nextBtnTextStyle: {
-        color: colors.text,
+        color: 'black',
         fontWeight: 'bold'
     },
     previousBtnStyle: {

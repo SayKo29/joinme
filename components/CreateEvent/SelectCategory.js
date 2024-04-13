@@ -5,6 +5,7 @@ import colors from '@/styles/colors'
 import LottieAnimation from '@/components/LottieAnimation'
 import formStyles from 'styles/formStyles'
 import useCategoryStore from 'store/CategoryStore'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     const { categories, isInitialized, fetchCategories } = useCategoryStore()
@@ -37,7 +38,6 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
         // Use the filteredCategories array for further processing or rendering
         setFilteredCategories(filteredCategories)
     }
-
     // Function to remove accents from text
     const normalize = (text) => {
         return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -54,13 +54,15 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
                 </Text>
                 <TextInput placeholder='Senderismo...' placeholderTextColor={colors.gray} style={formStyles.input} onChangeText={(text) => handleCategoryFiltering(text)} />
             </View>
-            {filteredCategories.map((category) => (
-                <CategoryCard
-                    key={category._id}
-                    category={category}
-                    categorySelected={handleCategoryPressed}
-                    activeCategory={activeCategory}
-                />
+            {filteredCategories.map((category, index) => (
+                <Animated.View entering={FadeInDown.delay(50 * index)} key={index}>
+                    <CategoryCard
+                        key={category._id}
+                        category={category}
+                        categorySelected={handleCategoryPressed}
+                        activeCategory={activeCategory}
+                    />
+                </Animated.View>
             ))}
         </View>
     )

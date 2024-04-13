@@ -9,10 +9,13 @@ import { AppStack } from './AppStack'
 import { AuthStack } from './AuthStack'
 import { useAuth } from '@/contexts/Auth'
 import { Loading } from '@/components/Loading'
-import { useColorScheme } from 'react-native'
+import { View, useColorScheme, Text } from 'react-native'
 import colors from '@/styles/colors'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import Toast from 'react-native-toast-message';
+import { toastConfig } from 'styles/toastConfig'
+
 
 export const Router = () => {
     const { authData, loading } = useAuth()
@@ -39,6 +42,8 @@ export const Router = () => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
                     {authData ? <AppStack /> : <AuthStack />}
+                    {/* only mod */}
+                    <Toast config={toastConfig} />
                 </NavigationContainer>
             </GestureHandlerRootView>
         </SafeAreaProvider>

@@ -12,6 +12,7 @@ import mapStyle from '@/styles/mapStyle'
 import EventCard from '../EventCard'
 import BottomSheet from './BottomSheet'
 import { useNavigation } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
 
 const EventMap = ({ data }) => {
     const navigation = useNavigation();
@@ -103,9 +104,14 @@ const EventMap = ({ data }) => {
                 longitudeDelta: 0.03
             }
             setInitialRegion(region)
-            console.log("entra por aqui")
             AsyncStorage.setItem('region', JSON.stringify(region))
             mapRef.current.animateToRegion(region, 2000)
+            Toast.show({
+                type: 'success',
+                text1: 'Ubicación actual',
+                text2: 'Ubicación actualizada',
+                position: 'bottom',
+            })
         }
 
         getLocation()

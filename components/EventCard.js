@@ -40,7 +40,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
 
     const eventOwner = user[event.user]
     return (
-        <Animated.View entering={FadeInDown.delay(200 * index)} style={{ backgroundColor: colors.background }}>
+        <Animated.View entering={FadeInDown.delay(300 * index)}>
             <Pressable style={styles.container} onPress={handlePress}>
                 <View style={styles.userRowContainer}>
                     <View style={styles.userLeft}>
@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
         padding: 10,
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
+        paddingBottom: 20,
     },
     userRowContainer: {
         flexDirection: 'row',
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     },
     eventImageContainer: {
         marginTop: 10,
-        height: 200,
+        height: 180,
         width: '100%'
     },
     eventImage: {
@@ -168,9 +169,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.white,
         borderRadius: 10
-    },
-    activeDotStyle: {
-        backgroundColor: colors.accent
     },
     eventDescription: {
         width: '100%',
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
         fontFamily: 'SignikaRegular'
     },
     categoryText: {
-        color: colors.primary,
+        color: colors.accent,
         fontSize: 16,
         fontWeight: '900',
         fontFamily: 'SignikaBold'

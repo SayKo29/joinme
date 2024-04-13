@@ -5,14 +5,15 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
+    Pressable
 } from 'react-native'
 import getEventsByParticipant from '@/api/GetParticipantEvents'
 import { useQuery } from 'react-query'
 import LottieAnimation from '@/components/LottieAnimation'
 import colors from '@/styles/colors'
 import { FlashList } from '@shopify/flash-list'
-import Animated from 'react-native-reanimated'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -65,35 +66,37 @@ const ChatRooms = () => {
                 data={events}
                 estimatedItemSize={20}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        disabled={new Date(item.endDate) < new Date()}
-                        style={[
-                            styles.card,
-                            {
-                                backgroundColor:
-                                    new Date(item.endDate) < new Date()
-                                        ? colors.disabled
-                                        : colors.primary
-                            }
-                        ]}
-                        onPress={() => handleSelectChatroom(item)}
-                    >
+                renderItem={({ item, index }) => (
+                    <Animated.View entering={FadeInDown.delay(50 * index)} >
+                        <Pressable
+                            disabled={new Date(item.endDate) < new Date()}
+                            style={[
+                                styles.card,
+                                {
+                                    backgroundColor:
+                                        new Date(item.endDate) < new Date()
+                                            ? colors.disabled
+                                            : colors.primary
+                                }
+                            ]}
+                            onPress={() => handleSelectChatroom(item)}
+                        >
 
-                        <Animated.Image sharedTransitionTag={item._id} style={styles.image} source={{ uri: item.images[0] ? item.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
-                        <View style={styles.cardContent}>
-                            <Text style={styles.chatroom}>{item.name}</Text>
-                            <Text style={styles.participants}>
-                                {item.participants.length + 1}{' '}
-                                {item.participants.length + 1 === 1
-                                    ? 'participante'
-                                    : 'participantes'}
-                            </Text>
-                            {new Date(item.endDate) < new Date() && (
-                                <Text style={styles.participants}>Evento finalizado</Text>
-                            )}
-                        </View>
-                    </TouchableOpacity>
+                            <Animated.Image sharedTransitionTag={item._id} style={styles.image} source={{ uri: item.images[0] ? item.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
+                            <View style={styles.cardContent}>
+                                <Text style={styles.chatroom}>{item.name}</Text>
+                                <Text style={styles.participants}>
+                                    {item.participants.length + 1}{' '}
+                                    {item.participants.length + 1 === 1
+                                        ? 'participante'
+                                        : 'participantes'}
+                                </Text>
+                                {new Date(item.endDate) < new Date() && (
+                                    <Text style={styles.participants}>Evento finalizado</Text>
+                                )}
+                            </View>
+                        </Pressable>
+                    </Animated.View>
                 )}
             />
             <CustomBottomTab />
