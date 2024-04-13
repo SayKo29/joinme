@@ -20,6 +20,8 @@ import { webClientId, iosClientId, androidClientId } from '@env'
 import { useAuth } from '@/contexts/Auth'
 import colors from '@/styles/colors'
 import formStyles from 'styles/formStyles'
+import useHeaderEventStore from 'store/HeaderEventStore'
+import useTabStore from 'store/TabStore'
 
 export const SignInScreen = ({ navigation }) => {
     const [loading, isLoading] = useState(false)
@@ -45,6 +47,12 @@ export const SignInScreen = ({ navigation }) => {
         isLoading(false)
     }
 
+    // reset de la navegación por si cierra sesión y vuelve a entrar
+    useEffect(() => {
+        useHeaderEventStore.setState({ tab: 'EventMap' })
+        useTabStore.setState({ tab: 0 })
+    }, [])
+
     const getUserInfo = async (token) => {
         if (!token) return
         try {
@@ -58,7 +66,6 @@ export const SignInScreen = ({ navigation }) => {
             user.token = token
             await AsyncStorage.setItem('@user', JSON.stringify(user))
             const googleResponse = await auth.signInWithGoogle(user)
-            console.log(googleResponse, 'getuserInfo')
             setUserInfo(user)
         } catch (error) {
             console.log(error)
