@@ -84,7 +84,7 @@ const CreateEvent = ({ navigation }) => {
                         chatroom: ''
                     })
                     // navigate to Events screen
-                    navigation.navigate('Eventos')
+                    navigation.navigate('MyEvents')
                     setLoading(false)
                 } catch (error) {
                     console.error('Error al recargar los datos de los eventos:', error)

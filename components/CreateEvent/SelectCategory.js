@@ -32,11 +32,17 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
         categorySelected(category._id)
     }
     const handleCategoryFiltering = (text) => {
-        const filterValue = text.toLowerCase(); // Convert input value to lowercase for case-insensitive filtering
-        const filteredCategories = categories.filter(category => category.name.toLowerCase().includes(filterValue));
+        const filterValue = normalize(text).toLowerCase(); // Convert input value to lowercase for case-insensitive filtering and remove accents
+        const filteredCategories = categories.filter(category => normalize(category.name).toLowerCase().includes(filterValue));
         // Use the filteredCategories array for further processing or rendering
         setFilteredCategories(filteredCategories)
     }
+
+    // Function to remove accents from text
+    const normalize = (text) => {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>

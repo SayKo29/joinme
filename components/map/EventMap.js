@@ -103,6 +103,7 @@ const EventMap = ({ data }) => {
                 longitudeDelta: 0.03
             }
             setInitialRegion(region)
+            console.log("entra por aqui")
             AsyncStorage.setItem('region', JSON.stringify(region))
             mapRef.current.animateToRegion(region, 2000)
         }

@@ -13,6 +13,9 @@ import { formatDateTime } from '@/lib/utils'
 import { Icon } from 'react-native-elements'
 import formStyles from '@/styles/formStyles'
 import { HERE_API_KEY } from '@env'
+import MapView, { Marker } from 'react-native-maps'
+import mapStyle from 'styles/mapStyle'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [event, setEvent] = React.useState(currentEvent)
@@ -22,6 +25,8 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [inputValue, setInputValue] = React.useState('')
     const [debouncedInputValue, setDebouncedInputValue] = React.useState('')
     const [hasSelectedLocation, setHasSelectedLocation] = React.useState(false)
+    const [selectedResult, setSelectedResult] = React.useState(null);
+    const [markerPosition, setMarkerPosition] = React.useState(null)
 
     const handleInputChange = (value) => {
         setInputValue(value)
@@ -34,30 +39,40 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         return () => clearTimeout(delayInputTimeoutId)
     }, [inputValue])
 
-    React.useEffect(() => {
-        const handleSearch = async () => {
-            try {
-                const encodedAddress = encodeURIComponent(debouncedInputValue)
-                const response = await fetch(
-                    `https://geocode.search.hereapi.com/v1/geocode?q=${encodedAddress}&apiKey=${HERE_API_KEY}`
-                )
-                const data = await response.json()
-                const addresses = data.items.map(item => ({
-                    address: item.title,
-                    position: item.position
-                }))
-                setResults(addresses)
-                // si no hay resultados, añadir un resultado con el texto de búsqueda
+    const [searched, setSearched] = React.useState(false);
 
-            } catch (error) {
-                console.error('Error de búsqueda:', error)
+    const handleSearch = async () => {
+        if (searched) {
+            // set searched to false to allow new searches
+            setSearched(false);
+            return;
+        }
+        try {
+            console.log('se llama a la api')
+            // evita que se realicen búsquedas innecesarias
+            if (!debouncedInputValue) {
+                return;
             }
+            const encodedAddress = encodeURIComponent(debouncedInputValue);
+            const response = await fetch(
+                `https://geocode.search.hereapi.com/v1/geocode?q=${encodedAddress}&apiKey=${HERE_API_KEY}`
+            );
+            const data = await response.json();
+            const addresses = data.items.map((item) => ({
+                address: item.title,
+                position: item.position,
+            }));
+            setResults(addresses);
+        } catch (error) {
+            console.error('Error de búsqueda:', error);
         }
+    };
 
+    React.useEffect(() => {
         if (debouncedInputValue) {
-            handleSearch()
+            handleSearch();
         }
-    }, [debouncedInputValue])
+    }, [debouncedInputValue]);
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false)
 
@@ -100,18 +115,54 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         }
     }, [event.startDate, event.endDate])
 
-    // if has selected location and is changing the input value, reset the hasSelectedLocation state
-    React.useEffect(() => {
-        if (hasSelectedLocation && inputValue.length > 0) {
-            setHasSelectedLocation(false)
-        }
-    }, [inputValue])
-
     const handlePressLocation = (result) => {
-        setInputValue(result.address)
-        updateEvent('location', result)
-        setHasSelectedLocation(true)
+        setMarkerPosition(result.position);
+        setResults([]);
+        updateEvent('location', result);
+        // stop the new call to the api when the location is selected
+        setSearched(true);
+    };
+
+    // obtener la region inicial del mapa desde async storage
+    const [mapLoaded, setMapLoaded] = React.useState(false)
+    const [initialRegion, setInitialRegion] = React.useState(null)
+    const mapRef = React.useRef(null)
+
+    getInitialRegion = async () => {
+        try {
+            const region = await AsyncStorage.getItem('region')
+            if (region) {
+                setInitialRegion(JSON.parse(region))
+                setMapLoaded(true)
+            } else {
+                // get user location
+                const { coords } = await Location.getCurrentPositionAsync()
+                const { latitude, longitude } = coords
+                setInitialRegion({
+                    latitude,
+                    longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
+                })
+                AsyncStorage.setItem(
+                    'region',
+                    JSON.stringify({
+                        latitude,
+                        longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
+                    })
+                )
+                setMapLoaded(true)
+            }
+        } catch (error) {
+            console.error('Error loading initial region:', error)
+        }
     }
+
+    React.useEffect(() => {
+        getInitialRegion()
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -134,34 +185,73 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                                         }
                                 ]}
                             />
-                            {inputValue.length > 0
-                                ? (
-                                    <Icon
-                                        name='close'
-                                        size={30}
-                                        onPress={() => setInputValue('')}
-                                        color={colors.text}
-                                    />
-                                )
-                                : null}
+                            {inputValue.length > 0 ? (
+                                <Icon
+                                    name='close'
+                                    size={30}
+                                    onPress={() => setInputValue('')}
+                                    color={colors.text}
+                                />
+                            ) : null}
                         </View>
                         <View>
-                            {results.length > 0 && !hasSelectedLocation
-                                ? results.map((result, index) => (
+                            {results.length > 0 && !hasSelectedLocation ? (
+                                results.map((result, index) => (
                                     // make selectable results to put it in the text input
                                     <TouchableOpacity
                                         key={index}
-                                        onPress={handlePressLocation.bind(this, result)}
+                                        onPress={() => {
+                                            setInputValue(result.address);
+                                            handlePressLocation(result);
+                                        }}
                                         style={styles.resultAutocomplete}
                                     >
                                         <Text style={styles.label}>{result.address}</Text>
                                     </TouchableOpacity>
                                 ))
-                                : null}
+                            ) : selectedResult ? ( // Render selected result
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setInputValue(selectedResult.address);
+                                        handlePressLocation(selectedResult);
+                                    }}
+                                    style={styles.resultAutocomplete}
+                                >
+                                    <Text style={styles.label}>{selectedResult.address}</Text>
+                                </TouchableOpacity>
+                            ) : null}
                         </View>
                     </View>
                 )
                 : null}
+            {/* poner un mapa para poner un marcador cuando se seleccione la direccion del evento */}
+            <View style={styles.mapContainer}>
+                {mapLoaded && (
+                    <MapView
+                        ref={mapRef}
+                        provider='google'
+                        clusterColor={colors.primary}
+                        customMapStyle={
+                            mapStyle
+                        }
+                        showsUserLocation
+                        style={styles.map}
+                        mapType='standard'
+                        initialRegion={initialRegion}
+                    >
+                        {markerPosition && (
+                            <Marker
+                                coordinate={{
+                                    latitude: markerPosition.lat,
+                                    longitude: markerPosition.lng
+                                }}
+                                title={event.location.address}
+                            />
+                        )}
+                    </MapView>
+                )}
+            </View>
+
             <View style={styles.datePicker}>
                 <Text style={formStyles.label}>Fecha y hora de inicio del evento</Text>
                 <TouchableOpacity onPress={showDatePicker} style={formStyles.input}>
@@ -269,7 +359,17 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         width: '100%',
         color: colors.accent
-    }
+    },
+    mapContainer: {
+        width: '100%',
+        height: 200,
+    },
+    map: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        borderRadius: 10
+    },
 })
 
 export default AdvancedEventInfo
