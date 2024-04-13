@@ -80,7 +80,7 @@ const ChatRooms = () => {
                         onPress={() => handleSelectChatroom(item)}
                     >
 
-                        <Animated.Image sharedTransitionTag={item.images[0]} style={styles.image} source={{ uri: item.images[0] }} />
+                        <Animated.Image sharedTransitionTag={item._id} style={styles.image} source={{ uri: item.images[0] ? item.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
                         <View style={styles.cardContent}>
                             <Text style={styles.chatroom}>{item.name}</Text>
                             <Text style={styles.participants}>

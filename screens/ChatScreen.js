@@ -198,7 +198,7 @@ const ChatScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={styles.backButton} onPress={finishChatRoom}>
                     <Icon name='chevron-left' size={40} color={colors.white} />
                 </TouchableOpacity>
-                <Animated.Image style={styles.iconImage} sharedTransitionTag={event.images[0]} source={{ uri: event.images[0] }} />
+                <Animated.Image style={styles.iconImage} sharedTransitionTag={event._id} source={{ uri: event.images[0] ? event.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
                 <Text style={styles.headerText} ellipsizeMode='tail' numberOfLines={1}>{event?.name}</Text>
             </View>
 

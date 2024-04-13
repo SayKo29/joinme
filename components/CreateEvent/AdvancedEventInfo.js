@@ -297,6 +297,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                     isVisible={isDatePickerVisible2}
                     mode='datetime'
                     locale='es_ES'
+                    minimumDate={event.startDate}
                     onConfirm={(date) => {
                         updateEvent('endDate', date)
                         hideDatePicker2()

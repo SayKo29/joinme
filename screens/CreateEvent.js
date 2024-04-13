@@ -110,6 +110,26 @@ const CreateEvent = ({ navigation }) => {
         return <LottieAnimation />
     }
 
+    // when navigating to another screen, reset the event state
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            setEvent({
+                name: '',
+                description: '',
+                category: '',
+                location: '',
+                images: {},
+                user: '',
+                startDate: '',
+                endDate: '',
+                participants: [],
+                chatroom: ''
+            })
+        })
+
+        return unsubscribe
+    }, [navigation])
+
     return (
         <View style={[styles.container]}>
             <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
