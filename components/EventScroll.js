@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import EventCard from './EventCard'
 import { FlashList } from '@shopify/flash-list'
@@ -9,11 +9,11 @@ import useEventStore from 'store/EventStore'
 import useUsersStore from 'store/UsersStore'
 import CustomBottomTab from './ui/CustomBottomTab'
 import HeaderNavigationEvent from './HeaderNavigationEvent'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { sortEventsByCloser } from 'lib/utils'
 
 const EventScroll = () => {
     const navigation = useNavigation();
-    const inset = useSafeAreaInsets()
 
     const handleEventPress = (event, user) => {
         navigation.navigate('EventDetailScreen', { event, user })
@@ -27,9 +27,36 @@ const EventScroll = () => {
     const events = data
         ? data.filter((event) => event.user !== userLogged._id)
         : []
+    const [eventsSorted, setEventsSorted] = useState([])
+    // sort events by distance
+    // get user location from async storage
+    const getUserLocation = async () => {
+        try {
+            const userLocation = await AsyncStorage.getItem('region');
+            return JSON.parse(userLocation);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const sortEventsByDistance = async () => {
+        try {
+            const userLocation = await getUserLocation();
+            const { latitude, longitude } = userLocation;
+            const eventsSorted = sortEventsByCloser(latitude, longitude, events);
+            setEventsSorted(eventsSorted);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    React.useEffect(effect => {
+        sortEventsByDistance();
+    }, []);
+
 
     const user = users
-    if (events.length === 0) {
+    if (eventsSorted.length === 0) {
         return (
             <View style={styles.center}>
                 <Text style={styles.noEvents}>No hay eventos disponibles</Text>
@@ -43,7 +70,7 @@ const EventScroll = () => {
                 <HeaderNavigationEvent />
             </View>
             <FlashList
-                data={events}
+                data={eventsSorted}
                 renderItem={({ item, index }) => (
                     <EventCard event={item} user={user} onEventPress={handleEventPress} index={index} />
                 )}

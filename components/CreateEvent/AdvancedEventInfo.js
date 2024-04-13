@@ -48,7 +48,6 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
             return;
         }
         try {
-            console.log('se llama a la api')
             // evita que se realicen búsquedas innecesarias
             if (!debouncedInputValue) {
                 return;

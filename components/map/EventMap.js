@@ -124,10 +124,6 @@ const EventMap = ({ data }) => {
         return <LottieAnimation />
     }
 
-    if (data) {
-        AsyncStorage.setItem('events', JSON.stringify(data))
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.mapContainer}>

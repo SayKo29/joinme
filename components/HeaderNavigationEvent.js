@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
+        alignItems: 'center',
         padding: 10,
         backgroundColor: colors.background
     },
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
         color: colors.gray,
         fontSize: 16,
         fontFamily: 'SignikaBold'
-    }
+    },
 })
 
 export default HeaderNavigationEvent
