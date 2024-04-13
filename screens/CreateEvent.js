@@ -18,6 +18,8 @@ import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import useHeaderEventStore from 'store/HeaderEventStore'
+import useTabStore from 'store/TabStore'
 
 const CreateEvent = ({ navigation }) => {
     const inset = useSafeAreaInsets()
@@ -85,6 +87,8 @@ const CreateEvent = ({ navigation }) => {
                     })
                     // navigate to Events screen
                     navigation.navigate('MyEvents')
+                    useHeaderEventStore.setState({ tab: 'MyEvents' })
+                    useTabStore.setState({ tab: 0 })
                     setLoading(false)
                 } catch (error) {
                     console.error('Error al recargar los datos de los eventos:', error)
