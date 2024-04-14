@@ -20,9 +20,11 @@ import CustomBottomTab from 'components/ui/CustomBottomTab'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useHeaderEventStore from 'store/HeaderEventStore'
 import useTabStore from 'store/TabStore'
-
-const CreateEvent = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native'
+import Toast from 'react-native-toast-message'
+const CreateEvent = () => {
     const inset = useSafeAreaInsets()
+    const navigation = useNavigation()
     const eventsQuery = useQuery({
         queryKey: ['EVENTS'],
         queryFn: getEventsData,
@@ -58,57 +60,46 @@ const CreateEvent = ({ navigation }) => {
     }
 
     const handleEventCreation = async () => {
-        setLoading(true)
+        await createEvent();
+    };
+
+    const createEvent = async () => {
+        setLoading(true);
+
         const eventToSend = {
             ...event,
             category,
             startDate: new Date(event.startDate).toISOString(),
             endDate: new Date(event.endDate).toISOString(),
             user: user._id
-        }
-        try {
-            const response = await CreateEventPost(eventToSend)
-            if (response) {
-                try {
-                    // invalidate EVENTS query to refetch data
-                    await eventsQuery.refetch()
-                    // clear event state
-                    setEvent({
-                        name: '',
-                        description: '',
-                        category: '',
-                        location: '',
-                        images: {},
-                        user: '',
-                        startDate: '',
-                        endDate: '',
-                        participants: [],
-                        chatroom: ''
-                    })
-                    // navigate to Events screen
-                    navigation.navigate('MyEvents')
-                    useHeaderEventStore.setState({ tab: 'MyEvents' })
-                    useTabStore.setState({ tab: 0 })
-                    setLoading(false)
-                } catch (error) {
-                    console.error('Error al recargar los datos de los eventos:', error)
-                    setLoading(false)
-                    setErrors(true)
-                }
-            } else {
-                setLoading(false)
-                setErrors(true)
-            }
-        } catch (error) {
-            console.error('Error al crear el evento:', error)
-            setLoading(false)
-            setErrors(true)
-        }
-    }
+        };
 
-    if (loading) {
-        return <LottieAnimation />
-    }
+        try {
+            await CreateEventPost(eventToSend);
+            await eventsQuery.refetch();
+            setEvent({/* estado inicial del evento */ });
+            useHeaderEventStore.setState({ tab: 'MyEvents' });
+            useTabStore.setState({ tab: 0 });
+            navigation.navigate('MyEvents');
+            Toast.show({
+                type: 'success',
+                text1: 'Evento creado exitosamente',
+                visibilityTime: 3000,
+            });
+        } catch (error) {
+            console.error('Error al crear el evento:', error);
+            setErrors(true);
+            Toast.show({
+                type: 'error',
+                text1: 'Error al crear el evento',
+                text2: 'Por favor, inténtalo de nuevo más tarde',
+                visibilityTime: 3000,
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     // when navigating to another screen, reset the event state
     React.useEffect(() => {
@@ -136,65 +127,71 @@ const CreateEvent = ({ navigation }) => {
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Crear evento</Text>
             </View>
-            <View style={styles.stepWrapper}>
-                <ProgressSteps
-                    activeStepNumColor={colors.text}
-                    completedProgressBarColor={colors.primary}
-                    activeLabelColor={colors.text}
-                    completedStepIconColor={colors.primary}
-                    completedCheckColor={colors.primary}
-                    activeStepIconBorderColor={colors.primary}
-                    activeStepIconColor={colors.primary}
-                    disabledStepIconColor={colors.disabled}
-                    disabledStepNumColor={colors.white}
-                    progressBarColor={colors.disabled}
-                >
-                    <ProgressStep
-                        label='Categoría del evento'
-                        nextBtnStyle={styles.nextBtnStyle}
-                        nextBtnTextStyle={styles.nextBtnTextStyle}
-                        nextBtnText='Siguiente'
-                        nextBtnDisabled={category === ''}
-                        scrollViewProps={{
-                            showsVerticalScrollIndicator: false
-                        }}
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <LottieAnimation />
+                </View>
+            ) : (
+                <View style={styles.stepWrapper}>
+                    <ProgressSteps
+                        activeStepNumColor={colors.text}
+                        completedProgressBarColor={colors.primary}
+                        activeLabelColor={colors.text}
+                        completedStepIconColor={colors.primary}
+                        completedCheckColor={colors.primary}
+                        activeStepIconBorderColor={colors.primary}
+                        activeStepIconColor={colors.primary}
+                        disabledStepIconColor={colors.disabled}
+                        disabledStepNumColor={colors.white}
+                        progressBarColor={colors.disabled}
                     >
-                        <SelectCategory
-                            categorySelected={setCategory}
-                            activeCategory={category}
-                        />
-                    </ProgressStep>
-                    <ProgressStep
-                        label='Información básica'
-                        nextBtnStyle={styles.nextBtnStyle}
-                        nextBtnTextStyle={styles.nextBtnTextStyle}
-                        nextBtnText='Siguiente'
-                        previousBtnStyle={styles.previousBtnStyle}
-                        previousBtnTextStyle={styles.previousBtnTextStyle}
-                        previousBtnText='Atrás'
-                        nextBtnDisabled={event.name === '' || event.description === ''}
-                    >
-                        <EventInfo eventInfo={updateEvent} currentEvent={event} />
-                    </ProgressStep>
-                    <ProgressStep
-                        label='Información avanzada'
-                        nextBtnStyle={styles.nextBtnStyle}
-                        nextBtnTextStyle={styles.nextBtnTextStyle}
-                        previousBtnStyle={styles.previousBtnStyle}
-                        previousBtnTextStyle={styles.previousBtnTextStyle}
-                        previousBtnText='Atrás'
-                        finishBtnText='Crear evento'
-                        onSubmit={handleEventCreation}
-                        nextBtnDisabled={
-                            (event.location === '' && !event.isRemote) ||
-                            event.startDate === '' ||
-                            event.endDate === ''
-                        }
-                    >
-                        <AdvancedEventInfo eventInfo={updateEvent} currentEvent={event} />
-                    </ProgressStep>
-                </ProgressSteps>
-            </View>
+                        <ProgressStep
+                            label='Categoría del evento'
+                            nextBtnStyle={styles.nextBtnStyle}
+                            nextBtnTextStyle={styles.nextBtnTextStyle}
+                            nextBtnText='Siguiente'
+                            nextBtnDisabled={category === ''}
+                            scrollViewProps={{
+                                showsVerticalScrollIndicator: false
+                            }}
+                        >
+                            <SelectCategory
+                                categorySelected={setCategory}
+                                activeCategory={category}
+                            />
+                        </ProgressStep>
+                        <ProgressStep
+                            label='Información básica'
+                            nextBtnStyle={styles.nextBtnStyle}
+                            nextBtnTextStyle={styles.nextBtnTextStyle}
+                            nextBtnText='Siguiente'
+                            previousBtnStyle={styles.previousBtnStyle}
+                            previousBtnTextStyle={styles.previousBtnTextStyle}
+                            previousBtnText='Atrás'
+                            nextBtnDisabled={event.name === '' || event.description === ''}
+                        >
+                            <EventInfo eventInfo={updateEvent} currentEvent={event} />
+                        </ProgressStep>
+                        <ProgressStep
+                            label='Información avanzada'
+                            nextBtnStyle={styles.nextBtnStyle}
+                            nextBtnTextStyle={styles.nextBtnTextStyle}
+                            previousBtnStyle={styles.previousBtnStyle}
+                            previousBtnTextStyle={styles.previousBtnTextStyle}
+                            previousBtnText='Atrás'
+                            finishBtnText='Crear evento'
+                            onSubmit={handleEventCreation}
+                            nextBtnDisabled={
+                                (event.location === '' && !event.isRemote) ||
+                                event.startDate === '' ||
+                                event.endDate === ''
+                            }
+                        >
+                            <AdvancedEventInfo eventInfo={updateEvent} currentEvent={event} />
+                        </ProgressStep>
+                    </ProgressSteps>
+                </View>
+            )}
             <CustomBottomTab />
         </View>
     )
@@ -235,6 +232,11 @@ const styles = StyleSheet.create({
     previousBtnTextStyle: {
         color: colors.white
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 })
 
 export default CreateEvent

@@ -25,17 +25,19 @@ const EventMap = ({ data }) => {
     const userLoggedIn = user.authData.user
     const [mapLoaded, setMapLoaded] = useState(false)
     const [initialRegion, setInitialRegion] = useState(null)
+    let markerRefs = {}
 
     const renderMarkers = useCallback(() => {
-        return data.data.map((event, index) => (
+        return data.data.map((event) => (
             <Marker
-                key={index}
+                key={event._id}
                 title={event?.name}
                 description={event.description}
                 coordinate={{
                     latitude: parseFloat(event?.coords?.lat),
                     longitude: parseFloat(event?.coords?.lng)
                 }}
+                ref={(ref) => markerRefs[event._id] = ref}
                 pinColor={colors.primary}
                 onPress={() => handleMarkerPressed(event)}
             />
@@ -106,12 +108,7 @@ const EventMap = ({ data }) => {
             setInitialRegion(region)
             AsyncStorage.setItem('region', JSON.stringify(region))
             mapRef.current.animateToRegion(region, 2000)
-            Toast.show({
-                type: 'success',
-                text1: 'Ubicación actual',
-                text2: 'Ubicación actualizada',
-                position: 'bottom',
-            })
+
         }
 
         getLocation()
@@ -123,8 +120,20 @@ const EventMap = ({ data }) => {
 
     const handleMarkerPressed = (marker) => {
         setMarkerPressed(marker)
-        sheetRef.current?.expand()
     }
+
+    const hideMarker = () => {
+        const markerRefId = markerPressed._id
+        console.log(markerRefs, markerRefId)
+        setMarkerPressed(false)
+    }
+
+    useEffect(() => {
+        if (markerPressed) {
+            sheetRef.current?.expand()
+        }
+    }, [markerPressed])
+
 
     if (location != null && !data) {
         return <LottieAnimation />
@@ -154,6 +163,7 @@ const EventMap = ({ data }) => {
                         ref={sheetRef}
                         snapTo={'70%'}
                         backgroundColor={colors.background}
+                        hasClosed={() => hideMarker()}
                         backDropColor={'black'}>
                         <EventCard event={markerPressed} user={userLoggedIn} onEventPress={goToEventDetail} />
                     </BottomSheet>

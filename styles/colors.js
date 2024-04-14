@@ -13,6 +13,7 @@ const colors = {
     gray4: '#F3F5F7',
     gray: '#C1C1C1',
     gray6: '#F9FAFC',
-    disabled: '#5F5F5F'
+    disabled: '#5F5F5F',
+    error: '#FF0000',
 }
 export default colors

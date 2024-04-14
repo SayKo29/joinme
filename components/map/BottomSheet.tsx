@@ -21,6 +21,7 @@ type Props = {
   children?: ReactNode;
   backgroundColor: string;
   backDropColor: string;
+  hasClosed: () => void;
 };
 
 export interface BottomSheetMethods {
@@ -29,7 +30,7 @@ export interface BottomSheetMethods {
 }
 
 const BottomSheet = forwardRef<BottomSheetMethods, Props>(
-  ({snapTo, children, backgroundColor, backDropColor}: Props, ref) => {
+  ({snapTo, children, backgroundColor, backDropColor, hasClosed}: Props, ref) => {
     const inset = useSafeAreaInsets();
     const {height} = Dimensions.get('screen');
     const percentage = parseFloat(snapTo.replace('%', '')) / 100;
@@ -46,6 +47,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
     const close = useCallback(() => {
       'worklet';
       topAnimation.value = withTiming(closeHeight);
+      hasClosed()
     }, [closeHeight, topAnimation]);
 
     useImperativeHandle(

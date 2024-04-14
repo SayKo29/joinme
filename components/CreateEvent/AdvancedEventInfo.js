@@ -27,6 +27,27 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
     const [hasSelectedLocation, setHasSelectedLocation] = React.useState(false)
     const [selectedResult, setSelectedResult] = React.useState(null);
     const [markerPosition, setMarkerPosition] = React.useState(null)
+    // obtener la region inicial del mapa desde async storage
+    const [mapLoaded, setMapLoaded] = React.useState(false)
+    const [initialRegion, setInitialRegion] = React.useState(null)
+    const mapRef = React.useRef(null)
+    const getInitialRegion = async () => {
+        try {
+            const region = await AsyncStorage.getItem('region');
+            if (region) {
+                setInitialRegion(JSON.parse(region));
+                setMapLoaded(true);
+            } else {
+                // Código para obtener la ubicación del usuario
+            }
+        } catch (error) {
+            console.error('Error loading initial region:', error);
+        }
+    };
+
+    React.useEffect(() => {
+        getInitialRegion();
+    }, []);
 
     const handleInputChange = (value) => {
         setInputValue(value)
@@ -121,47 +142,6 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         // stop the new call to the api when the location is selected
         setSearched(true);
     };
-
-    // obtener la region inicial del mapa desde async storage
-    const [mapLoaded, setMapLoaded] = React.useState(false)
-    const [initialRegion, setInitialRegion] = React.useState(null)
-    const mapRef = React.useRef(null)
-
-    getInitialRegion = async () => {
-        try {
-            const region = await AsyncStorage.getItem('region')
-            if (region) {
-                setInitialRegion(JSON.parse(region))
-                setMapLoaded(true)
-            } else {
-                // get user location
-                const { coords } = await Location.getCurrentPositionAsync()
-                const { latitude, longitude } = coords
-                setInitialRegion({
-                    latitude,
-                    longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                })
-                AsyncStorage.setItem(
-                    'region',
-                    JSON.stringify({
-                        latitude,
-                        longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421
-                    })
-                )
-                setMapLoaded(true)
-            }
-        } catch (error) {
-            console.error('Error loading initial region:', error)
-        }
-    }
-
-    React.useEffect(() => {
-        getInitialRegion()
-    }, [])
 
     return (
         <View style={styles.container}>
@@ -296,7 +276,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                     isVisible={isDatePickerVisible2}
                     mode='datetime'
                     locale='es_ES'
-                    minimumDate={event.startDate}
+                    minimumDate={event?.startDate ? event.startDate : new Date()}
                     onConfirm={(date) => {
                         updateEvent('endDate', date)
                         hideDatePicker2()
