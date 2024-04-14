@@ -10,6 +10,7 @@ import Headerback from 'components/HeaderBack';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'; // Importa FastImage
 import useCategoryStore from 'store/CategoryStore';
+import useTabStore from 'store/TabStore';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -24,10 +25,11 @@ export default function EventDetailScreen ({ route }) {
         mutate({ event: event, participant: userLogged.user }, {
             onSuccess: () => {
                 // invalida las queries
-                setLoading(false);
                 queryClient.invalidateQueries('CHATROOMS');
                 queryClient.invalidateQueries('EVENTS');
-                navigation.navigate('Chats');
+                navigation.navigate('ChatScreen', { event });
+                useTabStore.setState({ tab: 1 });
+                setLoading(false);
             }
         });
     };
@@ -88,7 +90,6 @@ export default function EventDetailScreen ({ route }) {
                             <TouchableOpacity
                                 style={styles.buttonJoin}
                                 disabled
-                                onPress={handleJoinEvent}
                             >
                                 <Text style={styles.buttonText}>Ya te has unido al evento</Text>
                             </TouchableOpacity>
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
         bottom: 30,
         left: 40,
         right: 40,
-
     },
     buttonText: {
         color: 'black',

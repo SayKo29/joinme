@@ -80,12 +80,14 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: colors.text
+        color: colors.text,
+        fontFamily: 'SignikaBold'
     },
     title_search: {
         fontSize: 14,
         fontWeight: 'normal',
-        color: colors.text
+        color: colors.text,
+        fontFamily: 'SignikaRegular'
     }
 })
 

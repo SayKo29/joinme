@@ -21,10 +21,11 @@ import { FlashList } from '@shopify/flash-list'
 import getUserParticipants from '@/api/GetUserParticipants'
 import { useQuery } from 'react-query'
 import Animated from 'react-native-reanimated'
+import { useNavigation } from '@react-navigation/native'
 getUserParticipants
 
 
-const ChatScreen = ({ route, navigation }) => {
+const ChatScreen = ({ route }) => {
     const event = route.params.event
     const chatroomId = route.params.event.chatroom
 
@@ -38,6 +39,7 @@ const ChatScreen = ({ route, navigation }) => {
     const [participants, setParticipants] = useState([])
     const [error, setError] = useState(null)
     const [messageQueue, setMessageQueue] = useState([])
+    const navigation = useNavigation()
 
     const participantsQuery = useQuery(
         ['PARTICIPANTS', event?.participants],
@@ -62,7 +64,7 @@ const ChatScreen = ({ route, navigation }) => {
 
     const finishChatRoom = () => {
         handleDisconnect()
-        navigation.goBack()
+        navigation.navigate('ChatRoom')
     }
 
     const handleConnect = () => {

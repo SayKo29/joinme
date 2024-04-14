@@ -1,6 +1,4 @@
 import {
-    Platform,
-    StatusBar,
     StyleSheet,
     Text,
     View
@@ -17,13 +15,11 @@ import { useQuery } from 'react-query'
 import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useHeaderEventStore from 'store/HeaderEventStore'
 import useTabStore from 'store/TabStore'
 import { useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 const CreateEvent = () => {
-    const inset = useSafeAreaInsets()
     const navigation = useNavigation()
     const eventsQuery = useQuery({
         queryKey: ['EVENTS'],
@@ -33,7 +29,6 @@ const CreateEvent = () => {
 
     const [category, setCategory] = React.useState('')
     const [loading, setLoading] = React.useState(false)
-    const [errors, setErrors] = React.useState(Boolean)
     const [event, setEvent] = React.useState({
         name: '',
         description: '',
@@ -88,7 +83,6 @@ const CreateEvent = () => {
             });
         } catch (error) {
             console.error('Error al crear el evento:', error);
-            setErrors(true);
             Toast.show({
                 type: 'error',
                 text1: 'Error al crear el evento',
@@ -123,7 +117,6 @@ const CreateEvent = () => {
 
     return (
         <View style={[styles.container]}>
-            <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Crear evento</Text>
             </View>
@@ -144,6 +137,7 @@ const CreateEvent = () => {
                         disabledStepIconColor={colors.disabled}
                         disabledStepNumColor={colors.white}
                         progressBarColor={colors.disabled}
+                        labelFontFamily='SignikaRegular'
                     >
                         <ProgressStep
                             label='Categoría del evento'
@@ -209,7 +203,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.white
+        color: colors.white,
+        fontFamily: 'SignikaBold',
     },
     stepWrapper: {
         flex: 1,
@@ -222,7 +217,8 @@ const styles = StyleSheet.create({
     },
     nextBtnTextStyle: {
         color: 'black',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     previousBtnStyle: {
         backgroundColor: colors.gray,
@@ -230,7 +226,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     previousBtnTextStyle: {
-        color: colors.white
+        color: colors.white,
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     loadingContainer: {
         flex: 1,

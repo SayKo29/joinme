@@ -159,17 +159,23 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.white
+        color: colors.white,
+        fontFamily: 'SignikaBold'
     },
     text: {
         color: colors.white,
-        fontSize: 18
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingBottom: 10,
+        fontFamily: 'SignikaBold'
     },
     btn: {
         color: colors.accent,
         fontSize: 18,
         fontWeight: 'bold',
-        paddingTop: 10
+        paddingTop: 10,
+        fontFamily: 'SignikaBold'
     },
 
 })

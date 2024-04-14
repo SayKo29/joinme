@@ -2,12 +2,14 @@ import React from 'react'
 import { useAuth } from '@/contexts/Auth'
 import { FlashList } from '@shopify/flash-list'
 import EventCard from './EventCard'
-import { StyleSheet, Text, View, Platform } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import colors from '@/styles/colors'
 import useEventStore from 'store/EventStore'
 import CustomBottomTab from './ui/CustomBottomTab'
 import HeaderNavigationEvent from './HeaderNavigationEvent'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { uiStyles } from 'styles/uiStyles'
+import useTabStore from 'store/TabStore'
 
 const MyEvents = ({ navigation }) => {
     const inset = useSafeAreaInsets()
@@ -21,6 +23,12 @@ const MyEvents = ({ navigation }) => {
         navigation.navigate('EventDetailScreen', { event, user })
     }
 
+    const handleCreateEvent = () => {
+        // Navegar a la pantalla de creación de evento
+        navigation.navigate('CreateEvent')
+        useTabStore.setState({ tab: 2 })
+    }
+
     React.useEffect(() => {
         if (data) {
             const myEvents = data.filter((event) =>
@@ -32,8 +40,17 @@ const MyEvents = ({ navigation }) => {
 
     if (myEvents.length === 0) {
         return (
-            <View style={styles.center}>
-                <Text style={styles.noEvents}>No tienes eventos creados</Text>
+            <View style={[styles.container]}>
+                <HeaderNavigationEvent />
+                <View style={styles.center}>
+                    <Text style={styles.noEvents}>No tienes eventos creados</Text>
+                    <TouchableOpacity style={uiStyles.button} onPress={handleCreateEvent}>
+                        <Text style={uiStyles.buttonText}>Crea un evento</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.bottomTab}>
+                    <CustomBottomTab />
+                </View>
             </View>
         )
     }
@@ -69,7 +86,8 @@ const styles = StyleSheet.create({
     noEvents: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.text
+        color: colors.text,
+        paddingBottom: 20
     },
 })
 

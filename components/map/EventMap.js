@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { View, StyleSheet, Appearance, Image } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Marker } from 'react-native-maps'
 import MapView from 'react-native-map-clustering'
 import * as Location from 'expo-location'
@@ -12,7 +12,6 @@ import mapStyle from '@/styles/mapStyle'
 import EventCard from '../EventCard'
 import BottomSheet from './BottomSheet'
 import { useNavigation } from '@react-navigation/native'
-import Toast from 'react-native-toast-message'
 
 const EventMap = ({ data }) => {
     const navigation = useNavigation();
@@ -20,7 +19,6 @@ const EventMap = ({ data }) => {
     const [markerPressed, setMarkerPressed] = useState(false)
     const sheetRef = useRef(null)
     const mapRef = useRef(null)
-    const snapPoints = ['40%', '100%']
     const user = useAuth()
     const userLoggedIn = user.authData.user
     const [mapLoaded, setMapLoaded] = useState(false)
@@ -38,7 +36,7 @@ const EventMap = ({ data }) => {
                     longitude: parseFloat(event?.coords?.lng)
                 }}
                 ref={(ref) => markerRefs[event._id] = ref}
-                pinColor={colors.primary}
+                pinColor={event.user === userLoggedIn._id ? 'red' : colors.primary}
                 onPress={() => handleMarkerPressed(event)}
             />
         ))

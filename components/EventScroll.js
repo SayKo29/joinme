@@ -58,8 +58,16 @@ const EventScroll = () => {
     const user = users
     if (eventsSorted.length === 0) {
         return (
-            <View style={styles.center}>
-                <Text style={styles.noEvents}>No hay eventos disponibles</Text>
+            <View style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <HeaderNavigationEvent />
+                </View>
+                <View style={styles.center}>
+                    <Text style={styles.noEvents}>No hay eventos disponibles</Text>
+                </View>
+                <View style={styles.bottomTab}>
+                    <CustomBottomTab />
+                </View>
             </View>
         )
     }
@@ -95,9 +103,9 @@ const styles = StyleSheet.create({
         height: 40
     },
     center: {
+        backgroundColor: colors.background,
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
     },
     noEvents: {
         color: colors.text,
