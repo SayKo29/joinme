@@ -5,10 +5,10 @@
         "package": "com.joinme.app",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/logo.jpeg",
+        "icon": "./assets/logo.png",
         "userInterfaceStyle": "automatic",
         "splash": {
-            "image": "./assets/logo.jpeg",
+            "image": "./assets/logo.png",
             "resizeMode": "contain",
             "backgroundColor": "#081c15"
         },
@@ -48,7 +48,7 @@
         "android": {
             "userInterfaceStyle": "automatic",
             "adaptiveIcon": {
-                "foregroundImage": "./assets/logo.jpeg",
+                "foregroundImage": "./assets/logo.png",
                 "backgroundColor": "#161F2A"
             },
             "config": {
@@ -61,7 +61,7 @@
         },
         "web": {
             "bundler": "metro",
-            "favicon": "./assets/img/logo.jpeg"
+            "favicon": "./assets/logo.png"
         },
         "extra": {
             "eas": {
