@@ -1,11 +1,11 @@
-import { Image, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import UserActionsButtons from './ui/UserActionsButtons';
 
-const Headerback = () => {
+const Headerback = ({ isEventCreator, userHasJoinedEvent }) => {
     const inset = useSafeAreaInsets();
     const navigation = useNavigation()
     return (
@@ -23,7 +23,7 @@ const Headerback = () => {
                 />
             </Pressable>
             <View style={{ position: 'relative', width: 44, height: 44 }}>
-                <UserActionsButtons />
+                <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} />
             </View>
         </Animated.View>
     );

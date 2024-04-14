@@ -213,13 +213,15 @@ const profile = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.white,
-        paddingTop: 30
+        paddingTop: 30,
+        fontFamily: 'SignikaRegular'
     },
     fullName: {
         fontSize: 18,
         fontWeight: 'bold',
         color: colors.white,
-        paddingTop: 5
+        paddingTop: 5,
+        fontFamily: 'SignikaBold'
     },
     location: {
         fontSize: 12,
@@ -253,10 +255,11 @@ const profile = StyleSheet.create({
         elevation: 5
     },
     signoutText: {
-        color: '#fff',
+        color: colors.black,
         fontSize: 16,
         fontWeight: 'bold',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        fontFamily: 'SignikaBold'
     }
 })
 

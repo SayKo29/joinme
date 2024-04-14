@@ -45,9 +45,10 @@ export default function EventDetailScreen ({ route }) {
     )
 
     const eventCreator = users?.data[event?.user];
+    const isEventCreator = eventCreator?._id === userLogged.user._id;
     return (
         <View style={styles.container}>
-            <Headerback />
+            <Headerback isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} />
             <View>
                 <View>
                     <Animated.View

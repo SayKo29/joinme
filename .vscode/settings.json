@@ -1,3 +1,6 @@
 {
+    "eslint.workingDirectories": [
+        "../eslintrc.js",
+    ],
     "editor.stickyScroll.enabled": true
 }

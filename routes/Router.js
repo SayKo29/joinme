@@ -8,13 +8,13 @@ import {
 import { AppStack } from './AppStack'
 import { AuthStack } from './AuthStack'
 import { useAuth } from '@/contexts/Auth'
-import { Loading } from '@/components/Loading'
-import { View, useColorScheme, Text } from 'react-native'
+import { useColorScheme } from 'react-native'
 import colors from '@/styles/colors'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
 import { toastConfig } from 'styles/toastConfig'
+import LottieAnimation from 'components/LottieAnimation'
 
 
 export const Router = () => {
@@ -35,7 +35,7 @@ export const Router = () => {
     }
 
     if (loading) {
-        return <Loading />
+        return <LottieAnimation />
     }
     return (
         <SafeAreaProvider style={{ backgroundColor: colors.background }}>

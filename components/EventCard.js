@@ -77,6 +77,13 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                     <View style={styles.eventInfoRow}>
                         <Text style={styles.categoryText}>{eventCategory?.name}</Text>
                     </View>
+                    {/* number of actual participants */}
+                    <View style={styles.date}>
+                        <Icon name='people' size={24} color={colors.text} />
+                        <Text style={styles.linkGoogleMaps}>
+                            {event.participants.length} {event.participants.length === 1 ? 'participante' : 'participantes'}
+                        </Text>
+                    </View>
                     {/* event startDate and endDate */}
                     <View style={styles.date}>
                         <Icon name='date-range' size={24} color={colors.text} />

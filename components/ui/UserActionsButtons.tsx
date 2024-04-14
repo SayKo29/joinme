@@ -1,4 +1,4 @@
-import {Image, Pressable, StyleSheet, View} from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
 import Animated, {
   Easing,
@@ -14,7 +14,12 @@ import Animated, {
 import { Icon } from 'react-native-elements';
 import colors from 'styles/colors';
 
-const UserActionsButtons = () => {
+type params = {
+  isEventCreator: boolean;
+  userHasJoinedEvent: boolean;
+};
+
+const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
   const firstValue = useSharedValue(44);
   const firstWidth = useSharedValue(44);
   const isOpen = useSharedValue(false);
@@ -30,13 +35,13 @@ const UserActionsButtons = () => {
       duration: 500,
     };
     if (isOpen.value) {
-      firstWidth.value = withTiming(44, {duration: 100}, finish => {
+      firstWidth.value = withTiming(44, { duration: 100 }, (finish) => {
         if (finish) {
           firstValue.value = withDelay(44, withTiming(44, config));
         }
       });
-      opacity.value = withTiming(0, {duration: 100});
-      opacityIcon.value = withTiming(0, {duration: 500});
+      opacity.value = withTiming(0, { duration: 100 });
+      opacityIcon.value = withTiming(0, { duration: 500 });
     } else {
       firstValue.value = withSpring(100);
       firstWidth.value = withDelay(500, withSpring(160));
@@ -63,57 +68,119 @@ const UserActionsButtons = () => {
     };
   });
 
-  
-const firstIcon = useAnimatedStyle(() => {
+  const firstIcon = useAnimatedStyle(() => {
     const translateY = interpolate(
-        firstValue.value,
-        [30, -200],
-        [-45, 70],
-        Extrapolation.CLAMP,
+      firstValue.value,
+      [30, -200],
+      [-45, 70],
+      Extrapolation.CLAMP,
     );
 
     return {
-        top: firstValue.value,
-        transform: [{ translateY: translateY }],
-    };
-});
-
-    const plusIcon = useAnimatedStyle(() => {
-    return {
-    transform: [{rotate: `${progress.value * 90}deg`}],
+      top: firstValue.value,
+      transform: [{ translateY: translateY }],
     };
   });
 
+  const plusIcon = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: `${progress.value * 90}deg` }],
+    };
+  });
+
+  const handlePressRemoveEvent = () => {
+    Alert.alert(
+      'Borrar evento',
+      '¿Estás seguro de que quieres borrar el evento?',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'Borrar', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  };
+  const handlePressExitEvent = () => {
+    Alert.alert(
+      'Salir del grupo',
+      '¿Estás seguro de que quieres salir del grupo?',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'Salir', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[styles.contentContainer, firstIcon, firstWidthStyle]}>
-        <Animated.View style={[styles.iconContainer, opacityIconButton]}>
-            <Icon
+      {isEventCreator && (
+        <Animated.View
+          style={[styles.contentContainer, firstIcon, firstWidthStyle]}
+        >
+          <Pressable
+            onPress={() => handlePressRemoveEvent()}
+            style={styles.contentContainer}
+          >
+            <Animated.View style={[styles.iconContainer, opacityIconButton]}>
+              <Icon
+                name="delete"
+                type="antdesign"
+                color={"#fff"}
+                size={20}
+                style={styles.icon}
+              />
+            </Animated.View>
+            <Animated.Text style={[styles.text, opacityText]}>
+              Borrar evento
+            </Animated.Text>
+          </Pressable>
+        </Animated.View>
+      )}
+      {userHasJoinedEvent && (
+        <Animated.View
+          style={[styles.contentContainer, firstIcon, firstWidthStyle]}
+        >
+          <Pressable
+            onPress={() => handlePressExitEvent()}
+            style={styles.contentContainer}
+          >
+            <Animated.View style={[styles.iconContainer, opacityIconButton]}>
+              <Icon
                 name="exit"
                 type="ionicon"
                 color={"#fff"}
                 size={20}
                 style={styles.icon}
-            />
+              />
+            </Animated.View>
+            <Animated.Text style={[styles.text, opacityText]}>
+              Salir del grupo
+            </Animated.Text>
+          </Pressable>
         </Animated.View>
-        <Animated.Text style={[styles.text, opacityText]}>
-          Salir del grupo
-        </Animated.Text>
-      </Animated.View>
-         <Pressable
+      )}
+      <Pressable
         style={styles.contentContainer}
         onPress={() => {
           handlePress();
-        }}>
+        }}
+      >
         <Animated.View style={[styles.iconContainer, plusIcon]}>
-        <Icon
+          <Icon
             name="dots-three-vertical"
             type="entypo"
             color={colors.white}
             size={20}
             style={styles.icon}
-            />
+          />
         </Animated.View>
       </Pressable>
     </View>
@@ -138,7 +205,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 2,
     overflow: 'hidden',
-
   },
   iconContainer: {
     width: 44,
@@ -153,6 +219,6 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'SignikaRegular'
+    fontFamily: 'SignikaRegular',
   },
 });
