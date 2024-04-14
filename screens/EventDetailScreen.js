@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'; // Importa FastImage
 import useCategoryStore from 'store/CategoryStore';
 import useTabStore from 'store/TabStore';
+import * as Haptics from 'expo-haptics';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -21,6 +22,8 @@ export default function EventDetailScreen ({ route }) {
     const { mutate } = useMutation(JoinEvent);
     const [loading, setLoading] = useState(false);
     const handleJoinEvent = () => {
+        // low haptic feedback
+        Haptics.selectionAsync();
         setLoading(true);
         mutate({ event: event, participant: userLogged.user }, {
             onSuccess: () => {

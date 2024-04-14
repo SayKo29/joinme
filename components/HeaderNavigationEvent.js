@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import { useNavigation } from '@react-navigation/native'
 import useHeaderEventStore from 'store/HeaderEventStore'
-useHeaderEventStore
+import * as Haptics from 'expo-haptics'
 
 
 const HeaderNavigationEvent = () => {
     const navigation = useNavigation()
     const tab = useHeaderEventStore((state) => state.tab)
     const handleSelect = (value) => {
+        Haptics.selectionAsync()
         navigation.navigate(value)
         useHeaderEventStore.setState({ tab: value })
     }
