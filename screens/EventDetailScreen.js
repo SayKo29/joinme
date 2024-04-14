@@ -5,7 +5,7 @@ import getUsersData from '@/api/UsersData';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useAuth } from '@/contexts/Auth';
 import JoinEvent from '@/api/EventJoinParticipant';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import Headerback from 'components/HeaderBack';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'; // Importa FastImage
@@ -65,7 +65,7 @@ export default function EventDetailScreen ({ route }) {
                         <Text style={styles.textDescription}>{eventCategory?.name}</Text>
                     </Animated.View>
                 </View>
-                <View style={styles.eventInfo}>
+                <Animated.View style={styles.eventInfo} entering={FadeInUp.delay(800)} >
                     <Text style={styles.textDescription}>{event.description}</Text>
                     {/* Si el evento tiene un creador */}
                     {eventCreator && (
@@ -87,15 +87,17 @@ export default function EventDetailScreen ({ route }) {
                         )}
                     {
                         userHasJoinedEvent && (
-                            <TouchableOpacity
-                                style={styles.buttonJoin}
-                                disabled
-                            >
-                                <Text style={styles.buttonText}>Ya te has unido al evento</Text>
-                            </TouchableOpacity>
+                            <Animated.View style={{ flex: 1 }} entering={FadeInUp.delay(1000)}>
+                                <TouchableOpacity
+                                    style={styles.buttonJoin}
+                                    disabled
+                                >
+                                    <Text style={styles.buttonText}>Ya te has unido al evento</Text>
+                                </TouchableOpacity>
+                            </Animated.View>
                         )
                     }
-                </View>
+                </Animated.View>
             </View>
         </View>
     );

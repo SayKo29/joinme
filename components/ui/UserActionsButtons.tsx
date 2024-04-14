@@ -15,8 +15,8 @@ import { Icon } from 'react-native-elements';
 import colors from 'styles/colors';
 
 const UserActionsButtons = () => {
-  const thirdValue = useSharedValue(44);
-  const thirdWidth = useSharedValue(44);
+  const firstValue = useSharedValue(44);
+  const firstWidth = useSharedValue(44);
   const isOpen = useSharedValue(false);
   const opacity = useSharedValue(0);
   const opacityIcon = useSharedValue(0);
@@ -30,16 +30,16 @@ const UserActionsButtons = () => {
       duration: 500,
     };
     if (isOpen.value) {
-      thirdWidth.value = withTiming(44, {duration: 100}, finish => {
+      firstWidth.value = withTiming(44, {duration: 100}, finish => {
         if (finish) {
-          thirdValue.value = withDelay(44, withTiming(44, config));
+          firstValue.value = withDelay(44, withTiming(44, config));
         }
       });
       opacity.value = withTiming(0, {duration: 100});
       opacityIcon.value = withTiming(0, {duration: 500});
     } else {
-      thirdValue.value = withSpring(100);
-      thirdWidth.value = withDelay(500, withSpring(160));
+      firstValue.value = withSpring(100);
+      firstWidth.value = withDelay(500, withSpring(160));
       opacity.value = withDelay(800, withSpring(1));
       opacityIcon.value = withDelay(100, withSpring(1));
     }
@@ -57,23 +57,23 @@ const UserActionsButtons = () => {
     };
   });
 
-  const thirdWidthStyle = useAnimatedStyle(() => {
+  const firstWidthStyle = useAnimatedStyle(() => {
     return {
-      width: thirdWidth.value,
+      width: firstWidth.value,
     };
   });
 
   
-const thirdIcon = useAnimatedStyle(() => {
+const firstIcon = useAnimatedStyle(() => {
     const translateY = interpolate(
-        thirdValue.value,
+        firstValue.value,
         [30, -200],
         [-45, 70],
         Extrapolation.CLAMP,
     );
 
     return {
-        top: thirdValue.value,
+        top: firstValue.value,
         transform: [{ translateY: translateY }],
     };
 });
@@ -87,7 +87,7 @@ const thirdIcon = useAnimatedStyle(() => {
   return (
     <View style={styles.container}>
       <Animated.View
-        style={[styles.contentContainer, thirdIcon, thirdWidthStyle]}>
+        style={[styles.contentContainer, firstIcon, firstWidthStyle]}>
         <Animated.View style={[styles.iconContainer, opacityIconButton]}>
             <Icon
                 name="exit"
