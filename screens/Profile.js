@@ -56,7 +56,7 @@ const Profile = ({ navigation }) => {
                                 ? { uri: user.avatar } : user.picture ? { uri: user.picture }
                                     : require('@/assets/avatar.png')
                         }
-                        resizeMode='cover'
+                        resizeMode='stretch'
                     />
                     <View style={profile.filterBackgroundColor} />
                     <View style={profile.profileContainer}>
@@ -161,7 +161,7 @@ const profile = StyleSheet.create({
         width: '100%',
         height: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     filterBackgroundColor: {
         width: '100%',

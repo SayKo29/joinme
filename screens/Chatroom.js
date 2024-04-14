@@ -16,15 +16,14 @@ import { FlashList } from '@shopify/flash-list'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const ChatRooms = () => {
     const navigation = useNavigation()
     const auth = useAuth()
-    const inset = useSafeAreaInsets()
+    const loggedUser = auth.authData.user
     // console.log(auth.authData.user._id)
     const { isLoading, isError, data } = useQuery('CHATROOMS', () =>
-        getEventsByParticipant(auth.authData.user._id)
+        getEventsByParticipant(loggedUser._id)
     )
 
     const handleSelectChatroom = (event) => {

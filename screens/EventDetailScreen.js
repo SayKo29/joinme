@@ -54,7 +54,7 @@ export default function EventDetailScreen ({ route }) {
                         {/* Usa FastImage en lugar de Image */}
                         <FastImage
                             source={{ uri: event.images[0] ? event.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }}
-                            style={{ width: '100%', height: '100%', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
+                            style={{ width: '100%', height: '100%' }}
                             resizeMode={FastImage.resizeMode.cover} // Ajusta el modo de redimensionamiento según tu necesidad
                         />
                     </Animated.View>
