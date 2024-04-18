@@ -23,7 +23,7 @@ export default () => {
     return (
         <AuthProvider>
             <QueryClientProvider client={queryClient}>
-                <StatusBar style='auto' hidden={false} />
+                <StatusBar style='light' hidden={false} />
                 <Router />
             </QueryClientProvider>
         </AuthProvider>

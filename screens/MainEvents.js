@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import { View, Text, StyleSheet, Platform } from 'react-native'
 import React, { useState } from 'react'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import EventMap from 'components/map/EventMap'
@@ -51,7 +51,7 @@ const MainEvents = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 55,
+        paddingTop: Platform.OS === 'android' ? 0 : 55,
         backgroundColor: colors.background
     },
     headerContainer: {

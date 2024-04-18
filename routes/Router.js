@@ -15,6 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import Toast from 'react-native-toast-message'
 import { toastConfig } from 'styles/toastConfig'
 import LottieAnimation from 'components/LottieAnimation'
+import SafeViewAndroid from 'components/ui/SafeViewAndroid'
 
 
 export const Router = () => {
@@ -38,7 +39,7 @@ export const Router = () => {
         return <LottieAnimation />
     }
     return (
-        <SafeAreaProvider style={{ backgroundColor: colors.background }}>
+        <SafeAreaProvider style={[{ backgroundColor: colors.background }, SafeViewAndroid.AndroidSafeArea]} >
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <NavigationContainer theme={scheme === 'dark' ? MyTheme : DefaultTheme}>
                     {authData ? <AppStack /> : <AuthStack />}

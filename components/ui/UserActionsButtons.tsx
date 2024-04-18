@@ -169,6 +169,7 @@ const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
       )}
       <Pressable
         style={styles.contentContainer}
+        disabled={!isEventCreator && !userHasJoinedEvent}
         onPress={() => {
           handlePress();
         }}

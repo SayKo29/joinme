@@ -10,6 +10,7 @@ import HeaderNavigationEvent from './HeaderNavigationEvent'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { uiStyles } from 'styles/uiStyles'
 import useTabStore from 'store/TabStore'
+import { Platform } from 'react-native'
 
 const MyEvents = ({ navigation }) => {
     const inset = useSafeAreaInsets()
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
         flex: 1,
-        paddingTop: 55
+        paddingTop: Platform.OS === 'android' ? 0 : 55
     },
     center: {
         flex: 1,

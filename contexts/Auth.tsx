@@ -41,10 +41,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     const signIn = async (formData: any): Promise<AuthData | undefined> => {
         try {
-            const authData = await authService.signIn(formData);
+            let authData = await authService.signIn(formData);
             if (authData?.error) {
                 return undefined;
             }
+            // change authData.user.id to authData.user._id
+            authData.user._id = authData?.user?.id;
+            console.log("authData", authData)
             setAuthData(authData);
             await AsyncStorage.setItem("@AuthData", JSON.stringify(authData));
             return authData;

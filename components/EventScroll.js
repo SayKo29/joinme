@@ -94,7 +94,7 @@ const EventScroll = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
-        paddingTop: 55,
+        paddingTop: Platform.OS === 'android' ? 0 : 55,
         width: '100%',
         height: '100%',
         flex: 1

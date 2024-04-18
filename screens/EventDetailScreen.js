@@ -23,7 +23,7 @@ export default function EventDetailScreen ({ route }) {
     const [loading, setLoading] = useState(false);
     const handleJoinEvent = () => {
         // low haptic feedback
-        Haptics.selectionAsync();
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         setLoading(true);
         mutate({ event: event, participant: userLogged.user }, {
             onSuccess: () => {

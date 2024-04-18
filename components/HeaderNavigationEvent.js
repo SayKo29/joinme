@@ -10,7 +10,7 @@ const HeaderNavigationEvent = () => {
     const navigation = useNavigation()
     const tab = useHeaderEventStore((state) => state.tab)
     const handleSelect = (value) => {
-        Haptics.selectionAsync()
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         navigation.navigate(value)
         useHeaderEventStore.setState({ tab: value })
     }

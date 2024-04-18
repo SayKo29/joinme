@@ -23,6 +23,7 @@ const EventMap = ({ data }) => {
     const userLoggedIn = user.authData.user
     const [mapLoaded, setMapLoaded] = useState(false)
     const [initialRegion, setInitialRegion] = useState(null)
+    const [permissionDenied, setPermissionDenied] = useState(false)
     let markerRefs = {}
 
     const renderMarkers = useCallback(() => {
@@ -63,7 +64,7 @@ const EventMap = ({ data }) => {
         [
             location?.coords?.latitude,
             location?.coords?.longitude,
-            userLoggedIn?.avatar
+            userLoggedIn?.picture
         ]
     )
 
@@ -92,14 +93,14 @@ const EventMap = ({ data }) => {
             const { status } = await Location.requestForegroundPermissionsAsync()
             if (status !== 'granted') {
                 console.error('Permission to access location was denied')
-                return
+                setPermissionDenied(true)
             }
 
             const location = await getGeolocation()
             setLocation(location)
             const region = {
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: location?.coords?.latitude,
+                longitude: location?.coords?.longitude,
                 latitudeDelta: 0.03,
                 longitudeDelta: 0.03
             }
@@ -139,6 +140,13 @@ const EventMap = ({ data }) => {
 
     return (
         <View style={styles.container}>
+            {
+                permissionDenied && (
+                    <View style={{ padding: 20, backgroundColor: colors.background }}>
+                        <Text>Has denegado el permiso de ubicación, por favor actívalo en los ajustes de tu dispositivo</Text>
+                    </View>
+                )
+            }
             <View style={styles.mapContainer}>
                 {mapLoaded && (
                     <MapView
@@ -184,7 +192,7 @@ const styles = StyleSheet.create({
     map: {
         flex: 1,
         width: '100%',
-        height: '100%'
+        height: '100%',
     },
     slider: {
         backgroundColor: colors.background

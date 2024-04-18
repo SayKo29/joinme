@@ -4,10 +4,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import UserActionsButtons from './ui/UserActionsButtons';
+import * as Haptics from 'expo-haptics';
 
 const Headerback = ({ isEventCreator, userHasJoinedEvent }) => {
     const inset = useSafeAreaInsets();
     const navigation = useNavigation()
+    const handleBackPress = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        navigation.goBack()
+    }
     return (
         <Animated.View
             style={[styles.container, { top: Platform.OS === 'ios' ? inset.top : 20 }]}
@@ -15,7 +20,7 @@ const Headerback = ({ isEventCreator, userHasJoinedEvent }) => {
             entering={FadeIn.delay(400)}>
             <Pressable
                 onPress={() => {
-                    navigation.goBack();
+                    handleBackPress();
                 }}>
                 <Image
                     source={require('../assets/img/chevron.png')}

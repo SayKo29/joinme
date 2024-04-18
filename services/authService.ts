@@ -21,6 +21,7 @@ const signIn = async (formData: any) => {
     requestOptions
   );
   const json = await response.json();
+
   if (json.error) {
     return json;
   } else {

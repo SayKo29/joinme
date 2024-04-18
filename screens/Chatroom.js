@@ -16,6 +16,8 @@ import { FlashList } from '@shopify/flash-list'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
+import useTabStore from 'store/TabStore'
+import { uiStyles } from 'styles/uiStyles'
 
 const ChatRooms = () => {
     const navigation = useNavigation()
@@ -30,28 +32,38 @@ const ChatRooms = () => {
         navigation.navigate('ChatScreen', { event })
     }
 
+    const handleGoToEvents = () => {
+        navigation.navigate('EventMap')
+        useTabStore.setState({ tab: 0 })
+    }
+
     if (isLoading || isError) {
         return isLoading ? <LottieAnimation /> : <Text>Error</Text>
     }
     const events = data ?? []
 
     // sort events by date
-    events?.sort((a, b) => {
-        return new Date(b.endDate) - new Date(a.endDate)
-    })
+    if (events?.length > 0) {
+        events.sort((a, b) => {
+            return new Date(b.endDate) - new Date(a.endDate)
+        })
+    }
 
     if (events.length === 0) {
         return (
-            <View style={styles.emptyContainer}>
-                <TouchableOpacity
-                    style={styles.emptyContainer}
-                    onPress={() => navigation.navigate('Eventos')}
-                >
-                    <Text style={styles.text}>
-                        No hay chats disponibles, para unirte a alguno,
+            <View style={styles.emptyView}>
+                <View style={styles.textContainerEmpty}>
+                    <Text style={styles.textEmpty}>
+                        No hay chats de eventos disponibles, para unirte a alguno,
                     </Text>
-                    <Text style={styles.btn}>únete a un evento</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={uiStyles.button}
+                        onPress={handleGoToEvents}
+                    >
+                        <Text style={styles.buttonText}>Únete a un evento</Text>
+                    </TouchableOpacity>
+                </View>
+                <CustomBottomTab />
             </View>
         )
     }
@@ -145,11 +157,31 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.white
     },
-    emptyContainer: {
+    emptyView: {
         flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.background
+    },
+    textContainerEmpty: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10
+    },
+    textEmpty: {
+        color: colors.white,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingBottom: 15,
+        fontFamily: 'SignikaBold'
+    },
+    emptyContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10
     },
     title: {
         alignItems: 'center',

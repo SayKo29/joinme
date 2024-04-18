@@ -6,7 +6,9 @@
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
-        "userInterfaceStyle": "automatic",
+        "userInterfaceStyle": "dark",
+        "backgroundColor": "#081c15",
+        "primaryColor": "#40916c",
         "splash": {
             "image": "./assets/logo.png",
             "resizeMode": "contain",

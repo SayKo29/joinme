@@ -6,11 +6,17 @@ export const uiStyles = {
         borderRadius: 5,
     },
     buttonText: {
-        color: 'black',
+        color: colors.black,
         fontWeight: 'bold',
         textAlign: 'center',
         fontFamily: 'SignikaBold',
-        fontWeight: 'bold',
         fontSize: 16
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: 'SignikaBold',
+        textAlign: 'center'
     }
 }

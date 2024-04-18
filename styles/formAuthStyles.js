@@ -102,10 +102,15 @@ const formAuth = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        //
         backgroundColor: colors.accent,
-        color: '#FFF',
         borderRadius: 40
+    },
+    buttonText: {
+        fontFamily: 'SignikaBold',
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 16
     }
 })
 

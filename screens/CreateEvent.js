@@ -1,4 +1,5 @@
 import {
+    Platform,
     StyleSheet,
     Text,
     View
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.background,
-        paddingTop: 55
+        paddingTop: Platform.OS === 'android' ? 0 : 55,
     },
     titleContainer: {
         alignItems: 'center'

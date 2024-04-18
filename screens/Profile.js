@@ -49,15 +49,17 @@ const Profile = ({ navigation }) => {
         <View style={profile.container}>
             <View style={profile.content}>
                 <View style={profile.profileBackgroundContent}>
-                    <Image
-                        style={profile.imageBackground}
-                        source={
-                            user.avatar
-                                ? { uri: user.avatar } : user.picture ? { uri: user.picture }
-                                    : require('@/assets/avatar.png')
-                        }
-                        resizeMode='stretch'
-                    />
+                    <View style={profile.imageBackgroundContainer}>
+                        <Image
+                            style={profile.imageBackground}
+                            source={
+                                user.avatar
+                                    ? { uri: user.avatar } : user.picture ? { uri: user.picture }
+                                        : require('@/assets/avatar.png')
+                            }
+                            resizeMode='cover'
+                        />
+                    </View>
                     <View style={profile.filterBackgroundColor} />
                     <View style={profile.profileContainer}>
                         <Image
@@ -157,13 +159,18 @@ const profile = StyleSheet.create({
         alignItems: 'center'
     },
     imageBackground: {
-        flex: 1,
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
     },
+    imageBackgroundContainer: {
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+    },
     filterBackgroundColor: {
+        flex: 1,
         width: '100%',
         height: '100%',
         backgroundColor: colors.primary,
