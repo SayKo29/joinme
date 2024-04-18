@@ -24,7 +24,7 @@ const EventMap = ({ data }) => {
     const [mapLoaded, setMapLoaded] = useState(false)
     const [initialRegion, setInitialRegion] = useState(null)
     const [permissionDenied, setPermissionDenied] = useState(false)
-    let markerRefs = {}
+    const markerRefs = useRef([])
 
     const renderMarkers = useCallback(() => {
         return data.data.map((event) => (
@@ -123,7 +123,7 @@ const EventMap = ({ data }) => {
 
     const hideMarker = () => {
         const markerRefId = markerPressed._id
-        console.log(markerRefs, markerRefId)
+        markerRefs[markerRefId].hideCallout()
         setMarkerPressed(false)
     }
 
