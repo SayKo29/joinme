@@ -21,13 +21,16 @@ const EventMap = ({ data }) => {
     const mapRef = useRef(null)
     const user = useAuth()
     const userLoggedIn = user.authData.user
+    const events = data.data
+        ? data.data.filter((event) => event.user !== userLoggedIn._id)
+        : []
     const [mapLoaded, setMapLoaded] = useState(false)
     const [initialRegion, setInitialRegion] = useState(null)
     const [permissionDenied, setPermissionDenied] = useState(false)
     const markerRefs = useRef([])
 
     const renderMarkers = useCallback(() => {
-        return data.data.map((event) => (
+        return events.map((event) => (
             <Marker
                 key={event._id}
                 title={event?.name}
@@ -37,11 +40,11 @@ const EventMap = ({ data }) => {
                     longitude: parseFloat(event?.coords?.lng)
                 }}
                 ref={(ref) => markerRefs[event._id] = ref}
-                pinColor={event.user === userLoggedIn._id ? 'red' : colors.primary}
+                pinColor={colors.primary}
                 onPress={() => handleMarkerPressed(event)}
             />
         ))
-    }, [data.data])
+    }, [events])
 
     const renderLocationMarker = useCallback(
         () => (

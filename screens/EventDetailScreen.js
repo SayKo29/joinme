@@ -12,6 +12,9 @@ import FastImage from 'react-native-fast-image'; // Importa FastImage
 import useCategoryStore from 'store/CategoryStore';
 import useTabStore from 'store/TabStore';
 import * as Haptics from 'expo-haptics';
+import Toast from 'react-native-toast-message';
+import LottieAnimation from 'components/LottieAnimation';
+import RemoveEventOrParticipant from 'api/RemoveEventOrParticipant';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -20,6 +23,7 @@ export default function EventDetailScreen ({ route }) {
     const auth = useAuth();
     const userLogged = auth.authData;
     const { mutate } = useMutation(JoinEvent);
+    const removeEventOrParticipant = useMutation(RemoveEventOrParticipant);
     const [loading, setLoading] = useState(false);
     const handleJoinEvent = () => {
         // low haptic feedback
@@ -46,63 +50,111 @@ export default function EventDetailScreen ({ route }) {
 
     const eventCreator = users?.data[event?.user];
     const isEventCreator = eventCreator?._id === userLogged.user._id;
+
+    const handleSendPress = (param) => {
+        setLoading(true);
+        if (param === 1) {
+            // exit group action
+            let eventToUpdate = { ...event, participants: event.participants.filter(participant => participant !== userLogged.user._id) };
+            removeEventOrParticipant.mutate(eventToUpdate, {
+                onSuccess: () => {
+                    queryClient.invalidateQueries('EVENTS');
+                    queryClient.invalidateQueries('CHATROOMS');
+                    setLoading(false);
+                    navigation.goBack();
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'success',
+                        position: 'bottom',
+                        text1: 'Has salido del evento',
+                        text2: 'Has salido del evento correctamente'
+                    });
+                }
+            });
+        }
+        if (param === 2) {
+            // update Event.status to 2 for delete it
+            let eventToUpdate = { ...event, status: 2 };
+            removeEventOrParticipant.mutate(eventToUpdate, {
+                onSuccess: () => {
+                    queryClient.invalidateQueries('EVENTS');
+                    queryClient.invalidateQueries('CHATROOMS');
+                    setLoading(false);
+                    navigation.goBack();
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'success',
+                        position: 'bottom',
+                        text1: 'Evento eliminado',
+                        text2: 'El evento ha sido eliminado correctamente'
+                    });
+                }
+            });
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <Headerback isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} />
-            <View>
-                <View>
-                    <Animated.View
-                        sharedTransitionTag={event._id}
-                        style={{ width: width, height: width }}
-                    >
-                        {/* Usa FastImage en lugar de Image */}
-                        <FastImage
-                            source={{ uri: event.images[0] ? event.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }}
-                            style={{ width: '100%', height: '100%' }}
-                            resizeMode={FastImage.resizeMode.cover} // Ajusta el modo de redimensionamiento según tu necesidad
-                        />
-                    </Animated.View>
-                    <Animated.View
-                        style={styles.textContainer}
-                        entering={FadeInUp.delay(600)}>
-                        <Text style={styles.textName}>{event.name}</Text>
-                        <Text style={styles.textDescription}>{eventCategory?.name}</Text>
-                    </Animated.View>
-                </View>
-                <Animated.View style={styles.eventInfo} entering={FadeInUp.delay(800)} >
-                    <Text style={styles.textDescription}>{event.description}</Text>
-                    {/* Si el evento tiene un creador */}
-                    {eventCreator && (
-                        <Text style={styles.textCreatedBy}>
-                            Evento creado por <Text style={styles.bolderText}>{eventCreator?.name}</Text>
-                        </Text>
-                    )}
-
-                    {/* Botón para unirse al evento si no eres el creador del evento y no eres un participante del evento */}
-                    {userLogged.user._id !== event.user &&
-                        !userHasJoinedEvent && (
-                            <TouchableOpacity
-                                style={styles.buttonJoin}
-                                disabled={loading}
-                                onPress={handleJoinEvent}
+            {loading && <LottieAnimation />}
+            {!loading && (
+                <>
+                    <Headerback isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} sendPress={handleSendPress} />
+                    <View>
+                        <View>
+                            <Animated.View
+                                sharedTransitionTag={event._id}
+                                style={{ width: width, height: width }}
                             >
-                                <Text style={styles.buttonText}>Unirse al chat del evento</Text>
-                            </TouchableOpacity>
-                        )}
-                    {
-                        userHasJoinedEvent && (
-                            <Animated.View style={{ flex: 1 }} entering={FadeInUp.delay(1000)}>
-                                <TouchableOpacity
-                                    style={styles.buttonJoin}
-                                    disabled
-                                >
-                                    <Text style={styles.buttonText}>Ya te has unido al evento</Text>
-                                </TouchableOpacity>
+                                {/* Usa FastImage en lugar de Image */}
+                                <FastImage
+                                    source={{ uri: event.images[0] ? event.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }}
+                                    style={{ width: '100%', height: '100%' }}
+                                    resizeMode={FastImage.resizeMode.cover} // Ajusta el modo de redimensionamiento según tu necesidad
+                                />
                             </Animated.View>
-                        )
-                    }
-                </Animated.View>
-            </View>
+                            <Animated.View
+                                style={styles.textContainer}
+                                entering={FadeInUp.delay(600)}>
+                                <Text style={styles.textName}>{event.name}</Text>
+                                <Text style={styles.textDescription}>{eventCategory?.name}</Text>
+                            </Animated.View>
+                        </View>
+                        <Animated.View style={styles.eventInfo} entering={FadeInUp.delay(800)} >
+                            <Text style={styles.textDescription}>{event.description}</Text>
+                            {/* Si el evento tiene un creador */}
+                            {eventCreator && (
+                                <Text style={styles.textCreatedBy}>
+                                    Evento creado por <Text style={styles.bolderText}>{eventCreator?.name}</Text>
+                                </Text>
+                            )}
+
+                            {/* Botón para unirse al evento si no eres el creador del evento y no eres un participante del evento */}
+                            {userLogged.user._id !== event.user &&
+                                !userHasJoinedEvent && (
+                                    <TouchableOpacity
+                                        style={styles.buttonJoin}
+                                        disabled={loading}
+                                        onPress={handleJoinEvent}
+                                    >
+                                        <Text style={styles.buttonText}>Unirse al chat del evento</Text>
+                                    </TouchableOpacity>
+                                )}
+                            {
+                                userHasJoinedEvent && (
+                                    <Animated.View style={{ flex: 1 }} entering={FadeInUp.delay(1000)}>
+                                        <TouchableOpacity
+                                            style={styles.buttonJoin}
+                                            disabled
+                                        >
+                                            <Text style={styles.buttonText}>Ya te has unido al evento</Text>
+                                        </TouchableOpacity>
+                                    </Animated.View>
+                                )
+                            }
+                        </Animated.View>
+                    </View>
+                </>
+            )}
         </View>
     );
 }

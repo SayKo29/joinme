@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import UserActionsButtons from './ui/UserActionsButtons';
 import * as Haptics from 'expo-haptics';
 
-const Headerback = ({ isEventCreator, userHasJoinedEvent }) => {
+const Headerback = ({ isEventCreator, userHasJoinedEvent, sendPress }) => {
     const inset = useSafeAreaInsets();
     const navigation = useNavigation()
     const handleBackPress = () => {
@@ -28,7 +28,7 @@ const Headerback = ({ isEventCreator, userHasJoinedEvent }) => {
                 />
             </Pressable>
             <View style={{ position: 'relative', width: 44, height: 44 }}>
-                <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} />
+                <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} sendPress={sendPress} />
             </View>
         </Animated.View>
     );

@@ -1,5 +1,5 @@
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import React from 'react';
+import { Alert, Pressable, StyleSheet, View } from "react-native";
+import React from "react";
 import Animated, {
   Easing,
   Extrapolation,
@@ -10,23 +10,31 @@ import Animated, {
   withDelay,
   withSpring,
   withTiming,
-} from 'react-native-reanimated';
-import { Icon } from 'react-native-elements';
-import colors from 'styles/colors';
+} from "react-native-reanimated";
+import { Icon } from "react-native-elements";
+import colors from "styles/colors";
+import { userActionsParameters } from "Constants";
 
 type params = {
   isEventCreator: boolean;
   userHasJoinedEvent: boolean;
+  sendPress: (value: Number) => void;
 };
 
-const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
+const UserActionsButtons = ({
+  isEventCreator,
+  userHasJoinedEvent,
+  sendPress,
+}: params) => {
   const firstValue = useSharedValue(44);
   const firstWidth = useSharedValue(44);
+  const secondValue = useSharedValue(44);
+  const secondWidth = useSharedValue(44);
   const isOpen = useSharedValue(false);
   const opacity = useSharedValue(0);
   const opacityIcon = useSharedValue(0);
   const progress = useDerivedValue(() =>
-    isOpen.value ? withTiming(1) : withTiming(0),
+    isOpen.value ? withTiming(1) : withTiming(0)
   );
 
   const handlePress = () => {
@@ -40,11 +48,18 @@ const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
           firstValue.value = withDelay(44, withTiming(44, config));
         }
       });
+      secondWidth.value = withTiming(44, { duration: 100 }, (finish) => {
+        if (finish) {
+          secondValue.value = withDelay(44, withTiming(44, config));
+        }
+      });
       opacity.value = withTiming(0, { duration: 100 });
       opacityIcon.value = withTiming(0, { duration: 500 });
     } else {
       firstValue.value = withSpring(100);
-      firstWidth.value = withDelay(500, withSpring(160));
+      firstWidth.value = withDelay(500, withSpring(170));
+      secondValue.value = withSpring(100);
+      secondWidth.value = withDelay(500, withSpring(175));
       opacity.value = withDelay(800, withSpring(1));
       opacityIcon.value = withDelay(100, withSpring(1));
     }
@@ -68,12 +83,18 @@ const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
     };
   });
 
+  const secondWidthStyle = useAnimatedStyle(() => {
+    return {
+      width: secondWidth.value,
+    };
+  });
+
   const firstIcon = useAnimatedStyle(() => {
     const translateY = interpolate(
       firstValue.value,
       [30, -200],
       [-45, 70],
-      Extrapolation.CLAMP,
+      Extrapolation.CLAMP
     );
 
     return {
@@ -90,32 +111,38 @@ const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
 
   const handlePressRemoveEvent = () => {
     Alert.alert(
-      'Borrar evento',
-      '¿Estás seguro de que quieres borrar el evento?',
+      "Borrar evento",
+      "¿Estás seguro de que quieres borrar el evento?",
       [
         {
-          text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
+          text: "Cancelar",
+          onPress: () => handlePress(),
+          style: "cancel",
         },
-        { text: 'Borrar', onPress: () => console.log('OK Pressed') },
+        {
+          text: "Borrar",
+          onPress: () => sendPress(userActionsParameters.deleteEvent),
+        },
       ],
-      { cancelable: false },
+      { cancelable: false }
     );
   };
   const handlePressExitEvent = () => {
     Alert.alert(
-      'Salir del grupo',
-      '¿Estás seguro de que quieres salir del grupo?',
+      "Salir del evento",
+      "¿Estás seguro de que quieres salir del evento?",
       [
         {
-          text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
+          text: "Cancelar",
+          onPress: () => handlePress(),
+          style: "cancel",
         },
-        { text: 'Salir', onPress: () => console.log('OK Pressed') },
+        {
+          text: "Salir",
+          onPress: () => sendPress(userActionsParameters.exitGroup),
+        },
       ],
-      { cancelable: false },
+      { cancelable: false }
     );
   };
 
@@ -146,7 +173,7 @@ const UserActionsButtons = ({ isEventCreator, userHasJoinedEvent }: params) => {
       )}
       {userHasJoinedEvent && (
         <Animated.View
-          style={[styles.contentContainer, firstIcon, firstWidthStyle]}
+          style={[styles.contentContainer, firstIcon, secondWidthStyle]}
         >
           <Pressable
             onPress={() => handlePressExitEvent()}
@@ -197,29 +224,29 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     backgroundColor: colors.secondary,
-    position: 'absolute',
+    position: "absolute",
     right: 26,
     top: 0,
     borderRadius: 50,
     height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     zIndex: 2,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   iconContainer: {
     width: 44,
     height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   icon: {
     width: 20,
     height: 20,
   },
   text: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontFamily: 'SignikaRegular',
+    fontFamily: "SignikaRegular",
   },
 });

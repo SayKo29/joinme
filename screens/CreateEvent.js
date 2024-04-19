@@ -78,8 +78,9 @@ const CreateEvent = () => {
             useTabStore.setState({ tab: 0 });
             navigation.navigate('MyEvents');
             Toast.show({
+                position: 'bottom',
                 type: 'success',
-                text1: 'Evento creado exitosamente',
+                text1: 'Evento creado correctamente',
                 visibilityTime: 3000,
             });
         } catch (error) {
