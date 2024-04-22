@@ -283,7 +283,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                         updateEvent('endDate', date)
                         hideDatePicker2()
                     }}
-                    onCancel={hideDatePicker}
+                    onCancel={hideDatePicker2}
                 />
             </View>
         </View>
