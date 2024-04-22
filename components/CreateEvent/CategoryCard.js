@@ -9,7 +9,7 @@ const CategoryCard = ({ category, categorySelected, activeCategory }) => {
                 styles.card,
                 {
                     backgroundColor:
-                        activeCategory === category._id
+                        activeCategory === category?._id
                             ? colors.primary
                             : colors.background
                 }

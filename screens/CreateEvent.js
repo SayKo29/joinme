@@ -12,7 +12,6 @@ import { ProgressSteps, ProgressStep } from 'react-native-progress-steps'
 import AdvancedEventInfo from '@/components/CreateEvent/AdvancedEventInfo'
 import CreateEventPost from '@/api/CreateEventPost'
 import { useAuth } from '@/contexts/Auth'
-import { useQuery } from 'react-query'
 import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
@@ -22,11 +21,6 @@ import { useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 const CreateEvent = () => {
     const navigation = useNavigation()
-    const eventsQuery = useQuery({
-        queryKey: ['EVENTS'],
-        queryFn: getEventsData,
-        refetchInterval: 300000
-    })
 
     const [category, setCategory] = React.useState('')
     const [loading, setLoading] = React.useState(false)
@@ -72,7 +66,8 @@ const CreateEvent = () => {
 
         try {
             await CreateEventPost(eventToSend);
-            await eventsQuery.refetch();
+            // invalidate the query to get the new data
+            getEventsData.invalidateQueries('EVENTS');
             setEvent({/* estado inicial del evento */ });
             useHeaderEventStore.setState({ tab: 'MyEvents' });
             useTabStore.setState({ tab: 0 });
@@ -97,9 +92,8 @@ const CreateEvent = () => {
     };
 
 
-    // when navigating to another screen, reset the event state
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('blur', () => {
+        const resetEventState = () => {
             setEvent({
                 name: '',
                 description: '',
@@ -111,11 +105,18 @@ const CreateEvent = () => {
                 endDate: '',
                 participants: [],
                 chatroom: ''
-            })
-        })
+            });
+        };
 
-        return unsubscribe
-    }, [navigation])
+        const unsubscribe = navigation.addListener('blur', resetEventState);
+
+        return () => {
+            unsubscribe();
+            resetEventState(); // Limpia el estado cuando se desmonta el componente
+        };
+    }, [navigation]);
+
+    console.log('hiii')
 
     return (
         <View style={[styles.container]}>
@@ -147,9 +148,8 @@ const CreateEvent = () => {
                             nextBtnTextStyle={styles.nextBtnTextStyle}
                             nextBtnText='Siguiente'
                             nextBtnDisabled={category === ''}
-                            scrollViewProps={{
-                                showsVerticalScrollIndicator: false
-                            }}
+                            scrollable={false}
+                            viewProps={{ style: { flex: 1 } }}
                         >
                             <SelectCategory
                                 categorySelected={setCategory}

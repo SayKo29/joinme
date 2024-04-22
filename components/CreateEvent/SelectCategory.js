@@ -1,13 +1,14 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, FlatList } from 'react-native'
+import React, { useMemo, useState } from 'react'
 import CategoryCard from './CategoryCard'
 import colors from '@/styles/colors'
 import LottieAnimation from '@/components/LottieAnimation'
 import formStyles from 'styles/formStyles'
 import useCategoryStore from 'store/CategoryStore'
 import Animated, { FadeInDown } from 'react-native-reanimated'
+import { FlashList } from '@shopify/flash-list'
 
-const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
+const SelectCategory = ({ categorySelected, activeCategory }) => {
     const [loading, setLoading] = useState(false)
     const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
@@ -42,10 +43,31 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     const normalize = (text) => {
         return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
+    // Use useMemo outside of the conditional block
+    const memoizedCategories = useMemo(() => (
+        <FlashList
+            data={filteredCategories}
+            estimatedItemSize={filteredCategories.length}
+            renderItem={({ item, index }) => (
+                <Animated.View entering={FadeInDown.delay(300 * index)}>
+                    <CategoryCard
+                        category={item}
+                        onCategoryPress={handleCategoryPressed}
+                        activeCategory={activeCategory}
+                    />
+                </Animated.View>
+            )}
+            keyExtractor={(item) => item._id}
+        />
+    ), [filteredCategories]);
 
     return (
         <View style={styles.container}>
-            {loading ? <LottieAnimation />
+            {loading || filteredCategories.length === 0 ? <>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <LottieAnimation />
+                </View>
+            </>
                 :
                 <>
                     <View style={styles.titleContainer}>
@@ -57,16 +79,7 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
                         </Text>
                         <TextInput placeholder='Senderismo...' placeholderTextColor={colors.gray} style={formStyles.input} onChangeText={(text) => handleCategoryFiltering(text)} />
                     </View>
-                    {filteredCategories.map((category, index) => (
-                        <Animated.View entering={FadeInDown.delay(50 * index)} key={index}>
-                            <CategoryCard
-                                key={category._id}
-                                category={category}
-                                categorySelected={handleCategoryPressed}
-                                activeCategory={activeCategory}
-                            />
-                        </Animated.View>
-                    ))}
+                    {memoizedCategories}
                 </>}
         </View>
     )

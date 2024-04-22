@@ -2,7 +2,8 @@ import { create } from 'zustand';
 
 const useUsersStore = create((set) => ({
     users: [],
-    setEvents: (data) => set({ users: data }),
+    setUsers: (data) => set({ users: data }),
+    getUsers: () => useUsersStore.getState().users
 }));
 
 export default useUsersStore;

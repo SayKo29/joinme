@@ -93,32 +93,42 @@ const EventMap = ({ data }) => {
 
     useEffect(() => {
         const getLocation = async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync()
+            const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                console.error('Permission to access location was denied')
-                setPermissionDenied(true)
+                console.error('Permission to access location was denied');
+                setPermissionDenied(true);
+                return;
             }
 
-            const location = await getGeolocation()
-            setLocation(location)
+            const location = await getGeolocation();
+            setLocation(location);
             const region = {
                 latitude: location?.coords?.latitude,
                 longitude: location?.coords?.longitude,
                 latitudeDelta: 0.03,
                 longitudeDelta: 0.03
+            };
+            setInitialRegion(region);
+
+            const storedRegion = await AsyncStorage.getItem('region');
+            if (storedRegion) {
+                const parsedRegion = JSON.parse(storedRegion);
+                if (parsedRegion.latitude === region.latitude && parsedRegion.longitude === region.longitude) {
+                    return;
+                }
             }
-            setInitialRegion(region)
-            AsyncStorage.setItem('region', JSON.stringify(region))
-            mapRef.current.animateToRegion(region, 2000)
 
+            AsyncStorage.setItem('region', JSON.stringify(region));
+        };
+
+        getLocation();
+    }, []);
+
+    useEffect(() => {
+        if (initialRegion) {
+            mapRef?.current?.animateToRegion(initialRegion, 2000);
         }
-
-        getLocation()
-
-        return () => {
-            console.log('clean up')
-        }
-    }, [])
+    }, [initialRegion]);
 
     const handleMarkerPressed = (marker) => {
         setMarkerPressed(marker)
