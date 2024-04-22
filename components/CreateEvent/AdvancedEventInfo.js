@@ -78,7 +78,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                 `https://geocode.search.hereapi.com/v1/geocode?q=${encodedAddress}&apiKey=${HERE_API_KEY}`
             );
             const data = await response.json();
-            const addresses = data.items.map((item) => ({
+            const addresses = data?.items?.map((item) => ({
                 address: item.title,
                 position: item.position,
             }));
@@ -175,7 +175,7 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                         </View>
                         <View>
                             {results.length > 0 && !hasSelectedLocation ? (
-                                results.map((result, index) => (
+                                results?.map((result, index) => (
                                     // make selectable results to put it in the text input
                                     <TouchableOpacity
                                         key={index}
@@ -204,32 +204,34 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
                 )
                 : null}
             {/* poner un mapa para poner un marcador cuando se seleccione la direccion del evento */}
-            <View style={styles.mapContainer}>
-                {mapLoaded && !event?.isRemote && (
-                    <MapView
-                        ref={mapRef}
-                        provider='google'
-                        clusterColor={colors.primary}
-                        customMapStyle={
-                            mapStyle
-                        }
-                        showsUserLocation
-                        style={styles.map}
-                        mapType='standard'
-                        initialRegion={initialRegion}
-                    >
-                        {markerPosition && (
-                            <Marker
-                                coordinate={{
-                                    latitude: markerPosition.lat,
-                                    longitude: markerPosition.lng
-                                }}
-                                title={event.location.address}
-                            />
-                        )}
-                    </MapView>
-                )}
-            </View>
+            {!event?.isRemote ? (
+                <View style={styles.mapContainer}>
+                    {mapLoaded && (
+                        <MapView
+                            ref={mapRef}
+                            provider='google'
+                            clusterColor={colors.primary}
+                            customMapStyle={
+                                mapStyle
+                            }
+                            showsUserLocation
+                            style={styles.map}
+                            mapType='standard'
+                            initialRegion={initialRegion}
+                        >
+                            {markerPosition && (
+                                <Marker
+                                    coordinate={{
+                                        latitude: markerPosition.lat,
+                                        longitude: markerPosition.lng
+                                    }}
+                                    title={event.location.address}
+                                />
+                            )}
+                        </MapView>
+                    )}
+                </View>
+            ) : null}
 
             <View style={styles.datePicker}>
                 <Text style={formStyles.label}>Fecha y hora de inicio del evento</Text>

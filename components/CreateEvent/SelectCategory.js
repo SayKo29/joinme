@@ -8,6 +8,7 @@ import useCategoryStore from 'store/CategoryStore'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
+    const [loading, setLoading] = useState(false)
     const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
     const [filteredCategories, setFilteredCategories] = useState([])
@@ -15,6 +16,7 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     React.useEffect(() => {
         // Llamar a fetchCategories solo si no está inicializado
         if (!isInitialized) {
+            setLoading(true)
             fetchCategories()
         }
     }, [isInitialized])
@@ -22,12 +24,10 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
     React.useEffect(() => {
         if (categories.length > 0) {
             setFilteredCategories(categories);
+            setLoading(false)
         }
     }, [categories]);
 
-    if (categories.isLoading) {
-        return <LottieAnimation />
-    }
 
     const handleCategoryPressed = (category) => {
         categorySelected(category._id)
@@ -45,25 +45,29 @@ const SelectCategory = ({ navigation, categorySelected, activeCategory }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>Selecciona la categoría del evento</Text>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.title_search}>
-                    Buscar categoría
-                </Text>
-                <TextInput placeholder='Senderismo...' placeholderTextColor={colors.gray} style={formStyles.input} onChangeText={(text) => handleCategoryFiltering(text)} />
-            </View>
-            {filteredCategories.map((category, index) => (
-                <Animated.View entering={FadeInDown.delay(50 * index)} key={index}>
-                    <CategoryCard
-                        key={category._id}
-                        category={category}
-                        categorySelected={handleCategoryPressed}
-                        activeCategory={activeCategory}
-                    />
-                </Animated.View>
-            ))}
+            {loading ? <LottieAnimation />
+                :
+                <>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>Selecciona la categoría del evento</Text>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.title_search}>
+                            Buscar categoría
+                        </Text>
+                        <TextInput placeholder='Senderismo...' placeholderTextColor={colors.gray} style={formStyles.input} onChangeText={(text) => handleCategoryFiltering(text)} />
+                    </View>
+                    {filteredCategories.map((category, index) => (
+                        <Animated.View entering={FadeInDown.delay(50 * index)} key={index}>
+                            <CategoryCard
+                                key={category._id}
+                                category={category}
+                                categorySelected={handleCategoryPressed}
+                                activeCategory={activeCategory}
+                            />
+                        </Animated.View>
+                    ))}
+                </>}
         </View>
     )
 }

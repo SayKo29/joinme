@@ -68,7 +68,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                         resizeMode='cover'
                         source={{
                             uri:
-                                event.images[0] ? event.images[0] : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen'
+                                event.images ? event.images : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen'
                         }}
                     />
                 </View>

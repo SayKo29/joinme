@@ -15,14 +15,13 @@ export default async function CreateEventPost (event) {
     formData.append('participants', event.participants)
     formData.append('chatroom', event.chatroom)
     formData.append('isRemote', !!event.isRemote)
-    // poner todo encima de images que peta
-    if (event.images && event.images.length > 0) {
-        formData.append('images', event.images);
+    // Manejar la imagen adjunta
+    if (event.images) {
+        formData.append('images', event.images); // No necesitas convertirlo a Base64
     }
-
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://calm-lime-armadillo.cyclic.app/api/events",
-    // const response = await fetch("http://192.168.1.160:3000/api/events", {
+    // const response = await fetch("http://192.168.1.199:3000/api/events", {
     const response = await fetch(
         'https://calm-lime-armadillo.cyclic.app/api/events',
         {
