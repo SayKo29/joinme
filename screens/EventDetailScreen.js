@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, useWindowDimensions, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import colors from '@/styles/colors';
 import getUsersData from '@/api/UsersData';
@@ -15,6 +15,8 @@ import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 import LottieAnimation from 'components/LottieAnimation';
 import RemoveEventOrParticipant from 'api/RemoveEventOrParticipant';
+import { Icon } from 'react-native-elements';
+import { formatDateTime, openGoogleMaps } from 'lib/utils';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -119,15 +121,7 @@ export default function EventDetailScreen ({ route }) {
                                 <Text style={styles.textDescription}>{eventCategory?.name}</Text>
                             </Animated.View>
                         </View>
-                        <Animated.View style={styles.eventInfo} entering={FadeInUp.delay(800)} >
-                            <Text style={styles.textDescription}>{event.description}</Text>
-                            {/* Si el evento tiene un creador */}
-                            {eventCreator && (
-                                <Text style={styles.textCreatedBy}>
-                                    Evento creado por <Text style={styles.bolderText}>{eventCreator?.name}</Text>
-                                </Text>
-                            )}
-
+                        <Animated.ScrollView style={styles.eventInfo} entering={FadeInUp.delay(800)} >
                             {/* Botón para unirse al evento si no eres el creador del evento y no eres un participante del evento */}
                             {userLogged.user._id !== event.user &&
                                 !userHasJoinedEvent && (
@@ -141,17 +135,50 @@ export default function EventDetailScreen ({ route }) {
                                 )}
                             {
                                 userHasJoinedEvent && (
-                                    <Animated.View style={{ flex: 1 }} entering={FadeInUp.delay(1000)}>
-                                        <TouchableOpacity
-                                            style={styles.buttonJoin}
-                                            disabled
-                                        >
-                                            <Text style={styles.buttonText}>Ya te has unido al evento</Text>
-                                        </TouchableOpacity>
-                                    </Animated.View>
+                                    <TouchableOpacity
+                                        style={styles.buttonJoin}
+                                        disabled
+                                    >
+                                        <Text style={styles.buttonText}>Ya te has unido al evento</Text>
+                                    </TouchableOpacity>
                                 )
                             }
-                        </Animated.View>
+                            <Text style={styles.descriptionTitle}>Descripción del evento:</Text>
+                            <Text style={[styles.text, styles.space]}>{event.description}</Text>
+                            {/* Si el evento tiene un creador */}
+                            {eventCreator && (
+                                <Text style={[styles.space, styles.descriptionTitle]}>
+                                    Evento creado por: <Text style={styles.text}>{eventCreator?.name}</Text>
+                                </Text>
+                            )}
+
+                            <View style={styles.date}>
+                                <Icon name='date-range' size={24} color={colors.primary} style={{ marginRight: 10 }} />
+                                <Text style={styles.text}>
+                                    {/* format string to date */}
+                                    Del {formatDateTime(new Date(event.startDate))} al{' '}
+                                    {formatDateTime(new Date(event.endDate))}
+                                </Text>
+                            </View>
+
+                            {/* event location */}
+                            {event.isRemote
+                                ? (
+                                    <View style={styles.date}>
+                                        <Icon name='place' size={20} color={colors.primary} style={{ marginRight: 10 }} />
+                                        <Text style={styles.remote}>Es un evento remoto</Text>
+                                    </View>
+                                )
+                                : (
+                                    <Pressable
+                                        onPress={() => openGoogleMaps(event.location)}
+                                        style={styles.date}
+                                    >
+                                        <Icon name='place' size={25} color={colors.primary} style={{ marginRight: 10 }} />
+                                        <Text style={styles.text}>{event.location}</Text>
+                                    </Pressable>
+                                )}
+                        </Animated.ScrollView>
                     </View>
                 </>
             )}
@@ -179,11 +206,8 @@ const styles = StyleSheet.create({
     buttonJoin: {
         backgroundColor: colors.accent,
         padding: 10,
-        borderRadius: 5,
-        position: 'absolute',
-        bottom: 30,
-        left: 40,
-        right: 40,
+        borderRadius: 10,
+        marginVertical: 10,
     },
     buttonText: {
         color: 'black',
@@ -196,7 +220,8 @@ const styles = StyleSheet.create({
     eventInfo: {
         flex: 1,
         padding: 10,
-        paddingTop: 20,
+        paddingTop: 10,
+        position: 'relative'
     },
     textName: {
         color: colors.primary,
@@ -208,8 +233,7 @@ const styles = StyleSheet.create({
     textDescription: {
         color: colors.text,
         fontSize: 16,
-        fontFamily: 'SignikaBold',
-        fontWeight: 'bold'
+        fontFamily: 'SignikaRegular',
     },
     textCreatedBy: {
         color: 'white',
@@ -220,5 +244,26 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         fontFamily: 'SignikaBold'
+    },
+    descriptionTitle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        fontFamily: 'SignikaBold',
+        color: 'white'
+    },
+    text: {
+        color: 'white',
+        fontSize: 16,
+        fontFamily: 'SignikaRegular'
+    },
+    space: {
+        paddingBottom: 10
+    },
+    date: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        width: '100%',
+        height: 50
     },
 });

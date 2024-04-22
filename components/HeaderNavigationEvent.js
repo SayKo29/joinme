@@ -1,14 +1,19 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import { useNavigation } from '@react-navigation/native'
 import useHeaderEventStore from 'store/HeaderEventStore'
 import * as Haptics from 'expo-haptics'
 
-
 const HeaderNavigationEvent = () => {
     const navigation = useNavigation()
     const tab = useHeaderEventStore((state) => state.tab)
+    const tabs = [
+        { title: 'Mapa', value: 'EventMap' },
+        { title: 'Descubrir Nuevos', value: 'EventScroll' },
+        { title: 'Mis eventos', value: 'MyEvents' }
+    ]
+
     const handleSelect = (value) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         navigation.navigate(value)
@@ -17,39 +22,18 @@ const HeaderNavigationEvent = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                onPress={() => handleSelect('EventMap')}
-                style={[tab === 'EventMap' ? styles.tab : styles.unselected]}
-            >
-                <Text
-                    style={[tab === 'EventMap' ? styles.tab : styles.unselected]}
-                >
-                    Mapa
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => handleSelect('EventScroll')}
-                style={[tab === 'EventScroll' ? styles.tab : styles.unselected]}
-            >
-                <Text
-                    style={[tab === 'EventScroll' ? styles.tab : styles.unselected]}
-                >
-                    Descubrir Nuevos
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => handleSelect('MyEvents')}
-                testID='MyEvents-button'
-                style={[tab === 'MyEvents' ? styles.tab : styles.unselected]}
-            >
-                <Text
+            {tabs.map(({ title, value }) => (
+                <Pressable
+                    key={value}
+                    onPress={() => handleSelect(value)}
                     style={[
-                        tab === 'MyEvents' ? styles.tab : styles.unselected
+                        styles.tab,
+                        tab === value ? styles.selected : styles.unselected
                     ]}
                 >
-                    Mis eventos
-                </Text>
-            </TouchableOpacity>
+                    <Text style={tab === value ? styles.selectedText : styles.unselectedText}>{title}</Text>
+                </Pressable>
+            ))}
         </View>
     )
 }
@@ -58,24 +42,33 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        alignContent: 'center',
         width: '100%',
         alignItems: 'center',
-        padding: 10,
         backgroundColor: colors.background
     },
     tab: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    selectedText: {
         fontWeight: 'bold',
         color: colors.text,
+        fontSize: 16,
+        fontFamily: 'SignikaBold',
         borderBottomWidth: 1,
         borderBottomColor: colors.gray,
-        fontSize: 16,
-        fontFamily: 'SignikaBold'
     },
-    unselected: {
+    unselectedText: {
         fontWeight: 'bold',
         color: colors.gray,
         fontSize: 16,
-        fontFamily: 'SignikaBold'
+        fontFamily: 'SignikaBold',
+        borderBottomWidth: 1,
+        borderBottomColor: colors.background,
+    },
+    unselected: {
+        borderBottomWidth: 0, // Se elimina el borde inferior para los no seleccionados
     },
 })
 

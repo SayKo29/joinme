@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
     nextBtnStyle: {
         backgroundColor: colors.accent,
         borderRadius: 4,
+        width: 100,
         paddingHorizontal: 10
     },
     nextBtnTextStyle: {

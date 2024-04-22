@@ -1,7 +1,6 @@
 import React from 'react'
 import colors from '@/styles/colors'
 import {
-    SafeAreaView,
     View,
     Text,
     TouchableOpacity,
@@ -9,15 +8,16 @@ import {
     Image,
     Platform,
     StatusBar,
-    TextInput
 } from 'react-native'
 import { useAuth } from '@/contexts/Auth'
 import Tag from '@/components/ui/tag'
 import { Icon } from 'react-native-elements'
 import useCategoryStore from 'store/CategoryStore'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
+import { useNavigation } from '@react-navigation/native'
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
+    const navigation = useNavigation()
     const auth = useAuth()
     const { categories, isInitialized, fetchCategories } = useCategoryStore()
     let user = JSON.parse(JSON.stringify(auth?.authData.user))
@@ -116,10 +116,8 @@ const profile = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
         // padding for android notch
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+        paddingTop: Platform.OS === 'android' ? 0 : 0
     },
     content: {
         flex: 1,

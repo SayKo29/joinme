@@ -79,14 +79,14 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                     </View>
                     {/* number of actual participants */}
                     <View style={styles.date}>
-                        <Icon name='people' size={24} color={colors.text} />
+                        <Icon name='people' size={24} color={colors.primary} />
                         <Text style={styles.linkGoogleMaps}>
                             {event.participants.length} {event.participants.length === 1 ? 'participante' : 'participantes'}
                         </Text>
                     </View>
                     {/* event startDate and endDate */}
                     <View style={styles.date}>
-                        <Icon name='date-range' size={24} color={colors.text} />
+                        <Icon name='date-range' size={25} color={colors.primary} />
                         <Text style={styles.linkGoogleMaps}>
                             {/* format string to date */}
                             Del {formatDateTime(new Date(event.startDate))} al{' '}
@@ -97,7 +97,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                     {event.isRemote
                         ? (
                             <View style={styles.linkMaps}>
-                                <Icon name='place' size={20} color={colors.text} />
+                                <Icon name='place' size={20} color={colors.primary} />
                                 <Text style={styles.remote}>Es un evento remoto</Text>
                             </View>
                         )
@@ -106,7 +106,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                                 onPress={() => openGoogleMaps(event.location)}
                                 style={styles.linkMaps}
                             >
-                                <Icon name='place' size={20} color={colors.text} />
+                                <Icon name='place' size={25} color={colors.primary} />
                                 <Text style={styles.linkGoogleMaps}>{event.location}</Text>
                             </TouchableOpacity>
                         )}

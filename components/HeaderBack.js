@@ -27,9 +27,11 @@ const Headerback = ({ isEventCreator, userHasJoinedEvent, sendPress }) => {
                     style={styles.chevron}
                 />
             </Pressable>
-            <View style={{ position: 'relative', width: 44, height: 44 }}>
-                <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} sendPress={sendPress} />
-            </View>
+            {isEventCreator || userHasJoinedEvent && (
+                <View style={{ position: 'relative', width: 44, height: 44 }}>
+                    <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} sendPress={sendPress} />
+                </View>
+            )}
         </Animated.View>
     );
 };
