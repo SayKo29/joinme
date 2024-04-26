@@ -208,7 +208,12 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         fontFamily: 'SignikaBold'
     },
-
+    buttonText: {
+        color: colors.black,
+        fontSize: 16,
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
+    }
 })
 
 export default ChatRooms
