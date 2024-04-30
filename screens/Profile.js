@@ -12,14 +12,13 @@ import {
 import { useAuth } from '@/contexts/Auth'
 import Tag from '@/components/ui/tag'
 import { Icon } from 'react-native-elements'
-import useCategoryStore from 'store/CategoryStore'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import { useNavigation } from '@react-navigation/native'
+import { eventCategories } from 'Constants'
 
 const Profile = () => {
     const navigation = useNavigation()
     const auth = useAuth()
-    const { categories, isInitialized, fetchCategories } = useCategoryStore()
     let user = JSON.parse(JSON.stringify(auth?.authData.user))
 
     const [search, setSearch] = React.useState('')
@@ -28,22 +27,15 @@ const Profile = () => {
         auth.signOut()
     }
     const allCategories = []
-    if (categories.length > 0) {
+    if (eventCategories.length > 0) {
         // format data for autocomplete
-        categories.map((category) => {
+        eventCategories.map((category) => {
             allCategories.push({
                 id: category._id,
                 name: category.name
             })
         })
     }
-
-    React.useEffect(() => {
-        // Llamar a fetchCategories solo si no está inicializado
-        if (!isInitialized) {
-            fetchCategories()
-        }
-    }, [isInitialized])
 
     return (
         <View style={profile.container}>

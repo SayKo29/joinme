@@ -8,7 +8,7 @@ import {
 } from '@/lib/utils'
 import { Icon } from 'react-native-elements'
 import Animated, { FadeInDown } from 'react-native-reanimated'
-import useCategoryStore from 'store/CategoryStore'
+import { eventCategories } from 'Constants'
 
 const EventCard = ({ event, user, onEventPress, index }) => {
     if (!event || !user) {
@@ -24,9 +24,8 @@ const EventCard = ({ event, user, onEventPress, index }) => {
             ? `${event.description.substring(0, 23)}...`
             : event.description
 
-    const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
-    const eventCategory = categories.find(
+    const eventCategory = eventCategories.find(
         (category) => category._id === event.category
     )
 

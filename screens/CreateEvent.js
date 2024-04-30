@@ -116,7 +116,6 @@ const CreateEvent = () => {
         };
     }, [navigation]);
 
-    console.log('hiii')
 
     return (
         <View style={[styles.container]}>

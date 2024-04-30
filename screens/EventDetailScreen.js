@@ -9,7 +9,6 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import Headerback from 'components/HeaderBack';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'; // Importa FastImage
-import useCategoryStore from 'store/CategoryStore';
 import useTabStore from 'store/TabStore';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
@@ -17,6 +16,7 @@ import LottieAnimation from 'components/LottieAnimation';
 import RemoveEventOrParticipant from 'api/RemoveEventOrParticipant';
 import { Icon } from 'react-native-elements';
 import { formatDateTime, openGoogleMaps } from 'lib/utils';
+import { eventCategories } from 'Constants';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -45,8 +45,7 @@ export default function EventDetailScreen ({ route }) {
     let userHasJoinedEvent = event.participants?.includes(userLogged.user._id);
     const users = useQuery('USERS', getUsersData);
     const { width } = useWindowDimensions();
-    const { categories } = useCategoryStore()
-    const eventCategory = categories.find(
+    const eventCategory = eventCategories.find(
         (category) => category._id === event?.category
     )
 

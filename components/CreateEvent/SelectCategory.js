@@ -4,38 +4,32 @@ import CategoryCard from './CategoryCard'
 import colors from '@/styles/colors'
 import LottieAnimation from '@/components/LottieAnimation'
 import formStyles from 'styles/formStyles'
-import useCategoryStore from 'store/CategoryStore'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import { FlashList } from '@shopify/flash-list'
+import { eventCategories } from 'Constants'
 
-const SelectCategory = ({ categorySelected, activeCategory }) => {
+const SelectCategory = ({ categorySelected }) => {
     const [loading, setLoading] = useState(false)
-    const { categories, isInitialized, fetchCategories } = useCategoryStore()
 
     const [filteredCategories, setFilteredCategories] = useState([])
 
-    React.useEffect(() => {
-        // Llamar a fetchCategories solo si no está inicializado
-        if (!isInitialized) {
-            setLoading(true)
-            fetchCategories()
-        }
-    }, [isInitialized])
+    const [activeCategory, setActiveCategory] = useState(null);
 
     React.useEffect(() => {
-        if (categories.length > 0) {
-            setFilteredCategories(categories);
+        if (eventCategories.length > 0) {
+            setFilteredCategories(eventCategories);
             setLoading(false)
         }
-    }, [categories]);
+    }, [eventCategories]);
 
 
     const handleCategoryPressed = (category) => {
+        setActiveCategory(category);
         categorySelected(category._id)
     }
     const handleCategoryFiltering = (text) => {
         const filterValue = normalize(text).toLowerCase(); // Convert input value to lowercase for case-insensitive filtering and remove accents
-        const filteredCategories = categories.filter(category => normalize(category.name).toLowerCase().includes(filterValue));
+        const filteredCategories = eventCategories.filter(category => normalize(category.name).toLowerCase().includes(filterValue));
         // Use the filteredCategories array for further processing or rendering
         setFilteredCategories(filteredCategories)
     }
@@ -59,7 +53,7 @@ const SelectCategory = ({ categorySelected, activeCategory }) => {
             )}
             keyExtractor={(item) => item._id}
         />
-    ), [filteredCategories]);
+    ), [filteredCategories, activeCategory]);
 
     return (
         <View style={styles.container}>

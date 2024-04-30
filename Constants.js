@@ -10,97 +10,97 @@ export const eventCategories = [
         _id: '635430c104ad6019e8633e16',
         name: 'Pádel',
         description: 'Deporte de raquetas',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/padel.jpeg'
+        icon: require('@/assets/categoryIcons/padel.webp')
     },
     {
         _id: '635430da04ad6019e8633e19',
         name: 'SkateBoard',
         description: 'Deporte de skate',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/skate.jpeg'
+        icon: require('@/assets/categoryIcons/skate.webp')
     },
     {
         _id: '635430ec04ad6019e8633e1b',
         name: 'Baloncesto',
         description: 'Deporte de pelota',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/basket.jpeg'
+        icon: require('@/assets/categoryIcons/basket.webp')
     },
     {
         _id: '635430f904ad6019e8633e1d',
         name: 'Fútbol',
         description: 'Deporte de balonpie',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/futbol.jpeg'
+        icon: require('@/assets/categoryIcons/futbol.webp')
     },
     {
         _id: '6354310404ad6019e8633e1f',
         name: 'Snowboard',
         description: 'Deporte de nieve',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/snow.jpeg'
+        icon: require('@/assets/categoryIcons/snow.webp')
     },
     {
         _id: '635435d004ad6019e8633e27',
         name: 'Hockey',
         description: 'Deporte de hockey',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/hockey.jpeg'
+        icon: require('@/assets/categoryIcons/hockey.webp')
     },
     {
         _id: '6354371e04ad6019e8633e2b',
         name: 'Tomar una copa',
         description: 'Ir a algún sitio a beber',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/tomar_copa.jpeg'
+        icon: require('@/assets/categoryIcons/tomar_copa.webp')
     },
     {
         _id: '66105a65c5d6ba53dd722505',
         name: 'Tenis',
         description: 'Deporte de raqueta',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/tenis.jpeg'
+        icon: require('@/assets/categoryIcons/tenis.webp')
     },
     {
         _id: '66105aa0c5d6ba53dd722507',
         name: 'Pasear con perros',
         description: 'Pasear perros',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/perro.jpeg'
+        icon: require('@/assets/categoryIcons/perro.webp')
     },
     {
         _id: '66105ab2c5d6ba53dd722509',
         name: 'Escalada',
         description: 'Escalada',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/escalada.jpeg'
+        icon: require('@/assets/categoryIcons/escalada.webp')
     },
     {
         _id: '66105ac8c5d6ba53dd72250b',
         name: 'Montañismo',
         description: 'Aire libre',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/montanismo.jpeg'
+        icon: require('@/assets/categoryIcons/montanismo.webp')
     },
     {
         _id: '66105adec5d6ba53dd72250d',
         name: 'Paddle surf',
         description: 'Aire libre',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/padlesurf.jpeg'
+        icon: require('@/assets/categoryIcons/padlesurf.webp')
     },
     {
         _id: '66105ae6c5d6ba53dd72250f',
         name: 'Surf',
         description: 'Agua',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/surf.jpeg'
+        icon: require('@/assets/categoryIcons/surf.webp')
     },
     {
         _id: '66105afdc5d6ba53dd722511',
         name: 'Piragüismo',
         description: 'Agua',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/kayak.jpeg'
+        icon: require('@/assets/categoryIcons/kayak.webp')
     },
     {
         _id: '66105b0fc5d6ba53dd722513',
         name: 'Videojuegos',
         description: 'Electronico',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/videojuegos.jpeg'
+        icon: require('@/assets/categoryIcons/videojuegos.webp')
     },
     {
         _id: '66105b24c5d6ba53dd722515',
         name: 'Cine',
         description: 'ocio',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/cine.jpeg'
+        icon: require('@/assets/categoryIcons/cine.webp')
     },
     {
         _id: '66105b2bc5d6ba53dd722517',
@@ -124,7 +124,7 @@ export const eventCategories = [
         _id: '66105b52c5d6ba53dd72251d',
         name: 'Karaoke',
         description: 'ocio',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/karaoke.jpeg'
+        icon: require('@/assets/categoryIcons/karaoke.webp')
     },
     {
         _id: '66105b57c5d6ba53dd72251f',
@@ -202,7 +202,7 @@ export const eventCategories = [
         _id: '66105c5bc5d6ba53dd722537',
         name: 'Bádminton',
         description: 'Aire libre',
-        icon: 'https://jheotljnzqqzkvpqxxwh.supabase.co/storage/v1/object/public/categoryImages/badminton.jpeg'
+        icon: require('@/assets/categoryIcons/badminton.webp')
     },
     {
         _id: '66105c6bc5d6ba53dd722539',

@@ -1,26 +1,27 @@
-import { Text, StyleSheet, TouchableOpacity, Image, View } from 'react-native'
+import { Text, StyleSheet, Pressable, Image, View } from 'react-native'
 import React from 'react'
 import colors from '@/styles/colors'
 
-const CategoryCard = ({ category, categorySelected, activeCategory }) => {
+const CategoryCard = ({ category, onCategoryPress, activeCategory }) => {
+    const isSelected = activeCategory === category._id;
     return (
-        <TouchableOpacity
+        <Pressable
             style={[
                 styles.card,
-                {
-                    backgroundColor:
-                        activeCategory === category?._id
-                            ? colors.primary
-                            : colors.background
-                }
+                isSelected && { backgroundColor: colors.primary },
             ]}
-            onPress={() => categorySelected(category)}
+            onPress={() => onCategoryPress(category)}
         >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={styles.image} source={{ uri: category?.icon ? category?.icon : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
+                {category?.icon ?
+
+                    <Image style={styles.image} source={category.icon} />
+                    :
+                    <Image style={styles.image} source={require('@/assets/img/image-placeholder.jpg')} />
+                }
                 <Text style={styles.text}>{category.name}</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
