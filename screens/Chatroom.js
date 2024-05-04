@@ -6,7 +6,6 @@ import {
     Text,
     TouchableOpacity,
     View,
-    Pressable
 } from 'react-native'
 import getEventsByParticipant from '@/api/GetParticipantEvents'
 import { useQuery } from 'react-query'
@@ -18,6 +17,7 @@ import { useNavigation } from '@react-navigation/native'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import useTabStore from 'store/TabStore'
 import { uiStyles } from 'styles/uiStyles'
+import ChatCard from 'components/ChatComponents/ChatCard'
 
 const ChatRooms = () => {
     const navigation = useNavigation()
@@ -78,36 +78,7 @@ const ChatRooms = () => {
                 estimatedItemSize={20}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item, index }) => (
-                    <Animated.View entering={FadeInDown.delay(50 * index)} >
-                        <Pressable
-                            disabled={new Date(item.endDate) < new Date()}
-                            style={[
-                                styles.card,
-                                {
-                                    backgroundColor:
-                                        new Date(item.endDate) < new Date()
-                                            ? colors.disabled
-                                            : colors.primary
-                                }
-                            ]}
-                            onPress={() => handleSelectChatroom(item)}
-                        >
-
-                            <Animated.Image sharedTransitionTag={item._id} style={styles.image} source={{ uri: item.images ? item.images : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
-                            <View style={styles.cardContent}>
-                                <Text style={styles.chatroom}>{item.name}</Text>
-                                <Text style={styles.participants}>
-                                    {item.participants.length + 1}{' '}
-                                    {item.participants.length + 1 === 1
-                                        ? 'participante'
-                                        : 'participantes'}
-                                </Text>
-                                {new Date(item.endDate) < new Date() && (
-                                    <Text style={styles.participants}>Evento finalizado</Text>
-                                )}
-                            </View>
-                        </Pressable>
-                    </Animated.View>
+                    <ChatCard event={item} index={index} onPress={() => handleSelectChatroom(item)} />
                 )}
             />
             <CustomBottomTab />
@@ -120,42 +91,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: Platform.OS === 'android' ? 25 : 60,
         backgroundColor: colors.background
-    },
-    card: {
-        backgroundColor: colors.primary,
-        padding: 10,
-        marginVertical: 8,
-        marginHorizontal: 16,
-        borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5
-    },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-        marginRight: 10
-    },
-    cardContent: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
-    chatroom: {
-        fontSize: 18,
-        color: colors.white
-    },
-    participants: {
-        fontSize: 14,
-        color: colors.white
     },
     emptyView: {
         flex: 1,

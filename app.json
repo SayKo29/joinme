@@ -8,11 +8,11 @@
         "icon": "./assets/logo.png",
         "userInterfaceStyle": "dark",
         "backgroundColor": "#081c15",
-        "primaryColor": "#40916c",
+        "primaryColor": "#39c67b",
         "splash": {
             "image": "./assets/logo.png",
             "resizeMode": "contain",
-            "backgroundColor": "#081c15"
+            "backgroundColor": "#39c67b"
         },
         "experiments": {
             "tsconfigPaths": true

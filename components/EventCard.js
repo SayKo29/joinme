@@ -73,7 +73,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                     <View style={styles.date}>
                         <Icon name='people' size={24} color={colors.primary} />
                         <Text style={styles.linkGoogleMaps}>
-                            {event.participants.length} {event.participants.length === 1 ? 'participante' : 'participantes'}
+                            {event.participants.length + 1} {event.participants.length + 1 === 1 ? 'participante' : 'participantes'}
                         </Text>
                     </View>
                     {/* event startDate and endDate */}
