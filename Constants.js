@@ -1,11 +1,18 @@
-export const userActionsParameters = {
+export const USER_ACTIONS_PARAMETERS = {
     exitGroup: 1,
     deleteEvent: 2,
 };
 
+export const BOTTOM_TABS = [
+    { name: 'Eventos', iconName: 'map', iconInactiveName: 'map-outline', navigation: 'EventMap' },
+    { name: 'Chats', iconName: 'chatbox-ellipses', iconInactiveName: 'chatbox-ellipses-outline', navigation: 'ChatRoom' },
+    { name: 'Crear', iconName: 'add-circle', iconInactiveName: 'add-circle-outline', navigation: 'CreateEvent' },
+    { name: 'Perfil', iconName: 'person', iconInactiveName: 'person-outline', navigation: 'Profile' }
+];
 
 
-export const eventCategories = [
+
+export const EVENT_CATEGORIES = [
     {
         _id: '635430c104ad6019e8633e16',
         name: 'Pádel',

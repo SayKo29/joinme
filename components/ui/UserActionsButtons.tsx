@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Icon } from "react-native-elements";
 import colors from "styles/colors";
-import { userActionsParameters } from "Constants";
+import { USER_ACTIONS_PARAMETERS } from "Constants";
 
 type params = {
   isEventCreator: boolean;
@@ -121,7 +121,7 @@ const UserActionsButtons = ({
         },
         {
           text: "Borrar",
-          onPress: () => sendPress(userActionsParameters.deleteEvent),
+          onPress: () => sendPress(USER_ACTIONS_PARAMETERS.deleteEvent),
         },
       ],
       { cancelable: false }
@@ -139,7 +139,7 @@ const UserActionsButtons = ({
         },
         {
           text: "Salir",
-          onPress: () => sendPress(userActionsParameters.exitGroup),
+          onPress: () => sendPress(USER_ACTIONS_PARAMETERS.exitGroup),
         },
       ],
       { cancelable: false }

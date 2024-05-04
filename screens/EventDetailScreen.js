@@ -16,7 +16,7 @@ import LottieAnimation from 'components/LottieAnimation';
 import RemoveEventOrParticipant from 'api/RemoveEventOrParticipant';
 import { Icon } from 'react-native-elements';
 import { formatDateTime, openGoogleMaps } from 'lib/utils';
-import { eventCategories } from 'Constants';
+import { EVENT_CATEGORIES } from 'Constants';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -45,7 +45,7 @@ export default function EventDetailScreen ({ route }) {
     let userHasJoinedEvent = event.participants?.includes(userLogged.user._id);
     const users = useQuery('USERS', getUsersData);
     const { width } = useWindowDimensions();
-    const eventCategory = eventCategories.find(
+    const eventCategory = EVENT_CATEGORIES.find(
         (category) => category._id === event?.category
     )
 

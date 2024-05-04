@@ -3,7 +3,7 @@ import React from 'react'
 import colors from '@/styles/colors'
 
 const CategoryCard = ({ category, onCategoryPress, activeCategory }) => {
-    const isSelected = activeCategory === category._id;
+    const isSelected = activeCategory?._id === category._id;
     return (
         <Pressable
             style={[
@@ -19,7 +19,7 @@ const CategoryCard = ({ category, onCategoryPress, activeCategory }) => {
                     :
                     <Image style={styles.image} source={require('@/assets/img/image-placeholder.jpg')} />
                 }
-                <Text style={styles.text}>{category.name}</Text>
+                <Text style={[styles.text, isSelected && { color: colors.black }]}>{category.name}</Text>
             </View>
         </Pressable>
     )
@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     text: {
         color: colors.text,
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     image: {
         width: 50,

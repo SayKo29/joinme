@@ -141,6 +141,13 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         updateEvent('location', result);
         // stop the new call to the api when the location is selected
         setSearched(true);
+        // animate map to the selected location
+        mapRef.current.animateToRegion({
+            latitude: result.position.lat,
+            longitude: result.position.lng,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005
+        });
     };
 
     return (

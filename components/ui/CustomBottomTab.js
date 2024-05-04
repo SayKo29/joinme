@@ -5,59 +5,48 @@ import colors from '@/styles/colors';
 import { useNavigation } from '@react-navigation/native';
 import useTabStore from 'store/TabStore';
 import useHeaderEventStore from 'store/HeaderEventStore';
+import { BOTTOM_TABS } from 'Constants';
+
+const TabItem = React.memo(({ tab, tabIndex, index, handleTabChange }) => (
+    <TouchableOpacity
+        style={[styles.tabItem, tabIndex === index && styles.tabIndex]}
+        onPress={() => handleTabChange(tab.navigation, index)}>
+        <Icon
+            name={tabIndex === index ? tab.iconName : tab.iconInactiveName}
+            type='ionicon'
+            size={24}
+            color={tabIndex === index ? colors.white : colors.gray}
+        />
+        <Text style={[styles.tabText, tabIndex === index && styles.activeText]}>{tab.name}</Text>
+    </TouchableOpacity>
+));
+
 
 const CustomBottomTab = () => {
-    const navigation = useNavigation()
-    const tabIndex = useTabStore((state) => state.tab)
-    const tabs = [
-        {
-            name: 'Eventos',
-            iconName: 'map',
-            iconInactiveName: 'map-outline',
-            navigation: 'EventMap'
-        },
-        {
-            name: 'Chats',
-            iconName: 'chatbox-ellipses',
-            iconInactiveName: 'chatbox-ellipses-outline',
-            navigation: 'ChatRoom'
-        },
-        {
-            name: 'Crear',
-            iconName: 'add-circle',
-            iconInactiveName: 'add-circle-outline',
-            navigation: 'CreateEvent'
-        },
-        {
-            name: 'Perfil',
-            iconName: 'person',
-            iconInactiveName: 'person-outline',
-            navigation: 'Profile'
-        }
-    ]
+    const navigation = useNavigation();
+    const tabIndex = useTabStore((state) => state.tab);
+
 
     const handleTabChange = (tab, ind) => {
-        useTabStore.setState({ tab: ind });
         if (tab === 'EventMap') {
-            useHeaderEventStore.setState({ tab: tab })
+            useHeaderEventStore.setState({ tab: tab });
+        }
+        if (tabIndex !== ind) {
+            useTabStore.setState({ tab: ind });
         }
         navigation.navigate(tab);
-    }
+    };
+
     return (
         <View style={styles.tabContainer}>
-            {tabs.map((tab, index) => (
-                <TouchableOpacity
+            {BOTTOM_TABS.map((tab, index) => (
+                <TabItem
                     key={index}
-                    style={[styles.tabItem, tabIndex === index && styles.tabIndex]}
-                    onPress={() => handleTabChange(tab.navigation, index)}>
-                    <Icon
-                        name={tabIndex === index ? tab.iconName : tab.iconInactiveName}
-                        type='ionicon'
-                        size={24}
-                        color={tabIndex === index ? colors.white : colors.gray}
-                    />
-                    <Text style={[styles.tabText, tabIndex === index && styles.activeText]}>{tab.name}</Text>
-                </TouchableOpacity>
+                    tab={tab}
+                    tabIndex={tabIndex}
+                    index={index}
+                    handleTabChange={handleTabChange}
+                />
             ))}
         </View>
     );

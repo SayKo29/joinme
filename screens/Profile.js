@@ -14,7 +14,7 @@ import Tag from '@/components/ui/tag'
 import { Icon } from 'react-native-elements'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import { useNavigation } from '@react-navigation/native'
-import { eventCategories } from 'Constants'
+import { EVENT_CATEGORIES } from 'Constants'
 
 const Profile = () => {
     const navigation = useNavigation()
@@ -27,9 +27,9 @@ const Profile = () => {
         auth.signOut()
     }
     const allCategories = []
-    if (eventCategories.length > 0) {
+    if (EVENT_CATEGORIES.length > 0) {
         // format data for autocomplete
-        eventCategories.map((category) => {
+        EVENT_CATEGORIES.map((category) => {
             allCategories.push({
                 id: category._id,
                 name: category.name

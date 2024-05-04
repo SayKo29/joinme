@@ -53,7 +53,6 @@ const MainEvents = () => {
     if (eventsQuery.isError) {
         return <Text>Error events...</Text>;
     }
-    console.log('hola')
 
     return (
         <View style={styles.container}>

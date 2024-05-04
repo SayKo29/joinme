@@ -12,16 +12,16 @@ import { ProgressSteps, ProgressStep } from 'react-native-progress-steps'
 import AdvancedEventInfo from '@/components/CreateEvent/AdvancedEventInfo'
 import CreateEventPost from '@/api/CreateEventPost'
 import { useAuth } from '@/contexts/Auth'
-import getEventsData from '@/api/EventsData'
 import LottieAnimation from '@/components/LottieAnimation'
 import CustomBottomTab from 'components/ui/CustomBottomTab'
 import useHeaderEventStore from 'store/HeaderEventStore'
 import useTabStore from 'store/TabStore'
 import { useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
+import { useQueryClient } from 'react-query'
 const CreateEvent = () => {
     const navigation = useNavigation()
-
+    const queryClient = useQueryClient()
     const [category, setCategory] = React.useState('')
     const [loading, setLoading] = React.useState(false)
     const [event, setEvent] = React.useState({
@@ -67,7 +67,7 @@ const CreateEvent = () => {
         try {
             await CreateEventPost(eventToSend);
             // invalidate the query to get the new data
-            getEventsData.invalidateQueries('EVENTS');
+            queryClient.invalidateQueries('EVENTS');
             setEvent({/* estado inicial del evento */ });
             useHeaderEventStore.setState({ tab: 'MyEvents' });
             useTabStore.setState({ tab: 0 });

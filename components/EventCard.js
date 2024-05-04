@@ -8,7 +8,7 @@ import {
 } from '@/lib/utils'
 import { Icon } from 'react-native-elements'
 import Animated, { FadeInDown } from 'react-native-reanimated'
-import { eventCategories } from 'Constants'
+import { EVENT_CATEGORIES } from 'Constants'
 
 const EventCard = ({ event, user, onEventPress, index }) => {
     if (!event || !user) {
@@ -25,17 +25,10 @@ const EventCard = ({ event, user, onEventPress, index }) => {
             : event.description
 
 
-    const eventCategory = eventCategories.find(
+    const eventCategory = EVENT_CATEGORIES.find(
         (category) => category._id === event.category
     )
 
-    // validate if image exist
-
-    React.useEffect(() => {
-        if (!isInitialized) {
-            fetchCategories()
-        }
-    }, [isInitialized])
 
     const eventOwner = user[event.user]
     return (
@@ -47,7 +40,7 @@ const EventCard = ({ event, user, onEventPress, index }) => {
                             style={styles.userImage}
                             source={
                                 eventCategory?.icon
-                                    ? { uri: eventCategory.icon }
+                                    ? eventCategory.icon
                                     : require('../assets/img/google.png')
                             }
                         />

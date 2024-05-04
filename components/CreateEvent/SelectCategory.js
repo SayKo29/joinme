@@ -4,9 +4,7 @@ import CategoryCard from './CategoryCard'
 import colors from '@/styles/colors'
 import LottieAnimation from '@/components/LottieAnimation'
 import formStyles from 'styles/formStyles'
-import Animated, { FadeInDown } from 'react-native-reanimated'
-import { FlashList } from '@shopify/flash-list'
-import { eventCategories } from 'Constants'
+import { EVENT_CATEGORIES } from 'Constants'
 
 const SelectCategory = ({ categorySelected }) => {
     const [loading, setLoading] = useState(false)
@@ -16,11 +14,11 @@ const SelectCategory = ({ categorySelected }) => {
     const [activeCategory, setActiveCategory] = useState(null);
 
     React.useEffect(() => {
-        if (eventCategories.length > 0) {
-            setFilteredCategories(eventCategories);
+        if (EVENT_CATEGORIES.length > 0) {
+            setFilteredCategories(EVENT_CATEGORIES);
             setLoading(false)
         }
-    }, [eventCategories]);
+    }, [EVENT_CATEGORIES]);
 
 
     const handleCategoryPressed = (category) => {
@@ -29,7 +27,7 @@ const SelectCategory = ({ categorySelected }) => {
     }
     const handleCategoryFiltering = (text) => {
         const filterValue = normalize(text).toLowerCase(); // Convert input value to lowercase for case-insensitive filtering and remove accents
-        const filteredCategories = eventCategories.filter(category => normalize(category.name).toLowerCase().includes(filterValue));
+        const filteredCategories = EVENT_CATEGORIES.filter(category => normalize(category.name).toLowerCase().includes(filterValue));
         // Use the filteredCategories array for further processing or rendering
         setFilteredCategories(filteredCategories)
     }
@@ -39,17 +37,14 @@ const SelectCategory = ({ categorySelected }) => {
     }
     // Use useMemo outside of the conditional block
     const memoizedCategories = useMemo(() => (
-        <FlashList
+        <FlatList
             data={filteredCategories}
-            estimatedItemSize={filteredCategories.length}
-            renderItem={({ item, index }) => (
-                <Animated.View entering={FadeInDown.delay(300 * index)}>
-                    <CategoryCard
-                        category={item}
-                        onCategoryPress={handleCategoryPressed}
-                        activeCategory={activeCategory}
-                    />
-                </Animated.View>
+            renderItem={({ item }) => (
+                <CategoryCard
+                    category={item}
+                    onCategoryPress={handleCategoryPressed}
+                    activeCategory={activeCategory}
+                />
             )}
             keyExtractor={(item) => item._id}
         />
