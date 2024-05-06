@@ -26,6 +26,7 @@ const UserActionsButtons = ({
   userHasJoinedEvent,
   sendPress,
 }: params) => {
+    console.log("isEventCreatossr", isEventCreator)
   const firstValue = useSharedValue(44);
   const firstWidth = useSharedValue(44);
   const secondValue = useSharedValue(44);
@@ -57,7 +58,7 @@ const UserActionsButtons = ({
       opacityIcon.value = withTiming(0, { duration: 500 });
     } else {
       firstValue.value = withSpring(100);
-      firstWidth.value = withDelay(500, withSpring(170));
+      firstWidth.value = withDelay(500, withSpring(165));
       secondValue.value = withSpring(100);
       secondWidth.value = withDelay(500, withSpring(175));
       opacity.value = withDelay(800, withSpring(1));
@@ -160,7 +161,7 @@ const UserActionsButtons = ({
               <Icon
                 name="delete"
                 type="antdesign"
-                color={"#fff"}
+                color={colors.black}
                 size={20}
                 style={styles.icon}
               />
@@ -183,7 +184,7 @@ const UserActionsButtons = ({
               <Icon
                 name="exit"
                 type="ionicon"
-                color={"#fff"}
+                color={colors.black}
                 size={20}
                 style={styles.icon}
               />
@@ -205,7 +206,7 @@ const UserActionsButtons = ({
           <Icon
             name="dots-three-vertical"
             type="entypo"
-            color={colors.white}
+            color={colors.black}
             size={20}
             style={styles.icon}
           />
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     height: 460,
   },
   contentContainer: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.white,
     position: "absolute",
     right: 26,
     top: 0,
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   text: {
-    color: "white",
+    color: colors.black,
     fontSize: 16,
     fontFamily: "SignikaRegular",
   },

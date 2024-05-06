@@ -13,7 +13,7 @@ export default async function RemoveEventOrParticipant (event) {
         };
     }
     console.log('requestBody', requestBody)
-    // "https://calm-lime-armadillo.cyclic.app/api/events",
+    // "https://joinmeapi.onrender.com/api/events",
 
     const response = await fetch("http://192.168.1.91:3000/api/events/" + event._id, {
         method: 'PUT',

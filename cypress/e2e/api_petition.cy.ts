@@ -4,7 +4,7 @@ describe("Validate events api call", () => {
     it("Validate events api call", () => {
         cy.request({
             method: "GET",
-            url: "https://calm-lime-armadillo.cyclic.app/api/events",
+            url: "https://joinmeapi.onrender.com/api/events",
         }).then((response) => {
             expect(response.status).to.eq(200);
             expect(response.body).to.not.be.null;

@@ -16,7 +16,7 @@ const signIn = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/login",
+    "https://joinmeapi.onrender.com/api/login",
     // "http://192.168.1.160:3000/api/login",
     requestOptions
   );
@@ -38,7 +38,7 @@ const signInWithGoogle = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/signInGoogle",
+    "https://joinmeapi.onrender.com/api/signInGoogle",
     // "http://192.168.1.160:3000/api/signInGoogle",
     requestOptions
   );
@@ -58,7 +58,7 @@ const register = async (formData: any) => {
     body: encodeFormData(formData),
   };
   const response = await fetch(
-    "https://calm-lime-armadillo.cyclic.app/api/register",
+    "https://joinmeapi.onrender.com/api/register",
     // "http://192.168.1.160:3000/api/register",
     requestOptions
   );

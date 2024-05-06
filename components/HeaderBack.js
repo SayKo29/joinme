@@ -27,7 +27,7 @@ const Headerback = ({ isEventCreator, userHasJoinedEvent, sendPress }) => {
                     style={styles.chevron}
                 />
             </Pressable>
-            {isEventCreator || userHasJoinedEvent && (
+            {(isEventCreator || userHasJoinedEvent) && (
                 <View style={{ position: 'relative', width: 44, height: 44 }}>
                     <UserActionsButtons isEventCreator={isEventCreator} userHasJoinedEvent={userHasJoinedEvent} sendPress={sendPress} />
                 </View>

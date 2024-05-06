@@ -4,7 +4,7 @@ export default async function JoinEvent ({ event, participant }) {
     console.log('event', event)
     console.log("participant", participant)
     const response = await fetch(
-        'https://calm-lime-armadillo.cyclic.app/api/events/' +
+        'https://joinmeapi.onrender.com/api/events/' +
         event._id +
         '/participant/' + participant._id,
         // "http://192.168.1.146:3000/api/events/" + event._id + "/participant",

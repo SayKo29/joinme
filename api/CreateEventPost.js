@@ -20,10 +20,10 @@ export default async function CreateEventPost (event) {
         formData.append('images', event.images); // No necesitas convertirlo a Base64
     }
     // Realiza la solicitud utilizando 'multipart/form-data'
-    // "https://calm-lime-armadillo.cyclic.app/api/events",
+    // "https://joinmeapi.onrender.com/api/events",
     // const response = await fetch("http://192.168.1.199:3000/api/events", {
     const response = await fetch(
-        'https://calm-lime-armadillo.cyclic.app/api/events',
+        'https://joinmeapi.onrender.com/api/events',
         {
             method: 'POST',
             body: formData
