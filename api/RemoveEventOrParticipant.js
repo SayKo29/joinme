@@ -15,7 +15,7 @@ export default async function RemoveEventOrParticipant (event) {
     console.log('requestBody', requestBody)
     // "https://joinmeapi.onrender.com/api/events",
 
-    const response = await fetch("http://192.168.1.91:3000/api/events/" + event._id, {
+    const response = await fetch("https://joinmeapi.onrender.com/api/events/" + event._id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json' // Especifica el tipo de contenido como JSON

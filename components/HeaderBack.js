@@ -5,6 +5,8 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import UserActionsButtons from './ui/UserActionsButtons';
 import * as Haptics from 'expo-haptics';
+import { Icon } from 'react-native-elements';
+import colors from 'styles/colors';
 
 const Headerback = ({ isEventCreator, userHasJoinedEvent, sendPress }) => {
     const inset = useSafeAreaInsets();
@@ -19,13 +21,11 @@ const Headerback = ({ isEventCreator, userHasJoinedEvent, sendPress }) => {
             // style={[styles.container, { top: inset.top }]}
             entering={FadeIn.delay(400)}>
             <Pressable
+                style={styles.chevron}
                 onPress={() => {
                     handleBackPress();
                 }}>
-                <Image
-                    source={require('../assets/img/chevron.png')}
-                    style={styles.chevron}
-                />
+                <Icon name="chevron-left" type="font-awesome" color={colors.black} size={20} style={styles.icon} />
             </Pressable>
             {(isEventCreator || userHasJoinedEvent) && (
                 <View style={{ position: 'relative', width: 44, height: 44 }}>
@@ -49,9 +49,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     chevron: {
-        width: 44,
-        height: 44,
+        width: 45,
+        height: 45,
         position: 'relative',
-        borderRadius: 22,
+        borderRadius: 100,
+        backgroundColor: colors.white,
+        justifyContent: 'center',
     },
 });

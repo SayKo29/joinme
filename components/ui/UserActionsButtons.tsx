@@ -1,5 +1,5 @@
 import { Alert, Pressable, StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import Animated, {
   Easing,
   Extrapolation,
@@ -26,7 +26,6 @@ const UserActionsButtons = ({
   userHasJoinedEvent,
   sendPress,
 }: params) => {
-    console.log("isEventCreatossr", isEventCreator)
   const firstValue = useSharedValue(44);
   const firstWidth = useSharedValue(44);
   const secondValue = useSharedValue(44);
@@ -37,35 +36,6 @@ const UserActionsButtons = ({
   const progress = useDerivedValue(() =>
     isOpen.value ? withTiming(1) : withTiming(0)
   );
-
-  const handlePress = () => {
-    const config = {
-      easing: Easing.bezier(0.68, -0.6, 0.32, 1.6),
-      duration: 500,
-    };
-    if (isOpen.value) {
-      firstWidth.value = withTiming(44, { duration: 100 }, (finish) => {
-        if (finish) {
-          firstValue.value = withDelay(44, withTiming(44, config));
-        }
-      });
-      secondWidth.value = withTiming(44, { duration: 100 }, (finish) => {
-        if (finish) {
-          secondValue.value = withDelay(44, withTiming(44, config));
-        }
-      });
-      opacity.value = withTiming(0, { duration: 100 });
-      opacityIcon.value = withTiming(0, { duration: 500 });
-    } else {
-      firstValue.value = withSpring(100);
-      firstWidth.value = withDelay(500, withSpring(165));
-      secondValue.value = withSpring(100);
-      secondWidth.value = withDelay(500, withSpring(175));
-      opacity.value = withDelay(800, withSpring(1));
-      opacityIcon.value = withDelay(100, withSpring(1));
-    }
-    isOpen.value = !isOpen.value;
-  };
 
   const opacityText = useAnimatedStyle(() => {
     return {
@@ -110,7 +80,37 @@ const UserActionsButtons = ({
     };
   });
 
-  const handlePressRemoveEvent = () => {
+  const handlePress = useCallback(() => {
+    // Tu lógica handlePress existente aquí...
+    const config = {
+        easing: Easing.bezier(0.68, -0.6, 0.32, 1.6),
+        duration: 500,
+      };
+      if (isOpen.value) {
+        firstWidth.value = withTiming(44, { duration: 100 }, (finish) => {
+          if (finish) {
+            firstValue.value = withDelay(44, withTiming(44, config));
+          }
+        });
+        secondWidth.value = withTiming(44, { duration: 100 }, (finish) => {
+          if (finish) {
+            secondValue.value = withDelay(44, withTiming(44, config));
+          }
+        });
+        opacity.value = withTiming(0, { duration: 100 });
+        opacityIcon.value = withTiming(0, { duration: 500 });
+      } else {
+        firstValue.value = withSpring(100);
+        firstWidth.value = withDelay(500, withSpring(165));
+        secondValue.value = withSpring(100);
+        secondWidth.value = withDelay(500, withSpring(175));
+        opacity.value = withDelay(800, withSpring(1));
+        opacityIcon.value = withDelay(100, withSpring(1));
+      }
+      isOpen.value = !isOpen.value;
+  }, []);
+
+  const handlePressRemoveEvent = useCallback(() => {
     Alert.alert(
       "Borrar evento",
       "¿Estás seguro de que quieres borrar el evento?",
@@ -127,8 +127,9 @@ const UserActionsButtons = ({
       ],
       { cancelable: false }
     );
-  };
-  const handlePressExitEvent = () => {
+  }, [handlePress, sendPress]);
+
+  const handlePressExitEvent = useCallback(() => {
     Alert.alert(
       "Salir del evento",
       "¿Estás seguro de que quieres salir del evento?",
@@ -145,7 +146,7 @@ const UserActionsButtons = ({
       ],
       { cancelable: false }
     );
-  };
+  }, [handlePress, sendPress]);
 
   return (
     <View style={styles.container}>
