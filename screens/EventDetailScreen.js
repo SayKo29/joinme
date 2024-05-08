@@ -5,7 +5,7 @@ import getUsersData from '@/api/UsersData';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useAuth } from '@/contexts/Auth';
 import JoinEvent from '@/api/EventJoinParticipant';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import Headerback from 'components/HeaderBack';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'; // Importa FastImage
@@ -35,7 +35,7 @@ export default function EventDetailScreen ({ route }) {
             onSuccess: () => {
                 // invalida las queries
                 queryClient.invalidateQueries('CHATROOMS');
-                queryClient.invalidateQueries('EVENTS');
+                queryClient.invalidateQueries('events');
                 navigation.navigate('ChatScreen', { event });
                 useTabStore.setState({ tab: 1 });
                 setLoading(false);
@@ -58,9 +58,9 @@ export default function EventDetailScreen ({ route }) {
             // exit group action
             let eventToUpdate = { ...event, participants: event.participants.filter(participant => participant !== userLogged.user._id) };
             removeEventOrParticipant.mutate(eventToUpdate, {
-                onSuccess: () => {
-                    queryClient.invalidateQueries('EVENTS');
-                    queryClient.invalidateQueries('CHATROOMS');
+                onSettled: async () => {
+                    await queryClient.invalidateQueries('events');
+                    await queryClient.invalidateQueries('CHATROOMS');
                     setLoading(false);
                     navigation.goBack();
                     Toast.show({
@@ -78,7 +78,7 @@ export default function EventDetailScreen ({ route }) {
             let eventToUpdate = { ...event, status: 2 };
             removeEventOrParticipant.mutate(eventToUpdate, {
                 onSuccess: () => {
-                    queryClient.invalidateQueries('EVENTS');
+                    queryClient.invalidateQueries('events');
                     queryClient.invalidateQueries('CHATROOMS');
                     setLoading(false);
                     navigation.goBack();

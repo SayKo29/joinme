@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainEvents from 'screens/MainEvents';
 import EventScroll from 'components/EventScroll';
@@ -9,10 +8,33 @@ import ChatScreen from 'screens/ChatScreen';
 import Profile from 'screens/Profile';
 import ChatRooms from 'screens/Chatroom';
 import CreateEvent from 'screens/CreateEvent';
+import { getEvents, getUsers } from 'services/queries';
+import useEventStore from 'store/EventStore';
+import useUsersStore from 'store/UsersStore';
 
 const Stack = createNativeStackNavigator()
 
 export const AppStack = () => {
+
+    const { data: eventsData, isLoading: eventsLoading } = getEvents();
+    const { data: usersData, isLoading: usersLoading } = getUsers();
+
+    useEffect(() => {
+        // Verificar si los datos de eventos han cargado y no están en estado de carga
+        if (!eventsLoading && eventsData) {
+            // Actualizar el estado global de eventos
+            useEventStore.getState().setEvents(eventsData);
+        }
+    }, [eventsData, eventsLoading]);
+
+    useEffect(() => {
+        // Verificar si los datos de usuarios han cargado y no están en estado de carga
+        if (!usersLoading && usersData) {
+            // Actualizar el estado global de usuarios
+            useUsersStore.getState().setUsers(usersData);
+        }
+    }, [usersData, usersLoading]);
+
     return (
         <Stack.Navigator
             screenOptions={

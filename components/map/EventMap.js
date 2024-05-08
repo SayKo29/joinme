@@ -12,8 +12,9 @@ import mapStyle from '@/styles/mapStyle'
 import EventCard from '../EventCard'
 import BottomSheet from './BottomSheet'
 import { useNavigation } from '@react-navigation/native'
+import useEventStore from 'store/EventStore'
 
-const EventMap = ({ data }) => {
+const EventMap = () => {
     const navigation = useNavigation();
     const [location, setLocation] = useState(null)
     const [markerPressed, setMarkerPressed] = useState(false)
@@ -21,6 +22,7 @@ const EventMap = ({ data }) => {
     const mapRef = useRef(null)
     const user = useAuth()
     const userLoggedIn = user.authData.user
+    let data = useEventStore((state) => state.events)
     const events = data.data
         ? data.data.filter((event) => event.user !== userLoggedIn._id)
         : []

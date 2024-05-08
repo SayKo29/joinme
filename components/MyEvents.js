@@ -13,10 +13,9 @@ import useTabStore from 'store/TabStore'
 import { Platform } from 'react-native'
 
 const MyEvents = ({ navigation }) => {
-    const inset = useSafeAreaInsets()
     const auth = useAuth()
     const user = auth?.authData?.user
-    const data = useEventStore((state) => state.events)
+    const events = useEventStore((state) => state.events)
     const [myEvents, setMyEvents] = React.useState([])
 
     const handleEventPress = (event, user) => {
@@ -31,13 +30,13 @@ const MyEvents = ({ navigation }) => {
     }
 
     React.useEffect(() => {
-        if (data) {
-            const myEvents = data.filter((event) =>
+        if (events) {
+            const myEvents = events.filter((event) =>
                 event.user.includes(user._id)
             )
             setMyEvents(myEvents)
         }
-    }, [data])
+    }, [events])
 
     if (myEvents.length === 0) {
         return (

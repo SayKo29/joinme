@@ -9,14 +9,11 @@ import {
     TouchableOpacity
 } from 'react-native'
 
-// import * as Google from "expo-auth-session/providers/google";
 import { Icon } from 'react-native-elements'
 import { formAuth } from '@/styles/formAuthStyles'
-import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { webClientId, iosClientId, androidClientId } from '@env'
-
 import { useAuth } from '@/contexts/Auth'
 import colors from '@/styles/colors'
 import formStyles from 'styles/formStyles'
@@ -30,8 +27,7 @@ export const SignInScreen = ({ navigation }) => {
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId,
         iosClientId,
-        webClientId,
-        scopes: ['profile', 'email']
+        webClientId
     })
     const [email, setEmail] = useState('')
     const [error, setError] = useState('')

@@ -67,7 +67,7 @@ const CreateEvent = () => {
         try {
             await CreateEventPost(eventToSend);
             // invalidate the query to get the new data
-            queryClient.invalidateQueries('EVENTS');
+            queryClient.invalidateQueries('events');
             setEvent({/* estado inicial del evento */ });
             useHeaderEventStore.setState({ tab: 'MyEvents' });
             useTabStore.setState({ tab: 0 });

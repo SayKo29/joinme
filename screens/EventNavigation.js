@@ -15,30 +15,12 @@ import MyEvents from '@/components/MyEvents';
 const Stack = createNativeStackNavigator();
 
 export default function EventNavigation () {
-    const eventsQuery = useQuery({
-        queryKey: ['EVENTS'],
-        queryFn: getEventsData,
-        refetchInterval: 300000
-    });
-
-    const usersQuery = useQuery({
-        queryKey: ['USERS'],
-        queryFn: getUsersData,
-        refetchInterval: 300000
-    });
 
     const [selected, setSelected] = useState('map');
 
     const handleSelect = (value) => {
         setSelected(value);
     };
-
-    if (eventsQuery.isLoading) {
-        return <LottieAnimation />;
-    }
-    if (eventsQuery.isError) {
-        return <Text>Error events...</Text>;
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -64,7 +46,6 @@ export default function EventNavigation () {
                         <EventMap
                             {...props}
                             navigation={props.navigation}
-                            data={eventsQuery}
                             users={usersQuery}
                         />
                     )}
@@ -74,7 +55,6 @@ export default function EventNavigation () {
                         <MyEvents
                             {...props}
                             navigation={props.navigation}
-                            data={eventsQuery}
                             users={usersQuery}
                         />
                     )}

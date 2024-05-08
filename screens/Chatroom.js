@@ -17,6 +17,7 @@ import CustomBottomTab from 'components/ui/CustomBottomTab'
 import useTabStore from 'store/TabStore'
 import { uiStyles } from 'styles/uiStyles'
 import ChatCard from 'components/ChatComponents/ChatCard'
+import useHeaderEventStore from 'store/HeaderEventStore'
 
 const ChatRooms = () => {
     const navigation = useNavigation()
@@ -34,6 +35,7 @@ const ChatRooms = () => {
     const handleGoToEvents = () => {
         navigation.navigate('EventMap')
         useTabStore.setState({ tab: 0 })
+        useHeaderEventStore.setState({ tab: 'EventScroll' })
     }
 
     if (isLoading || isError) {
