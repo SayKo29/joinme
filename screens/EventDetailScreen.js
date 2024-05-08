@@ -174,7 +174,9 @@ export default function EventDetailScreen ({ route }) {
                                         style={styles.date}
                                     >
                                         <Icon name='place' size={25} color={colors.primary} style={{ marginRight: 10 }} />
-                                        <Text style={styles.text}>{event.location}</Text>
+                                        <Text ellipsizeMode={'tail'} numberOfLines={1} style={styles.text}>
+                                            {event.location}
+                                        </Text>
                                     </Pressable>
                                 )}
                         </Animated.ScrollView>
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 10,
-        width: '100%',
-        height: 50
+        width: '92%',
+        height: 50,
     },
 });

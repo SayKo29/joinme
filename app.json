@@ -45,7 +45,8 @@
             "bundleIdentifier": "com.joinme.app",
             "config": {
                 "googleMapsApiKey": "AIzaSyDbss3iJXZwYmnAjFYSoXuiZaCoI9385ko"
-            }
+            },
+            "icon": "./assets/logo.png"
         },
         "android": {
             "userInterfaceStyle": "automatic",

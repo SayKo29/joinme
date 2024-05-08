@@ -11,7 +11,6 @@ export const BOTTOM_TABS = [
 ];
 
 
-
 export const EVENT_CATEGORIES = [
     {
         _id: '635430c104ad6019e8633e16',
