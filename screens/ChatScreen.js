@@ -22,6 +22,7 @@ import getUserParticipants from '@/api/GetUserParticipants'
 import { useQuery } from 'react-query'
 import Animated from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
+import formStyles from 'styles/formStyles'
 getUserParticipants
 
 
@@ -201,7 +202,7 @@ const ChatScreen = ({ route }) => {
                     <Icon name='chevron-left' size={40} color={colors.white} />
                 </TouchableOpacity>
                 <Animated.Image style={styles.iconImage} sharedTransitionTag={event._id} source={{ uri: event.images ? event.images : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
-                <Text style={styles.headerText} ellipsizeMode='tail' numberOfLines={1}>{event?.name}</Text>
+                <Animated.Text sharedTransitionTag={event.name} style={styles.headerText} ellipsizeMode='tail' numberOfLines={1}>{event?.name}</Animated.Text>
             </View>
 
             <KeyboardAvoidingView
@@ -270,7 +271,7 @@ const ChatScreen = ({ route }) => {
 
                 <View style={styles.inputContainer}>
                     <TextInput
-                        style={styles.input}
+                        style={[formStyles.inputTextArea, { width: '80%', height: 50 }]}
                         placeholder='Escribe un mensaje'
                         value={newMessage}
                         onChangeText={setNewMessage}
@@ -323,7 +324,9 @@ const styles = StyleSheet.create({
     },
     messageTextRight: {
         color: colors.white,
-        textAlign: 'justify'
+        textAlign: 'justify',
+        fontFamily: 'SignikaRegular',
+        fontSize: 16
     },
     inputContainer: {
         width: '100%',
@@ -361,7 +364,9 @@ const styles = StyleSheet.create({
     },
     messageTextLeft: {
         color: colors.white,
-        textAlign: 'left'
+        textAlign: 'left',
+        fontFamily: 'SignikaRegular',
+        fontSize: 16
     },
     keyboard: {
         flex: 1,
@@ -385,7 +390,7 @@ const styles = StyleSheet.create({
         fontSize: 10
     },
     sendMessageButton: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.accent,
         padding: 10,
         borderRadius: 5,
         alignItems: 'center'

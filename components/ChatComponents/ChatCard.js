@@ -16,7 +16,7 @@ const ChatCard = ({ event, onPress, index }) => {
 
                 <Animated.Image sharedTransitionTag={event._id} style={styles.image} source={{ uri: event.images ? event.images : 'https://fakeimg.pl/600x400/0cab59/ffffff?text=Sin+imagen' }} />
                 <View style={styles.cardContent}>
-                    <Text style={styles.chatroom}>{event.name}</Text>
+                    <Animated.Text sharedTransitionTag={event.name} style={styles.chatroom}>{event.name}</Animated.Text>
                     <Text style={styles.participants}>
                         {event.participants.length + 1}{' '}
                         {event.participants.length + 1 === 1
