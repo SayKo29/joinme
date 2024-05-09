@@ -26,10 +26,10 @@ const UserActionsButtons = ({
   userHasJoinedEvent,
   sendPress,
 }: params) => {
-  const firstValue = useSharedValue(44);
-  const firstWidth = useSharedValue(44);
-  const secondValue = useSharedValue(84);
-  const secondWidth = useSharedValue(84);
+  const firstValue = useSharedValue(45);
+  const firstWidth = useSharedValue(45);
+  const secondValue = useSharedValue(45);
+  const secondWidth = useSharedValue(45);
   const isOpen = useSharedValue(false);
   const opacity = useSharedValue(0);
   const opacityIcon = useSharedValue(0);
@@ -162,6 +162,10 @@ const UserActionsButtons = ({
     );
   }, [handlePress, sendPress]);
 
+  const handlePressEditEvent = useCallback(() => {
+    sendPress(USER_ACTIONS_PARAMETERS.editEvent);
+  }, [sendPress]);
+
   return (
     <View style={styles.container}>
       {isEventCreator && (
@@ -175,7 +179,7 @@ const UserActionsButtons = ({
             ]}
           >
             <Pressable
-              onPress={() => handlePressRemoveEvent()}
+              onPress={() => handlePressEditEvent()}
               style={styles.contentContainer}
             >
               <Animated.View style={[styles.iconContainer, opacityIconButton]}>

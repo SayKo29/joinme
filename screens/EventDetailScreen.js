@@ -53,8 +53,8 @@ export default function EventDetailScreen ({ route }) {
     const isEventCreator = eventCreator?._id === userLogged.user._id;
 
     const handleSendPress = (param) => {
-        setLoading(true);
         if (param === 1) {
+            setLoading(true);
             // exit group action
             let eventToUpdate = { ...event, participants: event.participants.filter(participant => participant !== userLogged.user._id) };
             removeEventOrParticipant.mutate(eventToUpdate, {
@@ -75,6 +75,7 @@ export default function EventDetailScreen ({ route }) {
         }
         if (param === 2) {
             // update Event.status to 2 for delete it
+            setLoading(true);
             let eventToUpdate = { ...event, status: 2 };
             removeEventOrParticipant.mutate(eventToUpdate, {
                 onSuccess: () => {
@@ -91,6 +92,9 @@ export default function EventDetailScreen ({ route }) {
                     });
                 }
             });
+        }
+        if (param === 3) {
+            navigation.navigate('CreateEvent', { eventEdit: event });
         }
     }
 

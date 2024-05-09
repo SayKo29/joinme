@@ -20,7 +20,7 @@ const SelectCategory = ({ categorySelected, activeCategory }) => {
 
     React.useEffect(() => {
         setCategory(activeCategory)
-    }, [])
+    }, [activeCategory])
 
     const handleCategoryPressed = (category) => {
         setCategory(category._id);

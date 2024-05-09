@@ -135,6 +135,22 @@ const AdvancedEventInfo = ({ eventInfo, currentEvent }) => {
         }
     }, [event.startDate, event.endDate])
 
+    // if the event is editing, format start and end date to Date objects and set the location
+    React.useEffect(() => {
+        if (currentEvent) {
+            setEvent((oldEvent) => ({
+                ...oldEvent,
+                startDate: new Date(currentEvent.startDate),
+                endDate: new Date(currentEvent.endDate)
+            }))
+            if (currentEvent.coords) {
+                setMarkerPosition(currentEvent.coords)
+                setHasSelectedLocation(false)
+            }
+        }
+    }, [])
+
+
     const handlePressLocation = (result) => {
         setMarkerPosition(result.position);
         setResults([]);

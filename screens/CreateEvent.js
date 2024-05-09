@@ -4,7 +4,7 @@ import {
     Text,
     View
 } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import SelectCategory from '@/components/CreateEvent/SelectCategory'
 import colors from '@/styles/colors'
 import EventInfo from '@/components/CreateEvent/EventInfo'
@@ -19,11 +19,13 @@ import useTabStore from 'store/TabStore'
 import { useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 import { useQueryClient } from 'react-query'
-const CreateEvent = () => {
+import EditEvent from 'api/EditEvent'
+const CreateEvent = ({ route }) => {
     const navigation = useNavigation()
     const queryClient = useQueryClient()
     const [category, setCategory] = React.useState('')
     const [loading, setLoading] = React.useState(false)
+    const [isEditing, setIsEditing] = React.useState(false)
     const [event, setEvent] = React.useState({
         name: '',
         description: '',
@@ -37,6 +39,15 @@ const CreateEvent = () => {
         participants: [],
         chatroom: ''
     })
+
+    useEffect(() => {
+        if (route.params?.eventEdit) {
+            setEvent(route.params.eventEdit)
+            setCategory(route.params.eventEdit.category)
+            setIsEditing(true)
+        }
+    }, [route.params])
+
 
     const auth = useAuth()
     const user = auth?.authData?.user
@@ -52,6 +63,42 @@ const CreateEvent = () => {
     const handleEventCreation = async () => {
         await createEvent();
     };
+
+    const editEvent = async () => {
+        const eventToSend = {
+            ...event,
+            category,
+            startDate: new Date(event.startDate).toISOString(),
+            endDate: new Date(event.endDate).toISOString(),
+            user: user._id
+        };
+
+        try {
+            console.log('Evento a editar:', eventToSend)
+            await EditEvent(eventToSend);
+            // invalidate the query to get the new data
+            queryClient.invalidateQueries('events');
+            setEvent({/* estado inicial del evento */ });
+            useHeaderEventStore.setState({ tab: 'MyEvents' });
+            useTabStore.setState({ tab: 0 });
+            navigation.navigate('MyEvents');
+            Toast.show({
+                position: 'bottom',
+                type: 'success',
+                text1: 'Evento editado correctamente',
+                visibilityTime: 3000,
+            });
+        }
+        catch (error) {
+            console.error('Error al crear el evento:', error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error al crear el evento',
+                text2: 'Por favor, inténtalo de nuevo más tarde',
+                visibilityTime: 3000,
+            });
+        }
+    }
 
     const createEvent = async () => {
         setLoading(true);
@@ -121,7 +168,7 @@ const CreateEvent = () => {
     return (
         <View style={[styles.container]}>
             <View style={styles.titleContainer}>
-                <Text style={styles.title}>Crear evento</Text>
+                <Text style={styles.title}>{isEditing ? 'Editar evento' : 'Crear evento'}</Text>
             </View>
             {loading ? (
                 <View style={styles.loadingContainer}>
@@ -175,8 +222,8 @@ const CreateEvent = () => {
                             previousBtnStyle={styles.previousBtnStyle}
                             previousBtnTextStyle={styles.previousBtnTextStyle}
                             previousBtnText='Atrás'
-                            finishBtnText='Crear evento'
-                            onSubmit={handleEventCreation}
+                            finishBtnText={isEditing ? 'Guardar Cambios' : 'Crear Evento'}
+                            onSubmit={isEditing ? editEvent : handleEventCreation}
                             nextBtnDisabled={
                                 (event.location === '' && !event.isRemote) ||
                                 event.startDate === '' ||

@@ -1,6 +1,7 @@
 export const USER_ACTIONS_PARAMETERS = {
     exitGroup: 1,
     deleteEvent: 2,
+    editEvent: 3,
 };
 
 export const BOTTOM_TABS = [

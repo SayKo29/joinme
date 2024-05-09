@@ -114,7 +114,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 <Text style={formStyles.label}>Imagen del evento</Text>
                 {
                     // show Seleccionar imagen button if there is no image
-                    image && !image?.uri && (
+                    !image && (image?.uri || image) && (
                         <TouchableOpacity style={formStyles.pickImage} onPress={pickImage}>
                             <Text style={formStyles.text}>Seleccionar imagen</Text>
                         </TouchableOpacity>
@@ -122,15 +122,15 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                 }
                 {
                     // show Cambiar imagen button if there is an image
-                    image && image?.uri && (
+                    image && (image?.uri || image) && (
                         <TouchableOpacity style={formStyles.input} onPress={pickImage}>
                             <Text style={formStyles.text}>Cambiar imagen</Text>
                         </TouchableOpacity>
                     )
                 }
-                {image && image?.uri && (
+                {image && (image?.uri || image) && (
                     <Image
-                        source={{ uri: image?.uri }}
+                        source={{ uri: image?.uri ? image?.uri : image }}
                         style={{
                             width: 200,
                             height: 200,
