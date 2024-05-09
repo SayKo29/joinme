@@ -21,18 +21,20 @@ export default async function CreateEventPost (event) {
     }
     // Realiza la solicitud utilizando 'multipart/form-data'
     // "https://joinmeapi.onrender.com/api/events",
-    // const response = await fetch("http://192.168.1.199:3000/api/events", {
-    const response = await fetch(
-        'https://joinmeapi.onrender.com/api/events',
-        {
-            method: 'POST',
-            body: formData
-        }
+    const response = await fetch("http://192.168.1.160:3000/api/events", {
+        // const response = await fetch(
+        // 'https://joinmeapi.onrender.com/api/events',
+        // {
+        method: 'POST',
+        body: formData
+    }
     )
+    console.log(response, 'response')
 
     if (!response.ok) {
         throw new Error('Error al enviar el evento' + response.status)
     }
+
 
     return response.json()
 }

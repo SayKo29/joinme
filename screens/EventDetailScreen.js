@@ -1,8 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity, useWindowDimensions, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import colors from '@/styles/colors';
-import getUsersData from '@/api/UsersData';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useAuth } from '@/contexts/Auth';
 import JoinEvent from '@/api/EventJoinParticipant';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -17,6 +16,7 @@ import RemoveEventOrParticipant from 'api/RemoveEventOrParticipant';
 import { Icon } from 'react-native-elements';
 import { formatDateTime, openGoogleMaps } from 'lib/utils';
 import { EVENT_CATEGORIES } from 'Constants';
+import useUsersStore from 'store/UsersStore';
 
 export default function EventDetailScreen ({ route }) {
     const navigation = useNavigation();
@@ -43,13 +43,13 @@ export default function EventDetailScreen ({ route }) {
         });
     };
     let userHasJoinedEvent = event.participants?.includes(userLogged.user._id);
-    const users = useQuery('USERS', getUsersData);
+    const users = useUsersStore((state) => state.users);
     const { width } = useWindowDimensions();
     const eventCategory = EVENT_CATEGORIES.find(
         (category) => category._id === event?.category
     )
 
-    const eventCreator = users?.data[event?.user];
+    const eventCreator = users[event?.user];
     const isEventCreator = eventCreator?._id === userLogged.user._id;
 
     const handleSendPress = (param) => {

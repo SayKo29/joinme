@@ -28,8 +28,8 @@ const UserActionsButtons = ({
 }: params) => {
   const firstValue = useSharedValue(44);
   const firstWidth = useSharedValue(44);
-  const secondValue = useSharedValue(44);
-  const secondWidth = useSharedValue(44);
+  const secondValue = useSharedValue(84);
+  const secondWidth = useSharedValue(84);
   const isOpen = useSharedValue(false);
   const opacity = useSharedValue(0);
   const opacityIcon = useSharedValue(0);
@@ -74,6 +74,20 @@ const UserActionsButtons = ({
     };
   });
 
+  const secondIcon = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      secondValue.value,
+      [30, -200],
+      [-45, 70],
+      Extrapolation.CLAMP
+    );
+
+    return {
+      top: secondValue.value,
+      transform: [{ translateY: translateY }],
+    };
+  });
+
   const plusIcon = useAnimatedStyle(() => {
     return {
       transform: [{ rotate: `${progress.value * 90}deg` }],
@@ -83,31 +97,31 @@ const UserActionsButtons = ({
   const handlePress = useCallback(() => {
     // Tu lógica handlePress existente aquí...
     const config = {
-        easing: Easing.bezier(0.68, -0.6, 0.32, 1.6),
-        duration: 500,
-      };
-      if (isOpen.value) {
-        firstWidth.value = withTiming(44, { duration: 100 }, (finish) => {
-          if (finish) {
-            firstValue.value = withDelay(44, withTiming(44, config));
-          }
-        });
-        secondWidth.value = withTiming(44, { duration: 100 }, (finish) => {
-          if (finish) {
-            secondValue.value = withDelay(44, withTiming(44, config));
-          }
-        });
-        opacity.value = withTiming(0, { duration: 100 });
-        opacityIcon.value = withTiming(0, { duration: 500 });
-      } else {
-        firstValue.value = withSpring(100);
-        firstWidth.value = withDelay(500, withSpring(165));
-        secondValue.value = withSpring(100);
-        secondWidth.value = withDelay(500, withSpring(175));
-        opacity.value = withDelay(800, withSpring(1));
-        opacityIcon.value = withDelay(100, withSpring(1));
-      }
-      isOpen.value = !isOpen.value;
+      easing: Easing.bezier(0.68, -0.6, 0.32, 1.6),
+      duration: 500,
+    };
+    if (isOpen.value) {
+      firstWidth.value = withTiming(44, { duration: 100 }, (finish) => {
+        if (finish) {
+          firstValue.value = withDelay(44, withTiming(45, config));
+        }
+      });
+      secondWidth.value = withTiming(44, { duration: 400 }, (finish) => {
+        if (finish) {
+          secondValue.value = withDelay(84, withTiming(45, config));
+        }
+      });
+      opacity.value = withTiming(0, { duration: 100 });
+      opacityIcon.value = withTiming(0, { duration: 500 });
+    } else {
+      firstValue.value = withSpring(100);
+      firstWidth.value = withDelay(500, withSpring(165));
+      secondValue.value = withSpring(150);
+      secondWidth.value = withDelay(850, withSpring(165));
+      opacity.value = withDelay(800, withSpring(1));
+      opacityIcon.value = withDelay(100, withSpring(1));
+    }
+    isOpen.value = !isOpen.value;
   }, []);
 
   const handlePressRemoveEvent = useCallback(() => {
@@ -151,27 +165,60 @@ const UserActionsButtons = ({
   return (
     <View style={styles.container}>
       {isEventCreator && (
-        <Animated.View
-          style={[styles.contentContainer, firstIcon, firstWidthStyle]}
-        >
-          <Pressable
-            onPress={() => handlePressRemoveEvent()}
-            style={styles.contentContainer}
+        <>
+          <Animated.View
+            style={[
+              styles.contentContainer,
+              firstIcon,
+              firstWidthStyle,
+              { backgroundColor: colors.accent },
+            ]}
           >
-            <Animated.View style={[styles.iconContainer, opacityIconButton]}>
-              <Icon
-                name="delete"
-                type="antdesign"
-                color={colors.black}
-                size={20}
-                style={styles.icon}
-              />
-            </Animated.View>
-            <Animated.Text style={[styles.text, opacityText]}>
-              Borrar evento
-            </Animated.Text>
-          </Pressable>
-        </Animated.View>
+            <Pressable
+              onPress={() => handlePressRemoveEvent()}
+              style={styles.contentContainer}
+            >
+              <Animated.View style={[styles.iconContainer, opacityIconButton]}>
+                <Icon
+                  name="edit"
+                  type="antdesign"
+                  color={colors.white}
+                  size={20}
+                  style={styles.icon}
+                />
+              </Animated.View>
+              <Animated.Text style={[styles.text, opacityText]}>
+                Editar evento
+              </Animated.Text>
+            </Pressable>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.contentContainer,
+              secondIcon,
+              secondWidthStyle,
+              { backgroundColor: colors.error },
+            ]}
+          >
+            <Pressable
+              onPress={() => handlePressRemoveEvent()}
+              style={styles.contentContainer}
+            >
+              <Animated.View style={[styles.iconContainer, opacityIconButton]}>
+                <Icon
+                  name="delete"
+                  type="antdesign"
+                  color={colors.white}
+                  size={20}
+                  style={styles.icon}
+                />
+              </Animated.View>
+              <Animated.Text style={[styles.text, opacityText]}>
+                Borrar evento
+              </Animated.Text>
+            </Pressable>
+          </Animated.View>
+        </>
       )}
       {userHasJoinedEvent && (
         <Animated.View
@@ -185,7 +232,7 @@ const UserActionsButtons = ({
               <Icon
                 name="exit"
                 type="ionicon"
-                color={colors.black}
+                color={colors.white}
                 size={20}
                 style={styles.icon}
               />
@@ -203,7 +250,13 @@ const UserActionsButtons = ({
           handlePress();
         }}
       >
-        <Animated.View style={[styles.iconContainer, plusIcon]}>
+        <Animated.View
+          style={[
+            styles.iconContainer,
+            plusIcon,
+            { backgroundColor: colors.white },
+          ]}
+        >
           <Icon
             name="dots-three-vertical"
             type="entypo"
@@ -225,7 +278,6 @@ const styles = StyleSheet.create({
     height: 460,
   },
   contentContainer: {
-    backgroundColor: colors.white,
     position: "absolute",
     right: 26,
     top: 0,
@@ -237,8 +289,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   iconContainer: {
-    width: 44,
-    height: 44,
+    width: 46,
+    height: 46,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -247,8 +299,9 @@ const styles = StyleSheet.create({
     height: 20,
   },
   text: {
-    color: colors.black,
+    color: colors.white,
     fontSize: 16,
-    fontFamily: "SignikaRegular",
+    fontWeight: "bold",
+    fontFamily: "SignikaBold",
   },
 });

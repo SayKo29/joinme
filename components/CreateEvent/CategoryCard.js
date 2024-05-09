@@ -3,7 +3,7 @@ import React from 'react'
 import colors from '@/styles/colors'
 
 const CategoryCard = ({ category, onCategoryPress, activeCategory }) => {
-    const isSelected = activeCategory?._id === category._id;
+    const isSelected = activeCategory === category._id;
     return (
         <Pressable
             style={[

@@ -18,15 +18,19 @@ const formStyles = {
         borderRadius: 10,
         height: 70,
         textAlignVertical: 'top',
-        marginVertical: 8
+        marginVertical: 8,
+        fontFamily: 'SignikaRegular'
     },
     label: {
         color: colors.white,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     text: {
         color: colors.white,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
     },
     inputAutocomplete: {
         borderRadius: 10,
@@ -35,7 +39,8 @@ const formStyles = {
         width: '90%',
         color: colors.text,
         borderColor: colors.primary,
-        borderWidth: 2
+        borderWidth: 2,
+        fontFamily: 'SignikaRegular'
     },
     pickImage: {
         backgroundColor: colors.primary,

@@ -6,23 +6,24 @@ import LottieAnimation from '@/components/LottieAnimation'
 import formStyles from 'styles/formStyles'
 import { EVENT_CATEGORIES } from 'Constants'
 
-const SelectCategory = ({ categorySelected }) => {
+const SelectCategory = ({ categorySelected, activeCategory }) => {
     const [loading, setLoading] = useState(false)
 
     const [filteredCategories, setFilteredCategories] = useState([])
 
-    const [activeCategory, setActiveCategory] = useState(null);
+    const [category, setCategory] = useState('');
 
     React.useEffect(() => {
-        if (EVENT_CATEGORIES.length > 0) {
-            setFilteredCategories(EVENT_CATEGORIES);
-            setLoading(false)
-        }
+        setFilteredCategories(EVENT_CATEGORIES);
+        setLoading(false)
     }, [EVENT_CATEGORIES]);
 
+    React.useEffect(() => {
+        setCategory(activeCategory)
+    }, [])
 
     const handleCategoryPressed = (category) => {
-        setActiveCategory(category);
+        setCategory(category._id);
         categorySelected(category._id)
     }
     const handleCategoryFiltering = (text) => {
@@ -43,16 +44,16 @@ const SelectCategory = ({ categorySelected }) => {
                 <CategoryCard
                     category={item}
                     onCategoryPress={handleCategoryPressed}
-                    activeCategory={activeCategory}
+                    activeCategory={category}
                 />
             )}
             keyExtractor={(item) => item._id}
         />
-    ), [filteredCategories, activeCategory]);
+    ), [filteredCategories, category]);
 
     return (
         <View style={styles.container}>
-            {loading || filteredCategories.length === 0 ? <>
+            {loading ? <>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <LottieAnimation />
                 </View>

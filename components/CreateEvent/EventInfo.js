@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
+        fontFamily: 'SignikaBold'
     }
 })
 

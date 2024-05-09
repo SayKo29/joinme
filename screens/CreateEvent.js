@@ -65,6 +65,7 @@ const CreateEvent = () => {
         };
 
         try {
+            console.log('Evento a enviar:', eventToSend)
             await CreateEventPost(eventToSend);
             // invalidate the query to get the new data
             queryClient.invalidateQueries('events');
@@ -108,7 +109,7 @@ const CreateEvent = () => {
             });
         };
 
-        const unsubscribe = navigation.addListener('blur', resetEventState);
+        const unsubscribe = navigation.addListener('beforeRemove', resetEventState);
 
         return () => {
             unsubscribe();
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
         fontFamily: 'SignikaBold'
     },
     previousBtnStyle: {
-        backgroundColor: colors.gray,
+        backgroundColor: colors.secondary,
         borderRadius: 4,
         paddingHorizontal: 10
     },
