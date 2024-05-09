@@ -37,7 +37,6 @@ export default ChatCard
 const styles = StyleSheet.create({
     card: {
         padding: 10,
-        marginVertical: 8,
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1,

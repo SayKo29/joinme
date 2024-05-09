@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     selectedText: {
         fontWeight: 'bold',
         color: colors.primary,
-        fontSize: 16,
+        fontSize: 17,
         fontFamily: 'SignikaBold',
         borderBottomWidth: 1,
         borderBottomColor: colors.gray,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     unselectedText: {
         fontWeight: 'bold',
         color: colors.gray,
-        fontSize: 16,
+        fontSize: 17,
         fontFamily: 'SignikaBold',
         borderBottomWidth: 1,
         borderBottomColor: colors.background,
