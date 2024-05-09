@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     selectedText: {
         fontWeight: 'bold',
-        color: colors.text,
+        color: colors.primary,
         fontSize: 16,
         fontFamily: 'SignikaBold',
         borderBottomWidth: 1,

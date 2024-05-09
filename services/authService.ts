@@ -9,7 +9,6 @@ const encodeFormData = (data: any) => {
     .join("&");
 };
 const signIn = async (formData: any) => {
-  console.log(formData);
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -29,8 +28,8 @@ const signIn = async (formData: any) => {
   }
 };
 const signInWithGoogle = async (formData: any) => {
-  if(typeof formData === 'string') {
-    formData = JSON.parse(formData)
+  if (typeof formData === "string") {
+    formData = JSON.parse(formData);
   }
   const requestOptions = {
     method: "POST",
@@ -50,7 +49,6 @@ const signInWithGoogle = async (formData: any) => {
   }
 };
 
-
 const register = async (formData: any) => {
   const requestOptions = {
     method: "POST",
@@ -63,7 +61,6 @@ const register = async (formData: any) => {
     requestOptions
   );
   const json = await response.json();
-  console.log(json);
   if (json?.status == 400 || json?.status == 0) {
     return false;
   } else {
@@ -74,5 +71,5 @@ const register = async (formData: any) => {
 export const authService = {
   signIn,
   register,
-  signInWithGoogle
+  signInWithGoogle,
 };

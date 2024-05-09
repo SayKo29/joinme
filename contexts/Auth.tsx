@@ -49,7 +49,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       // change authData.user.id to authData.user._id
       authData.user._id = authData?.user?.id;
-      console.log("authData", authData);
       setAuthData(authData);
       await AsyncStorage.setItem("@AuthData", JSON.stringify(authData));
       return authData;

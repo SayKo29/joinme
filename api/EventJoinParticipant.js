@@ -1,8 +1,5 @@
 export default async function JoinEvent ({ event, participant }) {
     // make a put request to join event
-    //   console.log(event)
-    console.log('event', event)
-    console.log("participant", participant)
     const response = await fetch(
         'https://joinmeapi.onrender.com/api/events/' +
         event._id +

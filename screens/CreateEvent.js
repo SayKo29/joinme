@@ -74,7 +74,6 @@ const CreateEvent = ({ route }) => {
         };
 
         try {
-            console.log('Evento a editar:', eventToSend)
             await EditEvent(eventToSend);
             // invalidate the query to get the new data
             queryClient.invalidateQueries('events');
@@ -90,10 +89,10 @@ const CreateEvent = ({ route }) => {
             });
         }
         catch (error) {
-            console.error('Error al crear el evento:', error);
+            console.error('Error al editar el evento:', error);
             Toast.show({
                 type: 'error',
-                text1: 'Error al crear el evento',
+                text1: 'Error al editar el evento',
                 text2: 'Por favor, inténtalo de nuevo más tarde',
                 visibilityTime: 3000,
             });
@@ -112,7 +111,6 @@ const CreateEvent = ({ route }) => {
         };
 
         try {
-            console.log('Evento a enviar:', eventToSend)
             await CreateEventPost(eventToSend);
             // invalidate the query to get the new data
             queryClient.invalidateQueries('events');

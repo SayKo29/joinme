@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background
     },
     headerContainer: {
-        height: 40
+        height: 30
     },
     mapContainer: {
         flex: 1

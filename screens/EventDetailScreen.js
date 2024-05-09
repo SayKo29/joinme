@@ -169,7 +169,7 @@ export default function EventDetailScreen ({ route }) {
                                 ? (
                                     <View style={styles.date}>
                                         <Icon name='place' size={20} color={colors.primary} style={{ marginRight: 10 }} />
-                                        <Text style={styles.remote}>Es un evento remoto</Text>
+                                        <Text style={styles.remote}>Es un evento en remoto</Text>
                                     </View>
                                 )
                                 : (
@@ -271,4 +271,10 @@ const styles = StyleSheet.create({
         width: '92%',
         height: 50,
     },
+    remote: {
+        color: colors.primary,
+        fontSize: 16,
+        fontWeight: 'bold',
+        fontFamily: 'SignikaBold'
+    }
 });

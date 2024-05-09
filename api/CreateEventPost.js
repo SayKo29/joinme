@@ -29,7 +29,6 @@ export default async function CreateEventPost (event) {
         body: formData
     }
     )
-    console.log(response, 'response')
 
     if (!response.ok) {
         throw new Error('Error al enviar el evento' + response.status)

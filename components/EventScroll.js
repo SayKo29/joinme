@@ -21,7 +21,6 @@ const EventScroll = () => {
     const data = useEventStore((state) => state.events)
     const users = useUsersStore((state) => state.users)
     const auth = useAuth()
-    //   console.log(auth?.authData, "hola")
     const userLogged = auth?.authData.user
 
     const events = data
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     headerContainer: {
-        height: 40
+        height: 30
     },
     center: {
         backgroundColor: colors.background,

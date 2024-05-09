@@ -7,7 +7,6 @@ import colors from '@/styles/colors'
 import useEventStore from 'store/EventStore'
 import CustomBottomTab from './ui/CustomBottomTab'
 import HeaderNavigationEvent from './HeaderNavigationEvent'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { uiStyles } from 'styles/uiStyles'
 import useTabStore from 'store/TabStore'
 import { Platform } from 'react-native'
@@ -57,7 +56,9 @@ const MyEvents = ({ navigation }) => {
 
     return (
         <View style={[styles.container]}>
-            <HeaderNavigationEvent />
+            <View style={styles.headerContainer}>
+                <HeaderNavigationEvent />
+            </View>
             <FlashList
                 data={myEvents}
                 renderItem={({ item, index }) => (
@@ -88,6 +89,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: colors.text,
         paddingBottom: 20
+    },
+    headerContainer: {
+        height: 30
     },
 })
 

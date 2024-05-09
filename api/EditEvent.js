@@ -18,7 +18,6 @@ export default async function EditEvent (event) {
             lng: event.location.position.lng.toString()
         };
     }
-    console.log('requestBody', requestBody)
     // "https://joinmeapi.onrender.com/api/events",
 
     const response = await fetch("https://joinmeapi.onrender.com/api/events/" + event._id, {
