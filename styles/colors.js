@@ -3,6 +3,7 @@ const colors = {
     primary: '#39c67b',
     secondary: '#0a3d19',
     background: '#081c15',
+    chatline: '#040B03',
     accent: '#F5B803',
     tabs: '#161F2A',
     purple: '#513B68',

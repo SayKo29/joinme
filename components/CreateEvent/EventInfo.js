@@ -128,7 +128,7 @@ const EventInfo = ({ eventInfo, currentEvent }) => {
                         </TouchableOpacity>
                     )
                 }
-                {image && (image?.uri || image) && (
+                {image && (image?.uri || typeof image === 'String') && (
                     <Image
                         source={{ uri: image?.uri ? image?.uri : image }}
                         style={{
