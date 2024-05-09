@@ -89,7 +89,16 @@ const formAuth = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         marginTop: 20,
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: 'SignikaRegular'
+    },
+    textNormalUnderline: {
+        color: 'white',
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 15,
+        fontFamily: 'SignikaRegular',
+        textDecorationLine: 'underline'
     },
     text: {
         color: 'white',

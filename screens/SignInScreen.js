@@ -134,9 +134,6 @@ export const SignInScreen = ({ navigation }) => {
                                 <Icon name='login' color='white' />
                             </TouchableOpacity>
 
-                            {/* or signup with google */}
-                            <Text style={formAuth.textContent}>o</Text>
-
                             <TouchableOpacity
                                 style={formAuth.googleButtonContainer}
                                 onPress={() => {
@@ -156,7 +153,7 @@ export const SignInScreen = ({ navigation }) => {
                                         navigation.navigate('SignUp')
                                     }}
                                 >
-                                    <Text style={formAuth.textNormal}>Creala aquí</Text>
+                                    <Text style={formAuth.textNormalUnderline}>Creala aquí</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
