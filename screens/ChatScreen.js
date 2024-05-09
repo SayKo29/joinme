@@ -69,7 +69,6 @@ const ChatScreen = ({ route }) => {
 
     const handleConnect = () => {
         // primera conexión
-        setLoading(true)
         console.log('primera conexión')
         // Pedir al socket todos los mensajes de la sala
         socket.current.emit('getAllMessages', chatroomId)
@@ -113,6 +112,7 @@ const ChatScreen = ({ route }) => {
     }
 
     useEffect(() => {
+        setLoading(true)
         console.log(userLogged)
         socket.current = io(URL, {
             transports: ['websocket'],
