@@ -5,7 +5,7 @@
     "lib": ["es6"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["/*"]
+      "@/*": ["./*"]
     },
     "allowJs": true,
     "jsx": "react-native",
