@@ -92,15 +92,15 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-const signOut = async (): Promise<void> => {
+  const signOut = async (): Promise<void> => {
     try {
-        await AsyncStorage.removeItem("@AuthData");
-        await AsyncStorage.removeItem("@user");
-        setAuthData(undefined);
+      await AsyncStorage.removeItem("@AuthData");
+      await AsyncStorage.removeItem("@user");
+      setAuthData(undefined);
     } catch (error) {
-        console.error("Error signing out:", error);
+      console.error("Error signing out:", error);
     }
-};
+  };
 
   return (
     <AuthContext.Provider
