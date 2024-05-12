@@ -5,7 +5,6 @@ import { SOCKET_URL } from '@env'
 import { Icon } from 'react-native-elements'
 import { formatToTimeWithoutSeconds } from '@/services/functions'
 import {
-    Image,
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
