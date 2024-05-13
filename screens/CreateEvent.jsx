@@ -14,11 +14,12 @@ import useTabStore from "store/TabStore";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { useQueryClient } from "react-query";
-import EditEvent from "api/EditEvent";
+import UpdateEvent from "@/api/UpdateEvent";
 
 const CreateEvent = ({ route }) => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+  const [isApiSending, setIsApiSending] = React.useState(false);
   const [category, setCategory] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -60,6 +61,7 @@ const CreateEvent = ({ route }) => {
   };
 
   const editEvent = async () => {
+    setIsApiSending(true);
     const eventToSend = {
       ...event,
       category,
@@ -69,7 +71,7 @@ const CreateEvent = ({ route }) => {
     };
 
     try {
-      await EditEvent(eventToSend);
+      await UpdateEvent(eventToSend);
       // invalidate the query to get the new data
       queryClient.invalidateQueries("events");
       setEvent({
@@ -84,6 +86,7 @@ const CreateEvent = ({ route }) => {
         text1: "Evento editado correctamente",
         visibilityTime: 3000,
       });
+      setIsApiSending(false);
     } catch (error) {
       console.error("Error al editar el evento:", error);
       Toast.show({
@@ -92,6 +95,7 @@ const CreateEvent = ({ route }) => {
         text2: "Por favor, inténtalo de nuevo más tarde",
         visibilityTime: 3000,
       });
+      setIsApiSending(false);
     }
   };
 
@@ -223,7 +227,8 @@ const CreateEvent = ({ route }) => {
               nextBtnDisabled={
                 (event.location === "" && !event.isRemote) ||
                 event.startDate === "" ||
-                event.endDate === ""
+                event.endDate === "" ||
+                isApiSending
               }
             >
               <AdvancedEventInfo eventInfo={updateEvent} currentEvent={event} />

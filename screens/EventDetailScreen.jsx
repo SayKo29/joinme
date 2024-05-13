@@ -27,7 +27,7 @@ import useUsersStore from "store/UsersStore";
 
 export default function EventDetailScreen({ route }) {
   const navigation = useNavigation();
-  const { event, user } = route.params;
+  const { event } = route.params;
   const queryClient = useQueryClient();
   const auth = useAuth();
   const userLogged = auth.authData;
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     padding: 10,
     borderRadius: 10,
-    marginVertical: 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: "black",
