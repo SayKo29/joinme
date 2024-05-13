@@ -232,8 +232,8 @@ export default function EventDetailScreen({ route }) {
                   />
                   <Text
                     ellipsizeMode={"tail"}
-                    numberOfLines={1}
-                    style={styles.text}
+                    numberOfLines={2}
+                    style={styles.textMap}
                   >
                     {event.location}
                   </Text>
@@ -318,6 +318,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "SignikaRegular",
   },
+  textMap: {
+    color: colors.primary,
+    fontSize: 16,
+    fontFamily: "SignikaRegular",
+    textDecorationLine: "underline",
+  },
   space: {
     paddingBottom: 10,
   },
@@ -326,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
     width: "92%",
-    height: 50,
+    height: "auto",
   },
   remote: {
     color: colors.primary,
