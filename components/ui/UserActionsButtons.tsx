@@ -117,7 +117,7 @@ const UserActionsButtons = ({
       firstValue.value = withSpring(100);
       firstWidth.value = withDelay(500, withSpring(165));
       secondValue.value = withSpring(150);
-      secondWidth.value = withDelay(850, withSpring(165));
+      secondWidth.value = withDelay(850, withSpring(168));
       opacity.value = withDelay(800, withSpring(1));
       opacityIcon.value = withDelay(100, withSpring(1));
     }
